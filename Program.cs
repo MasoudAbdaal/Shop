@@ -1,24 +1,33 @@
 using System.Security.Cryptography;
+using System.Text;
+using Shop.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddDbContext<UserContext>();
+builder.Services.AddScoped<IUserRepo, SQLUserRepo>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+Guid UserGUID = new Guid(Convert.FromBase64String(builder.Configuration.GetValue<string>("Security:GUIDKeyBytes")));
+
+HMACSHA512 HashAlgorithm = new HMACSHA512(Convert.FromBase64String(builder.Configuration.GetValue<string>("JWT:Key")));
+
+byte[] Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes("asdjaklsdjalksdjklasdjkasdlajsdaklsdkaskldjksdlkjasldlakskl"));
+
+
 {
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-// Guid g = new Guid("asdasas");
-// Guid c = new Guid(BitConverter.ToString(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 }).Replace("-", ""));
 
-// Console.WriteLine("KEY LENGTH: {2} \n Manual GUID Length: {0} \n Key generated GUID: {1} ", g, c, new HMACSHA256().Key.Length);
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
