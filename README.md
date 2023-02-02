@@ -1,2 +1,2 @@
-# Online_Shop
+# Shop
 Ready to use E-Commerce platform for implement business.

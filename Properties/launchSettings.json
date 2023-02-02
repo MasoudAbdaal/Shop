@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "Online_Shop": {
+    "Shop": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

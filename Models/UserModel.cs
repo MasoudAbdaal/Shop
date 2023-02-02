@@ -1,4 +1,4 @@
-namespace Online_Shop.Models
+namespace Shop.Models
 {
   public class UserModel
   {
