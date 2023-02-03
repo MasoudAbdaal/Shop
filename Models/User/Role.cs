@@ -3,17 +3,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shop.Models
 {
-  public enum UserRoles : byte
-  {
-    ADMIN, SELLER, PURCHASER
-  }
 
   public class Role
   {
-    [Key, Column("role_id")]
+    public enum UserRoles : byte
+    {
+      ADMIN, SELLER, PURCHASER
+    }
+
+    [Key, Column("id")]
     public UserRoles ID { get; set; }
 
-    [Column("role_name")]
+    [Column("name"), MaxLength(40)]
     public string? Name { get; set; }
 
     public List<User>? Users { get; set; }

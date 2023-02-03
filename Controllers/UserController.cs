@@ -1,9 +1,11 @@
+using System.Collections.ObjectModel;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Data;
 using Shop.DTOs;
 using Shop.Models;
+using static Shop.Models.Role;
 
 namespace Shop.Controllers
 {
@@ -38,7 +40,12 @@ namespace Shop.Controllers
         PasswordSalt = HashAlgorithm.Key,
         Enabled = true,
         FailedLoginAttempts = 0,
-        AuthProvider = Models.User.AuthProviders.NONE,
+        
+        UserAuthMethods = new Collection<UserAuthMethod> {
+         new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL },
+         new UserAuthMethod {AuthProviderID = AuthProvider.Providers.GOOGLE },
+         new UserAuthMethod {AuthProviderID = AuthProvider.Providers.MICROSOFT }, },
+
         Role = UserRoles.SELLER,
         TwoStepMethod = Models.User.TwoStepMethods.NONE,
         PhoneNumber_Verified = false

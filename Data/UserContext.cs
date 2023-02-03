@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shop.Models;
+using static Shop.Models.AuthProvider;
+using static Shop.Models.Role;
 
 namespace Shop.Data
 {
@@ -13,6 +15,8 @@ namespace Shop.Data
     }
     public DbSet<User> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserAuthMethod> UserAuthMethods => Set<UserAuthMethod>();
+    public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -23,6 +27,8 @@ namespace Shop.Data
     {
       modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<byte>();
       modelBuilder.Entity<Role>().Property(r => r.ID).HasConversion<byte>();
+      modelBuilder.Entity<UserAuthMethod>().HasKey(x => new { x.UserID, x.AuthProviderID });
+      
 
       modelBuilder.Entity<Role>().HasData(
         Enum.GetValues(typeof(UserRoles))
@@ -31,6 +37,16 @@ namespace Shop.Data
           ID = u,
           Name = u.ToString()
         }));
+
+
+      modelBuilder.Entity<AuthProvider>().HasData(
+        Enum.GetValues(typeof(Providers))
+        .Cast<Providers>().Select(u => new AuthProvider()
+        {
+          ID = u,
+          Name = u.ToString()
+        }));
+
 
     }
   }

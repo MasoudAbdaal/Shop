@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using static Shop.Models.AuthProvider;
+using static Shop.Models.Role;
 
 namespace Shop.Models
 {
@@ -14,27 +16,22 @@ namespace Shop.Models
       NONE, SMS, EMAIL, TOKEN, SMS_AND_EMAIL
     }
 
-    public enum AuthProviders
-    {
-      NONE, GOOGLE, FACEBOOK, MICROSOFT
-    }
-
-    [Required, Key, Column("user_id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
+    [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
     public byte[] ID { get; set; } = new byte[16];
 
-    [Required, Column("user_name"), MaxLength(40)]
+    [Required, Column("name"), MaxLength(40)]
     public string Name { get; set; } = string.Empty;
 
-    [Required, Column("user_email"), EmailAddress, MaxLength(40)]
+    [Required, Column("email"), EmailAddress, MaxLength(40)]
     public string Email { get; set; } = string.Empty;
 
     [Column("is_email_verified")]
     public bool Email_Verified { get; set; } = false;
 
-    [Required, Column("user_password", TypeName = "Binary"), MaxLength(64)]
+    [Required, Column("password", TypeName = "Binary"), MaxLength(64)]
     public byte[] Password { get; set; } = new byte[64];
 
-    [Required, Column("user_password_salt", TypeName = "Binary"), MaxLength(128),]
+    [Required, Column("password_salt", TypeName = "Binary"), MaxLength(128),]
     public byte[] PasswordSalt { get; set; } = new byte[128];
 
     [Column("account_enabled")]
@@ -43,11 +40,12 @@ namespace Shop.Models
     [Column("failed_login_attempts_count")]
     public byte FailedLoginAttempts { get; set; } = 0;
 
-    [Column("authentication_providers")]
-    public AuthProviders AuthProvider { get; set; }
+    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
 
-    [Column("user_role")]
+    [Column("role")]
     public UserRoles Role { get; set; }
+    [ForeignKey("Role")]
+    public Role? Roles { get; set; }
 
     [Column("two_steps_verification_methods")]
     public TwoStepMethods TwoStepMethod { get; set; }
@@ -56,22 +54,22 @@ namespace Shop.Models
     public bool PhoneNumber_Verified { get; set; } = false;
 
     //DB TRIGGER
-    [Column("user_createdate")]
+    [Column("createdate")]
     public DateTime? CreateDate { get; set; }
 
-    [Column("user_birthdate")]
+    [Column("birthdate")]
     public DateTime? BirthDate { get; set; }
 
-    [Column("user_lastname"), MaxLength(40)]
+    [Column("lastname"), MaxLength(40)]
     public string? LastName { get; set; }
 
     [Column("verified_date")]
     public DateTime? VerifiedDate { get; set; }
 
-    [Phone, Column("user_phone")]
+    [Phone, Column("phone"), MaxLength(15)]
     public string? PhoneNumber { get; set; }
 
-    [Column("reset_pass_token")]
+    [Column("reset_pass_token"), MaxLength(128)]
     public string? ResetPasswordToken { get; set; }
 
     [Column("reset_pass_token_expire_date")]
@@ -85,8 +83,5 @@ namespace Shop.Models
 
     [Column("email_2step_code")]
     public uint? Email_Code { get; set; }
-
-    [ForeignKey("Role")]
-    public Role? Roles { get; set; }
   }
 }
