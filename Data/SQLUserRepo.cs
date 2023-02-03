@@ -10,7 +10,6 @@ namespace Shop.Data
     public SQLUserRepo(UserContext context)
     {
       _context = context;
-      _context.AddAsync<User>(new User { });
     }
 
     public Task SaveChanges()

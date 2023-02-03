@@ -12,8 +12,8 @@ using Shop.Data;
 namespace Shop.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20230202140131_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230203080036_RoleImplement")]
+    partial class RoleImplement
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,38 @@ namespace Shop.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Shop.Models.Role", b =>
+                {
+                    b.Property<byte>("ID")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("role_id");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("role_name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = (byte)0,
+                            Name = "ADMIN"
+                        },
+                        new
+                        {
+                            ID = (byte)1,
+                            Name = "SELLER"
+                        },
+                        new
+                        {
+                            ID = (byte)2,
+                            Name = "PURCHASER"
+                        });
+                });
+
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
                     b.Property<byte[]>("ID")
@@ -32,6 +64,10 @@ namespace Shop.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("Binary")
                         .HasColumnName("user_id");
+
+                    b.Property<int>("AuthProvider")
+                        .HasColumnType("int")
+                        .HasColumnName("authentication_providers");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2")
@@ -102,6 +138,10 @@ namespace Shop.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("reset_pass_token_expire_date");
 
+                    b.Property<byte>("Role")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("user_role");
+
                     b.Property<long?>("SMS_Code")
                         .HasColumnType("bigint")
                         .HasColumnName("sms_2step_code");
@@ -110,16 +150,38 @@ namespace Shop.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("token_2step_code");
 
+                    b.Property<int>("TwoStepMethod")
+                        .HasColumnType("int")
+                        .HasColumnName("two_steps_verification_methods");
+
                     b.Property<DateTime?>("VerifiedDate")
                         .HasColumnType("datetime2")
                         .HasColumnName("verified_date");
 
                     b.HasKey("ID");
 
+                    b.HasIndex("Role");
+
                     b.HasIndex(new[] { "ID" }, "Index_ID")
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Shop.Models.User", b =>
+                {
+                    b.HasOne("Shop.Models.Role", "Roles")
+                        .WithMany("Users")
+                        .HasForeignKey("Role")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("Shop.Models.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

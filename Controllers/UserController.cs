@@ -30,17 +30,17 @@ namespace Shop.Controllers
       User u = new User
       {
 
-        ID = new Guid(Convert.FromBase64String(_configuration.GetValue<string>("Security:GUIDKeyBytes"))).ToByteArray(),
-        Name = "",
-        Email = "",
+        ID = new Guid(RandomNumberGenerator.GetBytes(16)).ToByteArray(),
+        Name = "NewNameHello",
+        Email = "asdjalskdjl@asdkalsdkja",
         Email_Verified = false,
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes("123321")),
         PasswordSalt = HashAlgorithm.Key,
         Enabled = true,
         FailedLoginAttempts = 0,
         AuthProvider = Models.User.AuthProviders.NONE,
-        Role = Models.User.UserRoles.ADMIN,
-        TwoStepMethods = Models.User.TwoStepTypes.NONE,
+        Role = UserRoles.SELLER,
+        TwoStepMethod = Models.User.TwoStepMethods.NONE,
         PhoneNumber_Verified = false
       };
 

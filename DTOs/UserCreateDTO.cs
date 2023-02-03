@@ -9,16 +9,17 @@ namespace Shop.DTOs
     [Required, Column("user_name"), MaxLength(40)]
     public string Name { get; set; } = string.Empty;
 
-    [MaxLength(40)]
-    public string? LastName { get; set; }
-
-    [Required, EmailAddress, MaxLength(40)]
+    [Required, Column("user_email"), EmailAddress, MaxLength(40)]
     public string Email { get; set; } = string.Empty;
 
-    [Phone]
-    public string? PhoneNumber { get; set; }
-
+    [Column("user_birthdate")]
     public DateTime? BirthDate { get; set; }
+
+    [Column("user_lastname"), MaxLength(40)]
+    public string? LastName { get; set; }
+
+    [Phone, Column("user_phone")]
+    public string? PhoneNumber { get; set; }
 
   }
 }

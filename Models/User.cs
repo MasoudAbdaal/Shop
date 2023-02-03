@@ -9,14 +9,9 @@ namespace Shop.Models
   public class User
   {
 
-    public enum TwoStepTypes
+    public enum TwoStepMethods
     {
       NONE, SMS, EMAIL, TOKEN, SMS_AND_EMAIL
-    }
-
-    public enum UserRoles
-    {
-      ADMIN, SELLER, PURCHASER
     }
 
     public enum AuthProviders
@@ -36,7 +31,6 @@ namespace Shop.Models
     [Column("is_email_verified")]
     public bool Email_Verified { get; set; } = false;
 
-
     [Required, Column("user_password", TypeName = "Binary"), MaxLength(64)]
     public byte[] Password { get; set; } = new byte[64];
 
@@ -50,13 +44,13 @@ namespace Shop.Models
     public byte FailedLoginAttempts { get; set; } = 0;
 
     [Column("authentication_providers")]
-    public AuthProviders AuthProvider = AuthProviders.NONE;
+    public AuthProviders AuthProvider { get; set; }
 
     [Column("user_role")]
-    public UserRoles Role = UserRoles.PURCHASER;
+    public UserRoles Role { get; set; }
 
     [Column("two_steps_verification_methods")]
-    public TwoStepTypes TwoStepMethods = TwoStepTypes.NONE;
+    public TwoStepMethods TwoStepMethod { get; set; }
 
     [Column("is_phone_verified")]
     public bool PhoneNumber_Verified { get; set; } = false;
@@ -91,5 +85,8 @@ namespace Shop.Models
 
     [Column("email_2step_code")]
     public uint? Email_Code { get; set; }
+
+    [ForeignKey("Role")]
+    public Role? Roles { get; set; }
   }
 }
