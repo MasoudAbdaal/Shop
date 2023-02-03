@@ -40,14 +40,22 @@ namespace Shop.Controllers
         PasswordSalt = HashAlgorithm.Key,
         Enabled = true,
         FailedLoginAttempts = 0,
-        
+
+        UserVerificationMethods = new Collection<UserVerificationMethod> {
+           new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.EMAIL },
+           new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.TOKEN },
+      },
+
+
+
         UserAuthMethods = new Collection<UserAuthMethod> {
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL },
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.GOOGLE },
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.MICROSOFT }, },
 
+
         Role = UserRoles.SELLER,
-        TwoStepMethod = Models.User.TwoStepMethods.NONE,
+
         PhoneNumber_Verified = false
       };
 

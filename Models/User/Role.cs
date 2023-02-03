@@ -6,7 +6,7 @@ namespace Shop.Models
 
   public class Role
   {
-    public enum UserRoles : byte
+    public enum UserRoles : uint
     {
       ADMIN, SELLER, PURCHASER
     }
@@ -14,7 +14,7 @@ namespace Shop.Models
     [Key, Column("id")]
     public UserRoles ID { get; set; }
 
-    [Column("name"), MaxLength(40)]
+    [Column("name"), MaxLength(50)]
     public string? Name { get; set; }
 
     public List<User>? Users { get; set; }

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Models;
 using static Shop.Models.AuthProvider;
 using static Shop.Models.Role;
+using static Shop.Models.VerificationMethod;
 
 namespace Shop.Data
 {
@@ -17,6 +18,8 @@ namespace Shop.Data
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserAuthMethod> UserAuthMethods => Set<UserAuthMethod>();
     public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
+    public DbSet<UserVerificationMethod> UserVerificationMethods => Set<UserVerificationMethod>();
+    public DbSet<VerificationMethod> VerificationMethods => Set<VerificationMethod>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -25,10 +28,9 @@ namespace Shop.Data
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<User>().Property(u => u.Role).HasConversion<byte>();
-      modelBuilder.Entity<Role>().Property(r => r.ID).HasConversion<byte>();
       modelBuilder.Entity<UserAuthMethod>().HasKey(x => new { x.UserID, x.AuthProviderID });
-      
+      modelBuilder.Entity<UserVerificationMethod>().HasKey(x => new { x.UserID, x.VerificationMethodID });
+
 
       modelBuilder.Entity<Role>().HasData(
         Enum.GetValues(typeof(UserRoles))
@@ -42,6 +44,14 @@ namespace Shop.Data
       modelBuilder.Entity<AuthProvider>().HasData(
         Enum.GetValues(typeof(Providers))
         .Cast<Providers>().Select(u => new AuthProvider()
+        {
+          ID = u,
+          Name = u.ToString()
+        }));
+
+      modelBuilder.Entity<VerificationMethod>().HasData(
+        Enum.GetValues(typeof(VerifyMethods))
+        .Cast<VerifyMethods>().Select(u => new VerificationMethod()
         {
           ID = u,
           Name = u.ToString()

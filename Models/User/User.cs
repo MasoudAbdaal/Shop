@@ -10,12 +10,6 @@ namespace Shop.Models
   [Index(nameof(ID), IsUnique = true, Name = "Index_ID")]
   public class User
   {
-
-    public enum TwoStepMethods
-    {
-      NONE, SMS, EMAIL, TOKEN, SMS_AND_EMAIL
-    }
-
     [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
     public byte[] ID { get; set; } = new byte[16];
 
@@ -47,8 +41,7 @@ namespace Shop.Models
     [ForeignKey("Role")]
     public Role? Roles { get; set; }
 
-    [Column("two_steps_verification_methods")]
-    public TwoStepMethods TwoStepMethod { get; set; }
+    public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
 
     [Column("is_phone_verified")]
     public bool PhoneNumber_Verified { get; set; } = false;

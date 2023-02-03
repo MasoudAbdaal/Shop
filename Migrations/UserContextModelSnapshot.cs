@@ -62,13 +62,13 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Models.Role", b =>
                 {
-                    b.Property<byte>("ID")
-                        .HasColumnType("tinyint")
+                    b.Property<long>("ID")
+                        .HasColumnType("bigint")
                         .HasColumnName("id");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("name");
 
                     b.HasKey("ID");
@@ -78,17 +78,17 @@ namespace Shop.Migrations
                     b.HasData(
                         new
                         {
-                            ID = (byte)0,
+                            ID = 0L,
                             Name = "ADMIN"
                         },
                         new
                         {
-                            ID = (byte)1,
+                            ID = 1L,
                             Name = "SELLER"
                         },
                         new
                         {
-                            ID = (byte)2,
+                            ID = 2L,
                             Name = "PURCHASER"
                         });
                 });
@@ -172,8 +172,8 @@ namespace Shop.Migrations
                         .HasColumnType("datetime2")
                         .HasColumnName("reset_pass_token_expire_date");
 
-                    b.Property<byte>("Role")
-                        .HasColumnType("tinyint")
+                    b.Property<long>("Role")
+                        .HasColumnType("bigint")
                         .HasColumnName("role");
 
                     b.Property<long?>("SMS_Code")
@@ -183,10 +183,6 @@ namespace Shop.Migrations
                     b.Property<long?>("Token_Code")
                         .HasColumnType("bigint")
                         .HasColumnName("token_2step_code");
-
-                    b.Property<int>("TwoStepMethod")
-                        .HasColumnType("int")
-                        .HasColumnName("two_steps_verification_methods");
 
                     b.Property<DateTime?>("VerifiedDate")
                         .HasColumnType("datetime2")
@@ -220,6 +216,67 @@ namespace Shop.Migrations
                     b.ToTable("UserAuthMethods");
                 });
 
+            modelBuilder.Entity("Shop.Models.UserVerificationMethod", b =>
+                {
+                    b.Property<byte[]>("UserID")
+                        .HasMaxLength(16)
+                        .HasColumnType("Binary")
+                        .HasColumnName("user_id");
+
+                    b.Property<byte>("VerificationMethodID")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("verify_method_id");
+
+                    b.HasKey("UserID", "VerificationMethodID");
+
+                    b.HasIndex("VerificationMethodID");
+
+                    b.ToTable("UserVerificationMethod");
+                });
+
+            modelBuilder.Entity("Shop.Models.VerificationMethod", b =>
+                {
+                    b.Property<byte>("ID")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("VerificationMethod");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = (byte)0,
+                            Name = "NONE"
+                        },
+                        new
+                        {
+                            ID = (byte)1,
+                            Name = "SMS"
+                        },
+                        new
+                        {
+                            ID = (byte)2,
+                            Name = "EMAIL"
+                        },
+                        new
+                        {
+                            ID = (byte)3,
+                            Name = "TOKEN"
+                        },
+                        new
+                        {
+                            ID = (byte)4,
+                            Name = "SMS_AND_EMAIL"
+                        });
+                });
+
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
                     b.HasOne("Shop.Models.Role", "Roles")
@@ -250,6 +307,25 @@ namespace Shop.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Shop.Models.UserVerificationMethod", b =>
+                {
+                    b.HasOne("Shop.Models.User", "Users")
+                        .WithMany("UserVerificationMethods")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.VerificationMethod", "VerificationMethod")
+                        .WithMany("UserVerificationMethod")
+                        .HasForeignKey("VerificationMethodID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Users");
+
+                    b.Navigation("VerificationMethod");
+                });
+
             modelBuilder.Entity("Shop.Models.AuthProvider", b =>
                 {
                     b.Navigation("UserAuthMethod");
@@ -263,6 +339,13 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
                     b.Navigation("UserAuthMethods");
+
+                    b.Navigation("UserVerificationMethods");
+                });
+
+            modelBuilder.Entity("Shop.Models.VerificationMethod", b =>
+                {
+                    b.Navigation("UserVerificationMethod");
                 });
 #pragma warning restore 612, 618
         }
