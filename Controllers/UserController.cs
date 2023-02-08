@@ -35,28 +35,20 @@ namespace Shop.Controllers
         ID = new Guid(RandomNumberGenerator.GetBytes(16)).ToByteArray(),
         Name = "NewNameHello",
         Email = "asdjalskdjl@asdkalsdkja",
-        Email_Verified = false,
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes("123321")),
         PasswordSalt = HashAlgorithm.Key,
-        Enabled = true,
-        FailedLoginAttempts = 0,
+        UserInfo = new UserInfo { },
 
         UserVerificationMethods = new Collection<UserVerificationMethod> {
            new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.EMAIL },
            new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.TOKEN },
       },
-
-
-
         UserAuthMethods = new Collection<UserAuthMethod> {
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL },
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.GOOGLE },
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.MICROSOFT }, },
-
-
         Role = UserRoles.SELLER,
 
-        PhoneNumber_Verified = false
       };
 
       _context.Users.Add(u);

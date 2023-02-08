@@ -101,14 +101,6 @@ namespace Shop.Migrations
                         .HasColumnType("Binary")
                         .HasColumnName("id");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("birthdate");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("createdate");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -118,23 +110,6 @@ namespace Shop.Migrations
                     b.Property<long?>("Email_Code")
                         .HasColumnType("bigint")
                         .HasColumnName("email_2step_code");
-
-                    b.Property<bool>("Email_Verified")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_email_verified");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("bit")
-                        .HasColumnName("account_enabled");
-
-                    b.Property<byte>("FailedLoginAttempts")
-                        .HasColumnType("tinyint")
-                        .HasColumnName("failed_login_attempts_count");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)")
-                        .HasColumnName("lastname");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -154,18 +129,9 @@ namespace Shop.Migrations
                         .HasColumnType("Binary")
                         .HasColumnName("password_salt");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)")
-                        .HasColumnName("phone");
-
-                    b.Property<bool>("PhoneNumber_Verified")
-                        .HasColumnType("bit")
-                        .HasColumnName("is_phone_verified");
-
-                    b.Property<string>("ResetPasswordToken")
+                    b.Property<byte[]>("ResetPasswordToken")
                         .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)")
+                        .HasColumnType("Binary")
                         .HasColumnName("reset_pass_token");
 
                     b.Property<DateTime?>("ResetPasswordTokenExpires")
@@ -180,13 +146,18 @@ namespace Shop.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("sms_2step_code");
 
+                    b.Property<byte[]>("Token")
+                        .HasMaxLength(128)
+                        .HasColumnType("Binary")
+                        .HasColumnName("token");
+
+                    b.Property<DateTime?>("TokenExpireDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("token_expire_date");
+
                     b.Property<long?>("Token_Code")
                         .HasColumnType("bigint")
                         .HasColumnName("token_2step_code");
-
-                    b.Property<DateTime?>("VerifiedDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("verified_date");
 
                     b.HasKey("ID");
 
@@ -216,6 +187,57 @@ namespace Shop.Migrations
                     b.ToTable("UserAuthMethods");
                 });
 
+            modelBuilder.Entity("Shop.Models.UserInfo", b =>
+                {
+                    b.Property<byte[]>("ID")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(16)
+                        .HasColumnType("Binary")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("birthdate");
+
+                    b.Property<DateTime?>("CreateDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("createdate");
+
+                    b.Property<bool>("Email_Verified")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_email_verified");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit")
+                        .HasColumnName("account_enabled");
+
+                    b.Property<byte>("FailedLoginAttempts")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("failed_login_attempts_count");
+
+                    b.Property<string>("LastName")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("lastname");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)")
+                        .HasColumnName("phone");
+
+                    b.Property<bool>("PhoneNumber_Verified")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_phone_verified");
+
+                    b.Property<DateTime?>("VerifiedDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("verified_date");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UserInfo");
+                });
+
             modelBuilder.Entity("Shop.Models.UserVerificationMethod", b =>
                 {
                     b.Property<byte[]>("UserID")
@@ -231,7 +253,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("VerificationMethodID");
 
-                    b.ToTable("UserVerificationMethod");
+                    b.ToTable("UserVerificationMethods");
                 });
 
             modelBuilder.Entity("Shop.Models.VerificationMethod", b =>
@@ -247,7 +269,7 @@ namespace Shop.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("VerificationMethod");
+                    b.ToTable("VerificationMethods");
 
                     b.HasData(
                         new
@@ -307,6 +329,17 @@ namespace Shop.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("Shop.Models.UserInfo", b =>
+                {
+                    b.HasOne("Shop.Models.User", "User")
+                        .WithOne("UserInfo")
+                        .HasForeignKey("Shop.Models.UserInfo", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Shop.Models.UserVerificationMethod", b =>
                 {
                     b.HasOne("Shop.Models.User", "Users")
@@ -339,6 +372,8 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
                     b.Navigation("UserAuthMethods");
+
+                    b.Navigation("UserInfo");
 
                     b.Navigation("UserVerificationMethods");
                 });
