@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using static Shop.Models.AuthProvider;
 using static Shop.Models.Role;
 
 namespace Shop.Models
@@ -10,7 +9,7 @@ namespace Shop.Models
   [Index(nameof(ID), IsUnique = true, Name = "Index_ID")]
   public class User
   {
-    [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
+    [Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
     public byte[] ID { get; set; } = new byte[16];
 
     [Required, Column("name"), MaxLength(40)]
@@ -57,5 +56,6 @@ namespace Shop.Models
     public UserInfo? UserInfo { get; set; }
     public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
+    public ICollection<UserAddress>? UserAddress { get; set; }
   }
 }

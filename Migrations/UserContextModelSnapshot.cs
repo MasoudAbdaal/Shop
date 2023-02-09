@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Shop.Data;
 
 #nullable disable
@@ -21,6 +22,50 @@ namespace Shop.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Shop.Models.Address", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("address_line");
+
+                    b.Property<Point>("Location")
+                        .HasColumnType("geography")
+                        .HasColumnName("location");
+
+                    b.Property<string>("LocationAddress")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("location_address");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("postal_code");
+
+                    b.Property<long>("RegionID")
+                        .HasColumnType("bigint")
+                        .HasColumnName("region_id");
+
+                    b.Property<int>("UnitNumber")
+                        .HasColumnType("int")
+                        .HasColumnName("unit_number");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RegionID");
+
+                    b.ToTable("Address");
+                });
 
             modelBuilder.Entity("Shop.Models.AuthProvider", b =>
                 {
@@ -58,6 +103,30 @@ namespace Shop.Migrations
                             ID = (byte)3,
                             Name = "MICROSOFT"
                         });
+                });
+
+            modelBuilder.Entity("Shop.Models.Region", b =>
+                {
+                    b.Property<long>("RegionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RegionID"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("name");
+
+                    b.Property<long?>("ParentID")
+                        .HasColumnType("bigint")
+                        .HasColumnName("parent_id");
+
+                    b.HasKey("RegionID");
+
+                    b.HasIndex("ParentID");
+
+                    b.ToTable("Region");
                 });
 
             modelBuilder.Entity("Shop.Models.Role", b =>
@@ -169,6 +238,24 @@ namespace Shop.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Shop.Models.UserAddress", b =>
+                {
+                    b.Property<byte[]>("UserID")
+                        .HasMaxLength(16)
+                        .HasColumnType("Binary")
+                        .HasColumnName("user_id");
+
+                    b.Property<long>("AddressID")
+                        .HasColumnType("bigint")
+                        .HasColumnName("address_id");
+
+                    b.HasKey("UserID", "AddressID");
+
+                    b.HasIndex("AddressID");
+
+                    b.ToTable("UserAddress");
+                });
+
             modelBuilder.Entity("Shop.Models.UserAuthMethod", b =>
                 {
                     b.Property<byte[]>("UserID")
@@ -190,10 +277,9 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.UserInfo", b =>
                 {
                     b.Property<byte[]>("ID")
-                        .IsConcurrencyToken()
                         .HasMaxLength(16)
                         .HasColumnType("Binary")
-                        .HasColumnName("id");
+                        .HasColumnName("user_id");
 
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2")
@@ -299,6 +385,26 @@ namespace Shop.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Shop.Models.Address", b =>
+                {
+                    b.HasOne("Shop.Models.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Shop.Models.Region", b =>
+                {
+                    b.HasOne("Shop.Models.Region", "Regions")
+                        .WithMany("SubRegion")
+                        .HasForeignKey("ParentID");
+
+                    b.Navigation("Regions");
+                });
+
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
                     b.HasOne("Shop.Models.Role", "Roles")
@@ -308,6 +414,25 @@ namespace Shop.Migrations
                         .IsRequired();
 
                     b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("Shop.Models.UserAddress", b =>
+                {
+                    b.HasOne("Shop.Models.Address", "Address")
+                        .WithMany("UserAddress")
+                        .HasForeignKey("AddressID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.User", "User")
+                        .WithMany("UserAddress")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Shop.Models.UserAuthMethod", b =>
@@ -359,9 +484,19 @@ namespace Shop.Migrations
                     b.Navigation("VerificationMethod");
                 });
 
+            modelBuilder.Entity("Shop.Models.Address", b =>
+                {
+                    b.Navigation("UserAddress");
+                });
+
             modelBuilder.Entity("Shop.Models.AuthProvider", b =>
                 {
                     b.Navigation("UserAuthMethod");
+                });
+
+            modelBuilder.Entity("Shop.Models.Region", b =>
+                {
+                    b.Navigation("SubRegion");
                 });
 
             modelBuilder.Entity("Shop.Models.Role", b =>
@@ -371,6 +506,8 @@ namespace Shop.Migrations
 
             modelBuilder.Entity("Shop.Models.User", b =>
                 {
+                    b.Navigation("UserAddress");
+
                     b.Navigation("UserAuthMethods");
 
                     b.Navigation("UserInfo");
