@@ -20,15 +20,27 @@ namespace Shop.Data
     }
 
     public DbSet<User> Users => Set<User>();
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<UserAuthMethod> UserAuthMethods => Set<UserAuthMethod>();
-    public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
-    public DbSet<UserVerificationMethod> UserVerificationMethods => Set<UserVerificationMethod>();
-    public DbSet<VerificationMethod> VerificationMethods => Set<VerificationMethod>();
-    public DbSet<UserInfo> UserInfo => Set<UserInfo>();
-    public DbSet<UserAddress> UserAddress => Set<UserAddress>();
+    public DbSet<Role> User_Roles => Set<Role>();
+    public DbSet<UserInfo> User_Info => Set<UserInfo>();
+    public DbSet<UserAddress> User_Addressess => Set<UserAddress>();
+    public DbSet<UserAuthMethod> User_AuthMethods => Set<UserAuthMethod>();
+    public DbSet<UserVerificationMethod> User_VerificationMethods => Set<UserVerificationMethod>();
+
     public DbSet<Address> Address => Set<Address>();
-    public DbSet<Region> Region => Set<Region>();
+    public DbSet<Region> Regions => Set<Region>();
+    public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
+    public DbSet<VerificationMethod> VerificationMethods => Set<VerificationMethod>();
+
+
+    public DbSet<Product> Products => Set<Product>();
+    public DbSet<Category> Product_Categories => Set<Category>();
+    public DbSet<ProductConf> Product_Conf => Set<ProductConf>();
+    public DbSet<ProductItem> Product_Items => Set<ProductItem>();
+    public DbSet<Promotion> Product_Promotions => Set<Promotion>();
+    public DbSet<Variation> Product_Variations => Set<Variation>();
+    public DbSet<VariationOption> Product_VariationOptions => Set<VariationOption>();
+    public DbSet<Description> Product_Descriptions => Set<Description>();
+    public DbSet<PromotionCategory> Product_PromotionCategories => Set<PromotionCategory>();
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -43,6 +55,8 @@ namespace Shop.Data
       modelBuilder.Entity<UserAuthMethod>().HasKey(x => new { x.UserID, x.AuthProviderID });
       modelBuilder.Entity<UserVerificationMethod>().HasKey(x => new { x.UserID, x.VerificationMethodID });
       modelBuilder.Entity<UserAddress>().HasKey(x => new { x.UserID, x.AddressID });
+      modelBuilder.Entity<PromotionCategory>().HasKey(x => new { x.CategoryID, x.PromotionID });
+      modelBuilder.Entity<ProductConf>().HasKey(x => new { x.ProductItemID, x.VariationOptionID });
 
 
       modelBuilder.Entity<Role>().HasData(

@@ -105,6 +105,194 @@ namespace Shop.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Shop.Models.Category", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("name");
+
+                    b.Property<int?>("ParentID")
+                        .HasColumnType("int")
+                        .HasColumnName("parent_id");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ParentID");
+
+                    b.ToTable("Product_Categories");
+                });
+
+            modelBuilder.Entity("Shop.Models.Description", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Product_Descriptions");
+                });
+
+            modelBuilder.Entity("Shop.Models.Product", b =>
+                {
+                    b.Property<long>("ID")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)")
+                        .HasColumnName("description");
+
+                    b.Property<long>("FullDescriptionID")
+                        .HasColumnType("bigint")
+                        .HasColumnName("full_description_id");
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("image");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.HasIndex("FullDescriptionID")
+                        .IsUnique();
+
+                    b.HasIndex("ID")
+                        .IsUnique();
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductConf", b =>
+                {
+                    b.Property<byte?>("ProductItemID")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("product_item_id");
+
+                    b.Property<int>("VariationOptionID")
+                        .HasColumnType("int")
+                        .HasColumnName("variation_option_id");
+
+                    b.HasKey("ProductItemID", "VariationOptionID");
+
+                    b.HasIndex("VariationOptionID");
+
+                    b.ToTable("Product_Conf");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductItem", b =>
+                {
+                    b.Property<byte>("ID")
+                        .IsConcurrencyToken()
+                        .HasColumnType("tinyint")
+                        .HasColumnName("id");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("Money")
+                        .HasColumnName("price");
+
+                    b.Property<long>("ProductID")
+                        .HasColumnType("bigint")
+                        .HasColumnName("product_id");
+
+                    b.Property<long>("Quantity")
+                        .HasColumnType("bigint")
+                        .HasColumnName("quantity");
+
+                    b.Property<byte[]>("SKU")
+                        .HasMaxLength(110000)
+                        .HasColumnType("varbinary(max)")
+                        .HasColumnName("sku");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("ProductID");
+
+                    b.ToTable("Product_Items");
+                });
+
+            modelBuilder.Entity("Shop.Models.Promotion", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)")
+                        .HasColumnName("description");
+
+                    b.Property<DateTime?>("DiscountEndDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("end_date");
+
+                    b.Property<byte>("DiscountRate")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("rate");
+
+                    b.Property<DateTime?>("DiscountStartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("start_date");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Product_Promotions");
+                });
+
+            modelBuilder.Entity("Shop.Models.PromotionCategory", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<int>("PromotionID")
+                        .HasColumnType("int")
+                        .HasColumnName("promotion_id");
+
+                    b.HasKey("CategoryID", "PromotionID");
+
+                    b.HasIndex("PromotionID");
+
+                    b.ToTable("Product_PromotionCategories");
+                });
+
             modelBuilder.Entity("Shop.Models.Region", b =>
                 {
                     b.Property<long>("RegionID")
@@ -115,7 +303,8 @@ namespace Shop.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RegionID"));
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
                         .HasColumnName("name");
 
                     b.Property<long?>("ParentID")
@@ -126,7 +315,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("ParentID");
 
-                    b.ToTable("Region");
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Shop.Models.Role", b =>
@@ -142,7 +331,7 @@ namespace Shop.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Roles");
+                    b.ToTable("User_Roles");
 
                     b.HasData(
                         new
@@ -230,10 +419,10 @@ namespace Shop.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("Role");
-
-                    b.HasIndex(new[] { "ID" }, "Index_ID")
+                    b.HasIndex("ID")
                         .IsUnique();
+
+                    b.HasIndex("Role");
 
                     b.ToTable("Users");
                 });
@@ -253,7 +442,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("AddressID");
 
-                    b.ToTable("UserAddress");
+                    b.ToTable("User_Addressess");
                 });
 
             modelBuilder.Entity("Shop.Models.UserAuthMethod", b =>
@@ -271,7 +460,7 @@ namespace Shop.Migrations
 
                     b.HasIndex("AuthProviderID");
 
-                    b.ToTable("UserAuthMethods");
+                    b.ToTable("User_AuthMethods");
                 });
 
             modelBuilder.Entity("Shop.Models.UserInfo", b =>
@@ -321,7 +510,7 @@ namespace Shop.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("UserInfo");
+                    b.ToTable("User_Info");
                 });
 
             modelBuilder.Entity("Shop.Models.UserVerificationMethod", b =>
@@ -339,7 +528,57 @@ namespace Shop.Migrations
 
                     b.HasIndex("VerificationMethodID");
 
-                    b.ToTable("UserVerificationMethods");
+                    b.ToTable("User_VerificationMethods");
+                });
+
+            modelBuilder.Entity("Shop.Models.Variation", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<int?>("CategoryID")
+                        .HasColumnType("int")
+                        .HasColumnName("category_id");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("CategoryID");
+
+                    b.ToTable("Product_Variations");
+                });
+
+            modelBuilder.Entity("Shop.Models.VariationOption", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasColumnName("value");
+
+                    b.Property<int?>("VariationID")
+                        .HasColumnType("int")
+                        .HasColumnName("variation_id");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("VariationID");
+
+                    b.ToTable("Product_VariationOptions");
                 });
 
             modelBuilder.Entity("Shop.Models.VerificationMethod", b =>
@@ -394,6 +633,83 @@ namespace Shop.Migrations
                         .IsRequired();
 
                     b.Navigation("Region");
+                });
+
+            modelBuilder.Entity("Shop.Models.Category", b =>
+                {
+                    b.HasOne("Shop.Models.Category", "Categories")
+                        .WithMany("SubCategory")
+                        .HasForeignKey("ParentID");
+
+                    b.Navigation("Categories");
+                });
+
+            modelBuilder.Entity("Shop.Models.Product", b =>
+                {
+                    b.HasOne("Shop.Models.Category", "Category")
+                        .WithMany("Product")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.Description", "Descriptions")
+                        .WithOne("Product")
+                        .HasForeignKey("Shop.Models.Product", "FullDescriptionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Descriptions");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductConf", b =>
+                {
+                    b.HasOne("Shop.Models.ProductItem", "ProductItems")
+                        .WithMany("ProductConf")
+                        .HasForeignKey("ProductItemID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.VariationOption", "VariationOptions")
+                        .WithMany("ProductConf")
+                        .HasForeignKey("VariationOptionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductItems");
+
+                    b.Navigation("VariationOptions");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductItem", b =>
+                {
+                    b.HasOne("Shop.Models.Product", "Product")
+                        .WithMany("ProductItem")
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Shop.Models.PromotionCategory", b =>
+                {
+                    b.HasOne("Shop.Models.Category", "Category")
+                        .WithMany("PromotionCategory")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Shop.Models.Promotion", "Promotion")
+                        .WithMany("PromotionCategories")
+                        .HasForeignKey("PromotionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("Shop.Models.Region", b =>
@@ -484,6 +800,24 @@ namespace Shop.Migrations
                     b.Navigation("VerificationMethod");
                 });
 
+            modelBuilder.Entity("Shop.Models.Variation", b =>
+                {
+                    b.HasOne("Shop.Models.Category", "Category")
+                        .WithMany("Variation")
+                        .HasForeignKey("CategoryID");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Shop.Models.VariationOption", b =>
+                {
+                    b.HasOne("Shop.Models.Variation", "Variation")
+                        .WithMany("VariationOption")
+                        .HasForeignKey("VariationID");
+
+                    b.Navigation("Variation");
+                });
+
             modelBuilder.Entity("Shop.Models.Address", b =>
                 {
                     b.Navigation("UserAddress");
@@ -492,6 +826,37 @@ namespace Shop.Migrations
             modelBuilder.Entity("Shop.Models.AuthProvider", b =>
                 {
                     b.Navigation("UserAuthMethod");
+                });
+
+            modelBuilder.Entity("Shop.Models.Category", b =>
+                {
+                    b.Navigation("Product");
+
+                    b.Navigation("PromotionCategory");
+
+                    b.Navigation("SubCategory");
+
+                    b.Navigation("Variation");
+                });
+
+            modelBuilder.Entity("Shop.Models.Description", b =>
+                {
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Shop.Models.Product", b =>
+                {
+                    b.Navigation("ProductItem");
+                });
+
+            modelBuilder.Entity("Shop.Models.ProductItem", b =>
+                {
+                    b.Navigation("ProductConf");
+                });
+
+            modelBuilder.Entity("Shop.Models.Promotion", b =>
+                {
+                    b.Navigation("PromotionCategories");
                 });
 
             modelBuilder.Entity("Shop.Models.Region", b =>
@@ -513,6 +878,16 @@ namespace Shop.Migrations
                     b.Navigation("UserInfo");
 
                     b.Navigation("UserVerificationMethods");
+                });
+
+            modelBuilder.Entity("Shop.Models.Variation", b =>
+                {
+                    b.Navigation("VariationOption");
+                });
+
+            modelBuilder.Entity("Shop.Models.VariationOption", b =>
+                {
+                    b.Navigation("ProductConf");
                 });
 
             modelBuilder.Entity("Shop.Models.VerificationMethod", b =>

@@ -32,11 +32,11 @@ namespace Shop.Controllers
     {
       HMACSHA512 HashAlgorithm = new HMACSHA512(Convert.FromBase64String(_configuration.GetValue<string>("JWT:Key")));
 
-      await _context.Region.AddAsync(Countries.IRAN);
-      await _context.Region.AddAsync(Countries.USA);
+      await _context.Regions.AddAsync(Countries.IRAN);
+      await _context.Regions.AddAsync(Countries.USA);
       await _context.SaveChangesAsync();
 
-      Region? UserRegion = await _context.Region.FirstAsync(z => z.Name == "IRAN");
+      Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
 
 
 

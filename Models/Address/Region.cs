@@ -12,7 +12,7 @@ namespace Shop.Models
     [Key, Required, Column("id")]
     public uint RegionID { get; set; }
 
-    [Column("name")]
+    [Column("name"), MaxLength(20)]
     public string? Name { get; set; }
 
     [Column("parent_id")]

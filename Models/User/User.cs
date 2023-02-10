@@ -6,7 +6,7 @@ using static Shop.Models.Role;
 namespace Shop.Models
 {
 
-  [Index(nameof(ID), IsUnique = true, Name = "Index_ID")]
+  [Index(nameof(ID), IsUnique = true)]
   public class User
   {
     [Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]

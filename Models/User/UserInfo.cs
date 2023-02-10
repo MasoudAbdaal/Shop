@@ -8,7 +8,7 @@ namespace Shop.Models
 
   public class UserInfo
   {
-    [Key, ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[] ID { get; set; } = new byte[16];
 
     [Column("lastname"), MaxLength(40)]
