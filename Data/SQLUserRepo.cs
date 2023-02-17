@@ -5,9 +5,9 @@ namespace Shop.Data
 
   public class SQLUserRepo : IUserRepo
   {
-    private readonly UserContext _context;
+    private readonly MainContext _context;
 
-    public SQLUserRepo(UserContext context)
+    public SQLUserRepo(MainContext context)
     {
       _context = context;
     }

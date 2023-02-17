@@ -22,5 +22,9 @@ namespace Shop.Models
 
     public Product? Product { get; set; }
     public ICollection<ProductConf>? ProductConf { get; set; }
+
+    public ICollection<CartItem>? CartItem { get; set; }
+
+    public ICollection<OrderLine>? OrderLine { get; set; }
   }
 }

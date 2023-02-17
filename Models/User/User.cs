@@ -9,7 +9,7 @@ namespace Shop.Models
   [Index(nameof(ID), IsUnique = true)]
   public class User
   {
-    [Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
+    [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
     public byte[] ID { get; set; } = new byte[16];
 
     [Required, Column("name"), MaxLength(40)]
@@ -23,14 +23,6 @@ namespace Shop.Models
 
     [Required, Column("password_salt", TypeName = "Binary"), MaxLength(128),]
     public byte[] PasswordSalt { get; set; } = new byte[128];
-
-    [Column("token", TypeName = "Binary"), MaxLength(128)]
-    public string? Token { get; set; }
-
-    //Just Update Token expire date (DONT CREATE NEW ONE!)
-    //Check token exp with database value
-    [Column("token_expire_date")]
-    public DateTime? TokenExpireDate { get; set; }
 
     [Column("reset_pass_token", TypeName = "Binary"), MaxLength(128)]
     public string? ResetPasswordToken { get; set; }
@@ -53,9 +45,18 @@ namespace Shop.Models
 
     [ForeignKey("Role")]
     public Role? Roles { get; set; }
+
     public UserInfo? UserInfo { get; set; }
     public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
     public ICollection<UserAddress>? UserAddress { get; set; }
+
+    public ICollection<Cart>? Cart { get; set; }
+
+    public ICollection<Payment>? Payment { get; set; }
+
+    public ICollection<UserReview>? UserReview { get; set; }
+
+    public ICollection<Order>? Order { get; set; }
   }
 }

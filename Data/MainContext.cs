@@ -8,18 +8,19 @@ using static Shop.Models.VerificationMethod;
 
 namespace Shop.Data
 {
-  public class UserContext : DbContext
+  public class MainContext : DbContext
   {
     private readonly IConfiguration _configuration;
-    private readonly DbContextOptions<UserContext> _options;
+    private readonly DbContextOptions<MainContext> _options;
 
-    public UserContext(DbContextOptions<UserContext> options, IConfiguration configuration) : base(options)
+    public MainContext(DbContextOptions<MainContext> options, IConfiguration configuration) : base(options)
     {
       _configuration = configuration;
       _options = options;
     }
 
     public DbSet<User> Users => Set<User>();
+    public DbSet<UserReview> User_Reviews => Set<UserReview>();
     public DbSet<Role> User_Roles => Set<Role>();
     public DbSet<UserInfo> User_Info => Set<UserInfo>();
     public DbSet<UserAddress> User_Addressess => Set<UserAddress>();
@@ -31,6 +32,19 @@ namespace Shop.Data
     public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
     public DbSet<VerificationMethod> VerificationMethods => Set<VerificationMethod>();
 
+
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<PaymentType> Payment_Types => Set<PaymentType>();
+
+
+    public DbSet<Order> Orders => Set<Order>();
+    public DbSet<OrderLine> Order_Lines => Set<OrderLine>();
+    public DbSet<OrderStatus> Order_Status => Set<OrderStatus>();
+    public DbSet<OrderShippingMethod> Order_Shipping_Methods => Set<OrderShippingMethod>();
+
+
+    public DbSet<Cart> Carts => Set<Cart>();
+    public DbSet<CartItem> Cart_Items => Set<CartItem>();
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Product_Categories => Set<Category>();

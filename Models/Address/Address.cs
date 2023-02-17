@@ -30,6 +30,7 @@ namespace Shop.Models
 
     public Region? Region { get; set; }
     public ICollection<UserAddress>? UserAddress { get; set; }
+    public ICollection<Order>? Order { get; set; }
 
   }
 }

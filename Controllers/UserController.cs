@@ -18,10 +18,10 @@ namespace Shop.Controllers
   [ApiController]
   public class UserController : ControllerBase
   {
-    private readonly UserContext _context;
+    private readonly MainContext _context;
     private readonly IConfiguration _configuration;
 
-    public UserController(UserContext context, IConfiguration configuration)
+    public UserController(MainContext context, IConfiguration configuration)
     {
       _context = context;
       _configuration = configuration;
