@@ -1,4 +1,4 @@
-using Shop.Models;
+using Shop.Data.Interface;
 
 namespace Shop.Data
 {

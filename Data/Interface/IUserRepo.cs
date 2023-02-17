@@ -1,4 +1,4 @@
-namespace Shop.Data
+namespace Shop.Data.Interface
 {
 
   public interface IUserRepo
