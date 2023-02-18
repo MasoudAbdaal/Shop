@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using Shop.Constants;
 using Shop.Data;
+using Shop.Data.Interface;
 using Shop.DTOs;
 using Shop.Models;
 using static Shop.Models.Role;
@@ -17,10 +18,10 @@ namespace Shop.Controllers
   [ApiController]
   public class UserController : ControllerBase
   {
-    private readonly MainContext _context;
+    private readonly IUserRepo _context;
     private readonly IConfiguration _configuration;
 
-    public UserController(MainContext context, IConfiguration configuration)
+    public UserController(IUserRepo context, IConfiguration configuration)
     {
       _context = context;
       _configuration = configuration;
@@ -31,11 +32,12 @@ namespace Shop.Controllers
     {
       HMACSHA512 HashAlgorithm = new HMACSHA512(Convert.FromBase64String(_configuration.GetValue<string>("JWT:Key")));
 
-      await _context.Regions.AddAsync(Countries.IRAN);
-      await _context.Regions.AddAsync(Countries.USA);
-      await _context.SaveChangesAsync();
+      // await _context.Regions.AddAsync(Countries.IRAN);
+      // await _context.Regions.AddAsync(Countries.USA);
+      // await _context.SaveChangesAsync();
 
-      Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
+
+      // Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
 
 
 
@@ -48,10 +50,12 @@ namespace Shop.Controllers
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes("123321")),
         PasswordSalt = HashAlgorithm.Key,
 
-        UserAddress = new Collection<UserAddress>
-        {
-          new UserAddress{Address= new Address{Region=UserRegion,AddressLine="Karaj, Golshahr",PostalCode="asdaklsda",UnitNumber=911,Location =new Point(41.40338, 2.17403){SRID=4326} }}
-        },
+        // UserAddress = new Collection<UserAddress>
+        // {
+        //   new UserAddress{Address= new Address{
+        // Region=UserRegion,
+        //   AddressLine="Karaj, Golshahr",PostalCode="asdaklsda",UnitNumber=911,Location =new Point(41.40338, 2.17403){SRID=4326} }}
+        // },
 
         UserInfo = new UserInfo
         {
@@ -62,8 +66,9 @@ namespace Shop.Controllers
 
         UserVerificationMethods = new Collection<UserVerificationMethod> {
            new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.EMAIL
+  },
+           new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.TOKEN
 },
-           new UserVerificationMethod { VerificationMethodID = VerificationMethod.VerifyMethods.TOKEN },
             },
         UserAuthMethods = new Collection<UserAuthMethod> {
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL },
@@ -74,8 +79,10 @@ namespace Shop.Controllers
 
 
       };
-      await _context.Users.AddAsync(u);
-      await _context.SaveChangesAsync();
+
+      await _context.CreateUser(u);
+      // await _context.Users.AddAsync(u);
+      // await _context.SaveChangesAsync();
 
       return Ok();
     }

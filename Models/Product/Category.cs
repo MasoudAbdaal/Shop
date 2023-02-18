@@ -17,7 +17,7 @@ namespace Shop.Models
     [ForeignKey("ParentID")]
     public Category? Categories { get; set; }
     public ICollection<Category>? SubCategory { get; set; }
-    public ICollection<PromotionCategory>? PromotionCategory { get; set; }
+    public ICollection<PromotionCategories>? PromotionCategory { get; set; }
 
     public ICollection<Product>? Product { get; set; }
     public ICollection<Variation>? Variation { get; set; }

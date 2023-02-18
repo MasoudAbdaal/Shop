@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using static Shop.Models.Role;
 
 namespace Shop.Models
@@ -58,5 +59,7 @@ namespace Shop.Models
     public ICollection<UserReview>? UserReview { get; set; }
 
     public ICollection<Order>? Order { get; set; }
+
+
   }
 }

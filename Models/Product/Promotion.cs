@@ -24,11 +24,12 @@ namespace Shop.Models
     [Column("end_date")]
     public DateTime? DiscountEndDate { get; set; }
 
-    public ICollection<PromotionCategory>? PromotionCategories { get; set; }
+    public ICollection<PromotionCategories>? PromotionCategories { get; set; }
+    public ICollection<PromotionProducts>? PromotionProducts { get; set; }
   }
 
 
-  public class PromotionCategory
+  public class PromotionCategories
   {
     [ForeignKey("Promotion"), Column("promotion_id")]
     public ushort PromotionID { get; set; }
@@ -39,4 +40,18 @@ namespace Shop.Models
     public Category? Category { get; set; }
     public Promotion? Promotion { get; set; }
   }
+
+
+  public class PromotionProducts
+  {
+    [ForeignKey("ProductItem"), Column("product_item_id")]
+    public byte ProductItemID { get; set; }
+
+    [ForeignKey("Promotion"), Column("promotion_id")]
+    public ushort PromotionID { get; set; }
+
+    public Promotion? Promotion { get; set; }
+    public ProductItem? ProductItem { get; set; }
+  }
+
 }

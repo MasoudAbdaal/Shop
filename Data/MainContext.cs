@@ -48,13 +48,14 @@ namespace Shop.Data
 
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Product_Categories => Set<Category>();
+    public DbSet<Promotion> Promotions => Set<Promotion>();
     public DbSet<ProductConf> Product_Conf => Set<ProductConf>();
     public DbSet<ProductItem> Product_Items => Set<ProductItem>();
-    public DbSet<Promotion> Product_Promotions => Set<Promotion>();
     public DbSet<Variation> Product_Variations => Set<Variation>();
     public DbSet<VariationOption> Product_VariationOptions => Set<VariationOption>();
     public DbSet<Description> Product_Descriptions => Set<Description>();
-    public DbSet<PromotionCategory> Product_PromotionCategories => Set<PromotionCategory>();
+    public DbSet<PromotionCategories> Product_Categories_Promotions => Set<PromotionCategories>();
+    public DbSet<PromotionProducts> Product_Items_Promotions => Set<PromotionProducts>();
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -69,8 +70,9 @@ namespace Shop.Data
       modelBuilder.Entity<UserAuthMethod>().HasKey(x => new { x.UserID, x.AuthProviderID });
       modelBuilder.Entity<UserVerificationMethod>().HasKey(x => new { x.UserID, x.VerificationMethodID });
       modelBuilder.Entity<UserAddress>().HasKey(x => new { x.UserID, x.AddressID });
-      modelBuilder.Entity<PromotionCategory>().HasKey(x => new { x.CategoryID, x.PromotionID });
+      modelBuilder.Entity<PromotionCategories>().HasKey(x => new { x.CategoryID, x.PromotionID });
       modelBuilder.Entity<ProductConf>().HasKey(x => new { x.ProductItemID, x.VariationOptionID });
+      modelBuilder.Entity<PromotionProducts>().HasKey(x => new { x.ProductItemID, x.PromotionID });
 
 
       modelBuilder.Entity<Role>().HasData(
@@ -78,7 +80,7 @@ namespace Shop.Data
           .Cast<UserRoles>().Select(u => new Role()
           {
             ID = u,
-            Name = u.ToString()
+            Name = u.ToString(),
           }));
 
 
