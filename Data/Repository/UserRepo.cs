@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shop.Data.Interface;
@@ -35,7 +36,7 @@ namespace Shop.Data
     }
 
 
-    public async Task<User?> GetUser(string email, byte[]? userId)
+    public async Task<User?> GetUser(string? email, byte[]? userId)
     {
       User? result;
       if (userId != null)
@@ -46,28 +47,54 @@ namespace Shop.Data
       return result == null ? default : result;
     }
 
-    public async Task<User> EditUser(User user)
+    public async Task<User?> EditUser(User user)
     {
-      User? u = await GetUser(user.Email, null);
+      User? result;
+      if (user.Email != null)
+        result = await GetUser(user.Email, null);
+      else
+        result = await GetUser(null, user.ID);
 
-      EntityEntry<User> result = _context.Users.Update(user!);
-      await _context.SaveChangesAsync();
 
-      return result.Entity;
+
+      if (result != null)
+      {
+        User? J = new User() { Name = "NEW USSSSSSSSSSSSER" };
+
+        foreach (PropertyInfo item in user.GetType().GetProperties())
+        {
+          if (item.GetValue(user, null) != null)
+          {
+
+            Console.WriteLine("{0} ==>{1}", item.Name, item.GetValue(user, null) == null ? "NULL" : item.GetValue(user, null));
+
+            Console.WriteLine("{0}--------------{1}", J.GetType().GetProperty(item.Name)!.Name,
+            J.GetType().GetProperty(item.Name)!.GetValue(user, null)!);
+
+          }
+
+        }
+
+        _context.Users.Update(result!);
+        await SaveChanges();
+        return await GetUser(null, result.ID);
+      }
+
+      return default;
     }
 
-    public async Task DeleteUser(string email)
+    public async Task<User?> DeleteUser(string email)
     {
       User? u = await GetUser(email, null);
       if (u == null)
-        return;
+        return default;
 
-      (u.UserInfo!.Enabled) = false;
+      u!.UserInfo!.Enabled = false;
+      _context.Users.Update(u);
+      await SaveChanges();
+
+      return await GetUser(email, null);
     }
   }
-
-
-
-
 
 }

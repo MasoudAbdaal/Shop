@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,12 @@ namespace Shop.Controllers
   [ApiController]
   public class UserController : ControllerBase
   {
-    private readonly IUserRepo _context;
+    private readonly IUserRepo _repository;
     private readonly IConfiguration _configuration;
 
-    public UserController(IUserRepo context, IConfiguration configuration)
+    public UserController(IUserRepo repository, IConfiguration configuration)
     {
-      _context = context;
+      _repository = repository;
       _configuration = configuration;
     }
 
@@ -38,6 +39,11 @@ namespace Shop.Controllers
 
 
       // Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
+      User editedUser = new User() { Email = "asdjalskdjl@asdkalsdkja", Name = "MASOUD" };
+
+      await _repository.EditUser(editedUser);
+
+
 
 
 
@@ -80,10 +86,10 @@ namespace Shop.Controllers
 
       };
 
-      await _context.CreateUser(u);
+      // await _repository.CreateUser(u);
       // await _context.Users.AddAsync(u);
       // await _context.SaveChangesAsync();
-
+      
       return Ok();
     }
   }

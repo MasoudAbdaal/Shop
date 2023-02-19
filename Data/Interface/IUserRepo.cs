@@ -9,8 +9,8 @@ namespace Shop.Data.Interface
 
     Task<User?> CreateUser(User user);
     Task<User?> GetUser(string email, byte[]? userId);
-    Task<User> EditUser(User user);
-    Task DeleteUser(string email);
+    Task<User?> EditUser(User user);
+    Task<User?> DeleteUser(string email);
   }
 
 }
