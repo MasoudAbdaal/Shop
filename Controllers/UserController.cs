@@ -1,33 +1,30 @@
-using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NetTopologySuite.Geometries;
-using Shop.Constants;
-using Shop.Data;
 using Shop.Data.Interface;
 using Shop.DTOs;
+using Shop.Helpers;
 using Shop.Models;
-using static Shop.Models.Role;
 
 namespace Shop.Controllers
 {
-
+  [Route("api/[controller]")]
   [ApiController]
   public class UserController : ControllerBase
   {
     private readonly IUserRepo _repository;
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserRepo repository, IConfiguration configuration)
+    public UserController(IUserRepo repository, IConfiguration configuration, IMapper mapper)
     {
       _repository = repository;
       _configuration = configuration;
+      _mapper = mapper;
     }
 
     [HttpPost("register")]
@@ -62,42 +59,29 @@ namespace Shop.Controllers
       return Ok();
     }
 
-    [HttpPost("login")]
+    [HttpPost]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
       User? u = await _repository.GetUser(request.Email, null);
 
       if (u != null)
       {
-        HMACSHA512 HashAlgorithm = new HMACSHA512(u.PasswordSalt);
-
-        if (HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)).SequenceEqual(u.Password))
+        if (Authentication.CheckPassword(request.Password!, u.PasswordSalt))
         {
-          SymmetricSecurityKey signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWT:Key")));
-          SigningCredentials signingCredential = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha512Signature);
-
-          List<Claim> Claims = new List<Claim>
-        {
-        new Claim(JwtRegisteredClaimNames.Iss,_configuration.GetValue<string>("JWT:Issuer")),
-        new Claim(JwtRegisteredClaimNames.Aud,_configuration.GetValue<string>("JWT:Audience")),
-        new Claim(JwtRegisteredClaimNames.Exp, String.Format("{0}",Convert.ToInt32((DateTime.Now.AddDays(5) - new DateTime(1970, 1, 1)).TotalSeconds))),
-        new Claim(JwtRegisteredClaimNames.Email, (request.Email)),
-        };
-          JwtHeader HEADERS = new JwtHeader(signingCredential);
-          JwtPayload PAYLOAD = new JwtPayload(Claims);
-          JwtSecurityToken TOKEN = new JwtSecurityToken(HEADERS, PAYLOAD);
+          JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, 45,
+           _configuration.GetValue<string>("JWT:Issuer"),
+           _configuration.GetValue<string>("JWT:Audience"),
+           _configuration.GetValue<string>("JWT:Key"));
 
           return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
         }
 
-        else return Unauthorized();
+        else return Unauthorized("Invalid password!");
       }
 
-      return NotFound();
+      return NotFound("You do not have any account with this email!");
     }
 
   }
-
-
 
 }
