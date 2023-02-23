@@ -21,7 +21,7 @@ namespace Shop.Data
 
     public DbSet<User> Users => Set<User>();
     public DbSet<UserReview> User_Reviews => Set<UserReview>();
-    public DbSet<Role> User_Roles => Set<Role>();
+    public DbSet<Role> Roles => Set<Role>();
     public DbSet<UserInfo> User_Info => Set<UserInfo>();
     public DbSet<UserAddress> User_Addressess => Set<UserAddress>();
     public DbSet<UserAuthMethod> User_AuthMethods => Set<UserAuthMethod>();

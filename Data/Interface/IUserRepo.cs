@@ -7,7 +7,7 @@ namespace Shop.Data.Interface
   {
     Task SaveChanges();
 
-    Task<User?> CreateUser(User user);
+    Task CreateUser(User user);
     Task<User?> GetUser(string email, byte[]? userId);
     Task<User?> EditUser(User user);
     Task<User?> DeleteUser(string email);

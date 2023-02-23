@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +31,7 @@ namespace Shop.Models
     public string? ResetPasswordToken { get; set; }
 
     [Column("role")]
-    public UserRoles Role { get; set; }
+    public UserRoles Role { get; set; } = UserRoles.PURCHASER;
 
     [Column("reset_pass_token_expire_date")]
     public DateTime? ResetPasswordTokenExpires { get; set; }
@@ -47,8 +49,12 @@ namespace Shop.Models
     [ForeignKey("Role")]
     public Role? Roles { get; set; }
 
-    public UserInfo? UserInfo { get; set; }
-    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
+    public UserInfo? UserInfo { get; set; } = new UserInfo { CreateDate = DateTime.UtcNow, PhoneNumber_Verified = false, };
+
+    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; } = new Collection<UserAuthMethod> {
+         new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL}};
+
+
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
     public ICollection<UserAddress>? UserAddress { get; set; }
 
@@ -59,7 +65,5 @@ namespace Shop.Models
     public ICollection<UserReview>? UserReview { get; set; }
 
     public ICollection<Order>? Order { get; set; }
-
-
   }
 }

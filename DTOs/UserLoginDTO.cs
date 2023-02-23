@@ -4,12 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shop.DTOs
 {
-  public class UserRegisterDTO
+  public class UserLoginDTO
   {
-
-    [Required, MaxLength(40)]
-    public string Name { get; set; } = string.Empty;
-
     [Required, EmailAddress, MaxLength(40)]
     public string Email { get; set; } = string.Empty;
 
