@@ -11,7 +11,7 @@ namespace Shop.Models
     public byte[] UserID { get; set; } = new byte[16];
 
     [ForeignKey("Address"), Column("address_id")]
-    public uint AddressID { get; set; }
+    public byte[] AddressID { get; set; } = new byte[4];
 
     public User? User { get; set; }
     public Address? Address { get; set; }

@@ -15,7 +15,7 @@ namespace Shop.Models
     public uint PaymentMethodID { get; set; }
 
     [ForeignKey("Address"), Column("shipping_address")]
-    public uint AddressID { get; set; }
+    public byte[] AddressID { get; set; } = new byte[4];
 
     [ForeignKey("OrderShippingMethod"), Column("shipping_method")]
     public byte ShippingMethod { get; set; }

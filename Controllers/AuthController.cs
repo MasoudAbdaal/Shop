@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -14,13 +15,13 @@ namespace Shop.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class UserController : ControllerBase
+  public class AuthController : ControllerBase
   {
     private readonly IUserRepo _repository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public UserController(IUserRepo repository, IConfiguration configuration, IMapper mapper)
+    public AuthController(IUserRepo repository, IConfiguration configuration, IMapper mapper)
     {
       _repository = repository;
       _configuration = configuration;
@@ -40,6 +41,8 @@ namespace Shop.Controllers
 
 
       HMACSHA512 HashAlgorithm = new HMACSHA512();
+      byte[] AddressRandID = new byte[4];
+      new Random().NextBytes(AddressRandID);
 
       User u = new User
       {
@@ -48,6 +51,12 @@ namespace Shop.Controllers
         Email = request.Email,
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
         PasswordSalt = HashAlgorithm.Key,
+
+        // UserAddress = new Collection<UserAddress> { new UserAddress {
+        // AddressID =AddressRandID,
+
+        //  Address = new Address {ID=AddressRandID, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
+        //  },
         UserInfo = new UserInfo
         {
           PhoneNumber = request.PhoneNumber
@@ -59,7 +68,7 @@ namespace Shop.Controllers
       return Ok();
     }
 
-    [HttpPost]
+    [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
       User? u = await _repository.GetUser(request.Email, null);
@@ -82,6 +91,17 @@ namespace Shop.Controllers
       return NotFound("You do not have any account with this email!");
     }
 
+    [HttpPost, Route("add-mod")]
+    public async Task<IActionResult> ModAdd(UserAddressDTO request)
+    {
+      var z = await _repository.GetUser(request.Email!, null);
+
+      var HELLO = _mapper.Map<UserAddressDTO, User>(request, z);
+
+
+      return Ok();
+    }
   }
+
 
 }

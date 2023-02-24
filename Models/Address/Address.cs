@@ -7,8 +7,8 @@ namespace Shop.Models
 
   public class Address
   {
-    [Key, Required, Column("id")]
-    public uint ID { get; set; }
+    [Key, Required, Column("id"), MaxLength(4), DatabaseGenerated(DatabaseGeneratedOption.None)]
+    public byte[] ID { get; set; } = new byte[4];
 
     [ForeignKey("Region"), Column("region_id")]
     public uint RegionID { get; set; }
