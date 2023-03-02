@@ -6,10 +6,12 @@ using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Shop.Data.Interface;
 using Shop.DTOs;
 using Shop.Helpers;
 using Shop.Models;
+using Shop.Utility;
 
 namespace Shop.Controllers
 {
@@ -41,22 +43,25 @@ namespace Shop.Controllers
 
 
       HMACSHA512 HashAlgorithm = new HMACSHA512();
-      byte[] AddressRandID = new byte[4];
-      new Random().NextBytes(AddressRandID);
+      byte[] AddressID_Random = new byte[4];
+      byte[] UserID_Random = new byte[16];
+      Random r = new Random();
+      r.NextBytes(AddressID_Random);
+      r.NextBytes(UserID_Random);
 
       User u = new User
       {
-        ID = new Guid(RandomNumberGenerator.GetBytes(16)).ToByteArray(),
+        ID = UserID_Random,
         Name = request.Name,
         Email = request.Email,
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
         PasswordSalt = HashAlgorithm.Key,
 
-        // UserAddress = new Collection<UserAddress> { new UserAddress {
-        // AddressID =AddressRandID,
+        UserAddress = new Collection<UserAddress> { new UserAddress {
+        AddressID =AddressID_Random,
 
-        //  Address = new Address {ID=AddressRandID, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
-        //  },
+         Address = new Address {ID=AddressID_Random, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
+         },
         UserInfo = new UserInfo
         {
           PhoneNumber = request.PhoneNumber
@@ -71,13 +76,20 @@ namespace Shop.Controllers
     [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
+      // var z = Request.Headers[HeaderNames.Authorization];
+
+      // var tokenString = z.ToString().Split()[1];
+
+      // var jj = SecurityUtil.GetTokenInfo(tokenString);
+      // Console.WriteLine(jj.Role);
+
       User? u = await _repository.GetUser(request.Email, null);
 
       if (u != null)
       {
-        if (Authentication.CheckPassword(request.Password!, u.PasswordSalt))
+        if (Authentication.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
         {
-          JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, 45,
+          JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.Role, 45,
            _configuration.GetValue<string>("JWT:Issuer"),
            _configuration.GetValue<string>("JWT:Audience"),
            _configuration.GetValue<string>("JWT:Key"));
@@ -96,7 +108,7 @@ namespace Shop.Controllers
     {
       var z = await _repository.GetUser(request.Email!, null);
 
-      var HELLO = _mapper.Map<UserAddressDTO, User>(request, z);
+      var HELLO = _mapper.Map<UserAddressDTO, User>(request, z!);
 
 
       return Ok();
