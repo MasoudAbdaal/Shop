@@ -16,34 +16,6 @@ namespace Shop.Data
       _context = context;
     }
 
-    public Task SaveChanges()
-    {
-      return _context.SaveChangesAsync();
-    }
-
-    public async Task CreateUser(User user)
-    {
-      User? u = await GetUser(user.Email, null);
-
-      if (u == null)
-      {
-        await _context.Users.AddAsync(user!);
-        await SaveChanges();
-      }
-    }
-
-
-    public async Task<User?> GetUser(string? email, byte[]? userId)
-    {
-      User? result;
-      if (userId != null)
-        result = await _context.Users.FindAsync(userId);
-      else
-        result = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-
-      return result == null ? default : result;
-    }
-
     public async Task<User?> EditUser(User user)
     {
       User? result;
@@ -52,8 +24,6 @@ namespace Shop.Data
       else
         result = await GetUser(null, user.ID);
 
-
-      //Testing logic!
       if (result != null)
       {
 
@@ -84,6 +54,23 @@ namespace Shop.Data
 
       return await GetUser(email, null);
     }
-  }
 
+    public async Task<User?> GetUser(string? email, byte[]? userId)
+    {
+      User? result;
+      if (userId != null)
+        result = await _context.Users.FindAsync(userId);
+      else
+        result = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+
+      return result == null ? default : result;
+    }
+
+
+    public Task SaveChanges()
+    {
+      return _context.SaveChangesAsync();
+    }
+  }
 }
+

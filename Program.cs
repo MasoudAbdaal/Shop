@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

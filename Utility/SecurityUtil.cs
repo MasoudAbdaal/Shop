@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata;
+using Microsoft.Extensions.Primitives;
 using Shop.Models;
 
 namespace Shop.Utility
@@ -7,17 +9,25 @@ namespace Shop.Utility
 
   public static class SecurityUtil
   {
-    public static UserToken GetTokenInfo(string userToken)
+    public static UserToken GetBearerTokenInfo(StringValues authHeader)
     {
-      JwtSecurityToken Token = new JwtSecurityTokenHandler().ReadJwtToken(userToken);
+      if (authHeader.Any(z => z!.Contains("Bearer")))
+      {
 
-      string mail = Token.Payload.First(z => z.Key == "email").Value.ToString()!;
-      string id = Token.Payload.First(z => z.Key == "nameid").Value.ToString()!;
-      string role = Token.Payload.First(z => z.Key == "role").Value.ToString()!;
+        JwtSecurityToken Token = new JwtSecurityTokenHandler().ReadJwtToken(
+          authHeader![authHeader.ToString().IndexOf("Bearer")]!.Split()[1]
+          );
+
+        string mail = Token.Payload.First(z => z.Key == "email").Value.ToString()!;
+        string id = Token.Payload.First(z => z.Key == "nameid").Value.ToString()!;
+        string role = Token.Payload.First(z => z.Key == "role").Value.ToString()!;
 
 
 
-      return new UserToken(id, mail, Enum.Parse<Role.UserRoles>(role, true));
+        return new UserToken(id, mail, Enum.Parse<Role.UserRoles>(role, true));
+      }
+      return new UserToken();
+
     }
 
   }

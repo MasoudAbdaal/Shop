@@ -5,9 +5,17 @@ namespace Shop.Models
 {
   public class UserToken
   {
-    private readonly string _userID;
-    private readonly string _userEmail;
-    private readonly Role.UserRoles _userRole;
+    private readonly string? _userID;
+    private readonly string? _userEmail;
+    private readonly Role.UserRoles? _userRole;
+
+    public UserToken()
+    {
+      _userID = default;
+      _userEmail = default;
+      _userRole = null;
+
+    }
 
     public UserToken(string userID, string userEmail, Role.UserRoles userRole)
     {
@@ -16,9 +24,10 @@ namespace Shop.Models
       _userRole = userRole;
 
     }
-    public string ID { get { return _userID; } }
-    public string Email { get { return _userEmail; } }
-    public Role.UserRoles Role { get { return _userRole; } }
+
+    public string? ID { get { return _userID; } }
+    public string? Email { get { return _userEmail; } }
+    public Role.UserRoles? Role { get { return _userRole; } }
   }
 
 }

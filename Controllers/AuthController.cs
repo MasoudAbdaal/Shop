@@ -19,11 +19,11 @@ namespace Shop.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly IUserRepo _repository;
+    private readonly IAuthRepo _repository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public AuthController(IUserRepo repository, IConfiguration configuration, IMapper mapper)
+    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper)
     {
       _repository = repository;
       _configuration = configuration;
@@ -76,12 +76,9 @@ namespace Shop.Controllers
     [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
-      // var z = Request.Headers[HeaderNames.Authorization];
 
-      // var tokenString = z.ToString().Split()[1];
+      UserToken TokenInfo = SecurityUtil.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
 
-      // var jj = SecurityUtil.GetTokenInfo(tokenString);
-      // Console.WriteLine(jj.Role);
 
       User? u = await _repository.GetUser(request.Email, null);
 
