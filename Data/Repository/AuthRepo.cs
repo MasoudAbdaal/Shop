@@ -22,7 +22,7 @@ namespace Shop.Data
     }
 
 
-    public async Task CreateUser(User user)
+    public async Task<User?> CreateUser(User user)
     {
       User? u = await GetUser(user.Email, null);
 
@@ -30,7 +30,10 @@ namespace Shop.Data
       {
         await _context.Users.AddAsync(user!);
         await SaveChanges();
+        return await GetUser(user.Email, null);
       }
+      else
+        return u;
     }
 
 
@@ -52,6 +55,17 @@ namespace Shop.Data
       _context.Update(user);
       await SaveChanges();
       return await GetUser(newEmail, null);
+    }
+
+
+    public async Task<User?> EditPhone(User user, string newPhone)
+    {
+      user.UserInfo!.PhoneNumber = newPhone;
+
+      _context.Update(user);
+      await SaveChanges();
+
+      return await GetUser(user.Email, null);
     }
   }
 }

@@ -33,7 +33,6 @@ namespace Shop.Data
             result.GetType().GetProperty(item.Name)!.SetValue(result, item.GetValue(user, null), null);
 
         }
-
         _context.Users.Update(result!);
         await SaveChanges();
         return await GetUser(null, result.ID);

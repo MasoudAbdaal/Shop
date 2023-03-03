@@ -37,6 +37,7 @@ namespace Shop.Controllers
       // await _context.Regions.AddAsync(Countries.IRAN);
       // await _context.Regions.AddAsync(Countries.USA);
       // await _context.SaveChangesAsync();
+
       // Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
       // User editedUser = new User() { Email = "masoud@gmail.com", Name = "newNAME", Role = UserRoles.ADMIN };
       // await _repository.EditUser(editedUser);
@@ -57,28 +58,26 @@ namespace Shop.Controllers
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
         PasswordSalt = HashAlgorithm.Key,
 
-        UserAddress = new Collection<UserAddress> { new UserAddress {
-        AddressID =AddressID_Random,
+        // UserAddress = new Collection<UserAddress> { new UserAddress {
+        // AddressID =AddressID_Random,
 
-         Address = new Address {ID=AddressID_Random, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
-         },
+        //  Address = new Address {ID=AddressID_Random, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
+        //  },
         UserInfo = new UserInfo
         {
           PhoneNumber = request.PhoneNumber
         },
       };
+      User? Result = await _repository.CreateUser(u);
 
-      await _repository.CreateUser(u);
+      return Ok(_mapper.Map<User, UserPresentationDTO>(Result!));
 
-      return Ok();
     }
 
     [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
-
       UserToken TokenInfo = SecurityUtil.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
-
 
       User? u = await _repository.GetUser(request.Email, null);
 
@@ -100,17 +99,7 @@ namespace Shop.Controllers
       return NotFound("You do not have any account with this email!");
     }
 
-    [HttpPost, Route("add-mod")]
-    public async Task<IActionResult> ModAdd(UserAddressDTO request)
-    {
-      var z = await _repository.GetUser(request.Email!, null);
 
-      var HELLO = _mapper.Map<UserAddressDTO, User>(request, z!);
-
-
-      return Ok();
-    }
   }
-
 
 }

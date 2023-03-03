@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Shop.Data;
@@ -8,7 +9,11 @@ using Shop.Data.Interface;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+ {
+   options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+   options.JsonSerializerOptions.WriteIndented = true;
+ });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContextFactory<MainContext>();
