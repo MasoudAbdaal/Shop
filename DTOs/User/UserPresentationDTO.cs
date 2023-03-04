@@ -8,24 +8,24 @@ using static Shop.Models.Role;
 
 namespace Shop.DTOs
 {
+  [AutoMap(typeof(User))]
   public class UserPresentationDTO
   {
     public string? Name { get; set; }
 
+    [SourceMember(nameof(User.Email))]
     public string? Mail { get; set; }
 
-    [SourceMember(nameof(User.UserInfo.PhoneNumber))]
     public string? Phone { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public UserRoles UserRole { get; set; }
 
+    [SourceMember(nameof(UserInfo))]
     public UserInfoDTO? Info { get; set; }
 
     public ICollection<UserAuthMethodDTO>? AuthenticationMethods { get; set; }
-
   }
-
 
   public class UserAuthMethodDTO
   {
