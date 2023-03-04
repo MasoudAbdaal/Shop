@@ -48,6 +48,7 @@ namespace Shop.Controllers
       byte[] UserID_Random = new byte[16];
       Random r = new Random();
       r.NextBytes(AddressID_Random);
+      r.Next();
       r.NextBytes(UserID_Random);
 
       User u = new User
@@ -69,6 +70,10 @@ namespace Shop.Controllers
         },
       };
       User? Result = await _repository.CreateUser(u);
+
+      if (Result == null)
+        return StatusCode(502);
+
 
       return Ok(_mapper.Map<User, UserPresentationDTO>(Result!));
 
@@ -93,10 +98,10 @@ namespace Shop.Controllers
           return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
         }
 
-        else return Unauthorized("Invalid password!");
+        else return Unauthorized("Invalid username/password");
       }
 
-      return NotFound("You do not have any account with this email!");
+      return Unauthorized("You do not have any account with this email!");
     }
 
 
