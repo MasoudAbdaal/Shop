@@ -1,7 +1,9 @@
 using System.Reflection;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shop.Data.Interface;
+using Shop.DTOs;
 using Shop.Models;
 
 namespace Shop.Data
@@ -10,32 +12,38 @@ namespace Shop.Data
   public class UserRepo : IUserRepo
   {
     private readonly MainContext _context;
+    private readonly IMapper _mapper;
 
-    public UserRepo(MainContext context)
+    public UserRepo(MainContext context, IMapper mapper)
     {
       _context = context;
+      _mapper = mapper;
     }
 
-    public async Task<User?> EditUser(User user)
+    public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
     {
-      User? result;
-      if (user.Email != null)
-        result = await GetUser(user.Email, null);
-      else
-        result = await GetUser(null, user.ID);
 
-      if (result != null)
+      user!.Name = newInfo.Mail.Length > 5 ? newInfo.Mail : user.Name;
+
+      UserInfo Info = _context.User_Info.Find(user.ID)!;
+
+      if (user != null)
       {
 
-        foreach (PropertyInfo item in user.GetType().GetProperties())
+        foreach (PropertyInfo item in newInfo.info!.GetType().GetProperties())
         {
-          if (item.GetValue(user, null) != null && item.Name != "ID" && item.Name != "Email")
-            result.GetType().GetProperty(item.Name)!.SetValue(result, item.GetValue(user, null), null);
+          var value = item.GetValue(newInfo.info, null);
+
+          if (value != null && value!.GetType().FullName != "System.Byte[]")
+            Info!.GetType().GetProperty(item.Name)!.SetValue(Info, item.GetValue(newInfo.info, null));
 
         }
-        _context.Users.Update(result!);
+
+        _context.User_Info.Update(Info!);
+        _context.Users.Update(user!);
+
         await SaveChanges();
-        return await GetUser(null, result.ID);
+        return user;
       }
 
       return default;

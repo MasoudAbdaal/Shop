@@ -9,9 +9,12 @@ namespace Shop.Profiles
     public UserProfile()
     {
       CreateMap<User, UserPresentationDTO>()
-      .ForMember(dest => dest.Phone, opt => opt.MapFrom(dest => dest.UserInfo!.PhoneNumber));
-      
+      .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserInfo!.PhoneNumber));
+
+      CreateMap<UserModifyDTO, User>().ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Mail));
+
       CreateMap<UserInfo, UserInfoDTO>();
+      CreateMap<UserInfoDTO, UserInfo>();
       CreateMap<UserAuthMethod, UserAuthMethodDTO>();
 
       CreateMap<UserRegisterDTO, User>();
