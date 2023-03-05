@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://github.com/MasoudAbdaal/Shop">
   <p align="center">
-    <img src="https://png2.cleanpng.com/dy/5bac0bc4427bd5e7c3e9a1d085874823/L0KzQYq3WcExN6N3kZH9cnHxg8HokvVvfF5yh9DydHB1PbrqjB4ubZR0hd9ucnPoPbrqjB4ud59xgdDuLYPrf8G0ifNwdl46fKkCYUe5c4i3VPZlO183TaoCM0i1RIK8VsgyOmM8S6Q9Nj7zfri=/transparent-monitor-icon-ecommerce-icon-online-shop-icon-5d77a76c704fd3.25873824156812273246.png" alt="Logo" width="80" height="80">
+    <img src="ShopIcon.png" alt="Logo" width="80" height="80">
     </p>
   </a>
 
