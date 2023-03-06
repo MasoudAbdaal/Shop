@@ -3,8 +3,7 @@
 <p align="center">
   <a href="https://github.com/MasoudAbdaal/Shop">
   <p align="center">
-    <img src="ShopIcon.png" alt="Logo" width="80" height="80">
-    </p>
+    <img src="READMEAssets/ShopIcon.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Online Shop</h3>
@@ -21,6 +20,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Database Diagram](READMEAssets/DBDiagram.pdf)
 
 ## Getting Started
 
