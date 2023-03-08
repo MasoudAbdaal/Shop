@@ -1,12 +1,13 @@
 
 
 using System.ComponentModel.DataAnnotations;
-using System.Drawing;
 
 namespace Shop.DTOs
 {
+
   public class AddressPresentationDTO
   {
+
     public string? Region { get; set; }
 
     [MaxLength(20)]
@@ -15,9 +16,9 @@ namespace Shop.DTOs
     public ushort Unit { get; set; }
 
     [MaxLength(100)]
-    public string Address { get; set; } = string.Empty;
+    public string? AddressLine { get; set; }
 
-    public Point? GeoInfo { get; set; }
+    public string? GeoInfo { get; set; }
   }
 
 }

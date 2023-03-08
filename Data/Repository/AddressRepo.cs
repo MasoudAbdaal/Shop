@@ -51,6 +51,8 @@ public class AddressRepo : IAddressRepo
     {
 
       Address? Address = await _context.Address.FindAsync(ID);
+      Address!.Region = await _context.Regions.FindAsync(Address.RegionID);
+      Address.Location = new NetTopologySuite.Geometries.Point(12, 68, 89);
 
       AddressList.Add(Address!);
     }
