@@ -12,12 +12,10 @@ namespace Shop.Data
   public class UserRepo : IUserRepo
   {
     private readonly MainContext _context;
-    private readonly IMapper _mapper;
 
-    public UserRepo(MainContext context, IMapper mapper)
+    public UserRepo(MainContext context)
     {
       _context = context;
-      _mapper = mapper;
     }
 
     public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
@@ -49,18 +47,19 @@ namespace Shop.Data
       return default;
     }
 
-    public async Task<User?> DeleteUser(string email)
-    {
-      User? u = await GetUser(email, null);
-      if (u == null)
-        return default;
 
-      u!.UserInfo!.Enabled = false;
-      _context.Users.Update(u);
-      await SaveChanges();
+    // public async Task<User?> DeleteUser(string email)
+    // {
+    //   User? u = await GetUser(email, null);
+    //   if (u == null)
+    //     return default;
 
-      return await GetUser(email, null);
-    }
+    //   u!.UserInfo!.Enabled = false;
+    //   _context.Users.Update(u);
+    //   await SaveChanges();
+
+    //   return await GetUser(email, null);
+    // }
 
     public async Task<User?> GetUser(string? email, byte[]? userId)
     {

@@ -58,15 +58,15 @@ namespace Shop.Data
     }
 
 
-    public async Task<User?> EditPhone(User user, string newPhone)
-    {
-      user.UserInfo!.PhoneNumber = newPhone;
+  //   public async Task<User?> EditPhone(User user, string newPhone)
+  //   {
+  //     user.UserInfo!.PhoneNumber = newPhone;
 
-      _context.Update(user);
-      await SaveChanges();
+  //     _context.Update(user);
+  //     await SaveChanges();
 
-      return await GetUser(user.Email, null);
-    }
+  //     return await GetUser(user.Email, null);
+  //   }
   }
 }
 

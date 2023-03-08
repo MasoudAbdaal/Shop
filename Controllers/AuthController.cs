@@ -7,6 +7,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using Shop.Constants;
 using Shop.Data.Interface;
 using Shop.DTOs;
 using Shop.Helpers;
@@ -34,22 +35,33 @@ namespace Shop.Controllers
     public async Task<IActionResult> Register(UserRegisterDTO request)
     {
 
-      // await _context.Regions.AddAsync(Countries.IRAN);
-      // await _context.Regions.AddAsync(Countries.USA);
-      // await _context.SaveChangesAsync();
-
-      // Region? UserRegion = await _context.Regions.FirstAsync(z => z.Name == "IRAN");
-      // User editedUser = new User() { Email = "masoud@gmail.com", Name = "newNAME", Role = UserRoles.ADMIN };
-      // await _repository.EditUser(editedUser);
-
-
       HMACSHA512 HashAlgorithm = new HMACSHA512();
       byte[] AddressID_Random = new byte[4];
       byte[] UserID_Random = new byte[16];
       Random r = new Random();
+
       r.NextBytes(AddressID_Random);
       r.Next();
       r.NextBytes(UserID_Random);
+
+      var address = new Collection<UserAddress> { new UserAddress {
+
+        AddressID =AddressID_Random.CloneByteArray(),
+        UserID = UserID_Random,
+         Address = new Address {ID=AddressID_Random.CloneByteArray(), AddressLine = "Address1",Region=Countries.USA,PostalCode= "1",LocationAddress="Location1",UnitNumber=0xcc1 }}
+         };
+
+      r.Next();
+      r.NextBytes(AddressID_Random);
+
+      address.Add(new UserAddress
+      {
+        AddressID = AddressID_Random,
+        UserID = UserID_Random,
+        Address = new Address { ID = AddressID_Random, AddressLine = "Address2", Region = Countries.USA, PostalCode = "2", LocationAddress = "Location2", UnitNumber = 0xcc1 }
+      }
+              );
+
 
       User u = new User
       {
@@ -59,11 +71,7 @@ namespace Shop.Controllers
         Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
         PasswordSalt = HashAlgorithm.Key,
 
-        // UserAddress = new Collection<UserAddress> { new UserAddress {
-        // AddressID =AddressID_Random,
-
-        //  Address = new Address {ID=AddressID_Random, AddressLine = "GOLSHAHR OLD",Region=new Region{Name="HOLLAND"} } }
-        //  },
+        UserAddress = address,
         UserInfo = new UserInfo
         {
           PhoneNumber = request.PhoneNumber

@@ -9,8 +9,8 @@ namespace Shop.Data.Interface
     Task SaveChanges();
 
     Task<User?> GetUser(string email, byte[]? userId);
+    // Task<User?> DeleteUser(string email);
     Task<User?> EditUserInfo(User user, UserModifyDTO newInfo);
-    Task<User?> DeleteUser(string email);
   }
 
 }

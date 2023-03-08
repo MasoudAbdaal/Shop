@@ -11,7 +11,7 @@ namespace Shop.Data.Interface
     Task<User?> GetUser(string email, byte[]? userId);
 
     Task<User?> EditEmail(User user, string newEmail);
-    Task<User?> EditPhone(User user, string newPhone);
+    // Task<User?> EditPhone(User user, string newPhone);
   }
 
 }

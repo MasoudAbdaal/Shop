@@ -12,7 +12,7 @@ namespace Shop.Models
   [Index(nameof(ID), IsUnique = true)]
   public class User
   {
-    [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16)]
+    [Key, Required, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(16), DatabaseGenerated(DatabaseGeneratedOption.None)]
     public byte[] ID { get; set; } = new byte[16];
 
     [Required, Column("name"), MaxLength(40)]
@@ -54,8 +54,8 @@ namespace Shop.Models
     public ICollection<UserAuthMethod>? UserAuthMethods { get; set; } = new Collection<UserAuthMethod> {
          new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL}};
 
-
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
+
     public ICollection<UserAddress>? UserAddress { get; set; }
 
     public ICollection<Cart>? Cart { get; set; }
