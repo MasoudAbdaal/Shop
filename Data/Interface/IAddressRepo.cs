@@ -8,10 +8,16 @@ namespace Shop.Data.Interface
   {
     Task SaveChanges();
     byte[]? GetUserID(string email);
-    Task<Address?> AddAddress();
     Task<IEnumerable<Address>?> GetUserAddresses(byte[] userId);
-    bool DeleteAddress(byte[] addressID);
     Task<IEnumerable<Region>> GetRegions();
+    uint? CheckRegionExist(string regionName);
+    
+
+    Task<Address?> GetAddressByID(byte[] addressId);
+
+    Task<Address?> AddAddress(Address newAddress, byte[] userId);
+    Task<Address?> ModifyAddress(Address newAddress);
+    bool DeleteAddress(byte[] addressID);
   }
 
 }

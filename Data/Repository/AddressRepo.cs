@@ -19,10 +19,6 @@ public class AddressRepo : IAddressRepo
     _mapper = mapper;
   }
 
-  public Task<Address?> AddAddress()
-  {
-    throw new NotImplementedException();
-  }
 
   public bool DeleteAddress(byte[] addressID)
   {
@@ -62,14 +58,42 @@ public class AddressRepo : IAddressRepo
 
   public byte[]? GetUserID(string email)
   {
-    byte[][] uid = _context.Users.Where(x => x.Email == email).Select(i => i.ID).ToArray();
+    byte[] uid = _context.Users.Where(x => x.Email == email).Select(i => i.ID).ToArray()[0];
     if (uid.Length < 1)
       return null;
-    return uid[0];
+    return uid;
   }
 
   public Task SaveChanges()
   {
     return _context.SaveChangesAsync();
+  }
+
+  public async Task<Address?> AddAddress(Address newAddress, byte[] userId)
+  {
+    await _context.User_Addressess.AddAsync(new UserAddress { AddressID = newAddress.ID, UserID = userId, Address = newAddress });
+    await SaveChanges();
+    var j = await GetAddressByID(newAddress.ID);
+    return j;
+  }
+
+  public Task<Address?> ModifyAddress(Address newAddress)
+  {
+    throw new NotImplementedException();
+  }
+
+
+  public uint? CheckRegionExist(string regionName)
+  {
+    List<uint> RegionID = _context.Regions.Where(x => x.Name == regionName).Select(x => x.RegionID).ToList()!;
+    if (RegionID.Capacity < 1)
+      return null;
+
+    else return RegionID[0];
+  }
+
+  public async Task<Address?> GetAddressByID(byte[] addressId)
+  {
+    return await _context.Address.FindAsync(addressId);
   }
 }
