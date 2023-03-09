@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shop.Data.Interface;
 using Shop.DTOs;
 using Shop.Models;
+using Shop.Utility;
 
 namespace Shop.Data
 {
@@ -12,36 +13,33 @@ namespace Shop.Data
   public class UserRepo : IUserRepo
   {
     private readonly MainContext _context;
+    private readonly IMapper _mapper;
 
-    public UserRepo(MainContext context)
+    public UserRepo(MainContext context, IMapper mapper)
     {
       _context = context;
+      _mapper = mapper;
     }
 
     public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
     {
 
-      user!.Name = newInfo.Mail.Length > 5 ? newInfo.Mail : user.Name;
+      user!.Name = newInfo.Name.Length > 5 ? newInfo.Name : user.Name;
 
       UserInfo Info = _context.User_Info.Find(user.ID)!;
 
       if (user != null)
       {
-
-        foreach (PropertyInfo item in newInfo.info!.GetType().GetProperties())
+        Info = GeneralUtil.ApplyChanges(Info, _mapper.Map<UserInfoDTO, UserInfo>(newInfo.info!))!;
+        if (Info is not null)
         {
-          var value = item.GetValue(newInfo.info, null);
+          _context.User_Info.Update(Info!);
+          _context.Users.Update(user!);
 
-          if (value != null && value!.GetType().FullName != "System.Byte[]")
-            Info!.GetType().GetProperty(item.Name)!.SetValue(Info, item.GetValue(newInfo.info, null));
-
+          await SaveChanges();
+          return user;
         }
-
-        _context.User_Info.Update(Info!);
-        _context.Users.Update(user!);
-
-        await SaveChanges();
-        return user;
+        return default;
       }
 
       return default;

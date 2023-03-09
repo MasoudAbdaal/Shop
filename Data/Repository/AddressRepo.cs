@@ -7,6 +7,7 @@ using Shop.Data;
 using Shop.Data.Interface;
 using Shop.DTOs;
 using Shop.Models;
+using Shop.Utility;
 
 public class AddressRepo : IAddressRepo
 {
@@ -48,7 +49,6 @@ public class AddressRepo : IAddressRepo
 
       Address? Address = await _context.Address.FindAsync(ID);
       Address!.Region = await _context.Regions.FindAsync(Address.RegionID);
-      Address.Location = new NetTopologySuite.Geometries.Point(12, 68, 89);
 
       AddressList.Add(Address!);
     }
@@ -73,13 +73,21 @@ public class AddressRepo : IAddressRepo
   {
     await _context.User_Addressess.AddAsync(new UserAddress { AddressID = newAddress.ID, UserID = userId, Address = newAddress });
     await SaveChanges();
-    var j = await GetAddressByID(newAddress.ID);
-    return j;
+
+    return await GetAddressByID(newAddress.ID);
   }
 
-  public Task<Address?> ModifyAddress(Address newAddress)
+  public async Task<Address?> ModifyAddress(Address newAddress, Address OldAddress)
   {
-    throw new NotImplementedException();
+    Address? Modified = GeneralUtil.ApplyChanges(OldAddress, newAddress)!;
+    if (Modified is not null)
+    {
+      _context.Address.Update(Modified);
+      await SaveChanges();
+
+      return OldAddress;
+    }
+    return default;
   }
 
 

@@ -21,7 +21,7 @@ public class AddressController : ControllerBase
   }
 
   [HttpPost, Route("new")]
-  public async Task<ActionResult<Address?>> NewAddress(AddressCreateDTO request)
+  public async Task<ActionResult<Address?>> New(AddressCreateDTO request)
   {
     byte[]? uid = _repo.GetUserID(request.Mail);
     uint? RegionID = _repo.CheckRegionExist(request.RegionName);
@@ -49,9 +49,23 @@ public class AddressController : ControllerBase
 
   }
 
+  [HttpPost, Route("modify")]
+  public async Task<ActionResult<AddressPresentationDTO>> Modify(AddressPresentationDTO request)
+  {
+    Address? Address = await _repo.GetAddressByID(request.AddressID);
+    if (Address is null)
+      return NotFound("Wrong addressID");
+
+    var z = _mapper.Map<AddressPresentationDTO, Address>(request);
+
+    
+    await _repo.ModifyAddress(z, Address);
+
+    return Ok();
+  }
 
   [HttpGet, Route("all")]
-  public async Task<ActionResult<IEnumerable<AddressPresentationDTO>>> GetAllAddresses(string email)
+  public async Task<ActionResult<IEnumerable<AddressPresentationDTO>>> GetAll(string email)
   {
     byte[]? uid = _repo.GetUserID(email);
     if (uid is null)

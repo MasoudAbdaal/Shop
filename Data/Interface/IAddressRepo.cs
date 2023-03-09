@@ -11,12 +11,9 @@ namespace Shop.Data.Interface
     Task<IEnumerable<Address>?> GetUserAddresses(byte[] userId);
     Task<IEnumerable<Region>> GetRegions();
     uint? CheckRegionExist(string regionName);
-    
-
-    Task<Address?> GetAddressByID(byte[] addressId);
-
     Task<Address?> AddAddress(Address newAddress, byte[] userId);
-    Task<Address?> ModifyAddress(Address newAddress);
+    Task<Address?> GetAddressByID(byte[] addressId);
+    Task<Address?> ModifyAddress(Address newAddress, Address OldAddress);
     bool DeleteAddress(byte[] addressID);
   }
 
