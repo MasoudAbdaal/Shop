@@ -58,7 +58,7 @@ public class AddressController : ControllerBase
 
     var z = _mapper.Map<AddressPresentationDTO, Address>(request);
 
-    
+
     await _repo.ModifyAddress(z, Address);
 
     return Ok();
@@ -81,5 +81,18 @@ public class AddressController : ControllerBase
   public async Task<ActionResult<IEnumerable<Region>>> GetRegions()
   {
     return Ok(await _repo.GetRegions());
+  }
+
+  [HttpPost, Route("delete")]
+  public async Task<ActionResult> Delete(AddressDeleteDTO request)
+  {
+    Address? Address = await _repo.GetAddressByID(request.AddressID);
+    if (Address is null)
+      return NotFound("Invalid AddressID!!");
+
+    if (await _repo.DeleteAddress(request.AddressID, request.UserID))
+      return Ok();
+
+    return StatusCode(StatusCodes.Status502BadGateway);
   }
 }

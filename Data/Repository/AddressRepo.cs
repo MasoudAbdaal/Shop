@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Shop.Constants;
 using Shop.Data;
 using Shop.Data.Interface;
-using Shop.DTOs;
 using Shop.Models;
 using Shop.Utility;
 
@@ -90,6 +89,19 @@ public class AddressRepo : IAddressRepo
     return default;
   }
 
+  public async Task<bool> DeleteAddress(byte[] addressID, byte[] userId)
+  {
+    UserAddress? Address = await _context.User_Addressess.FindAsync(userId, addressID);
+
+    if (Address is null)
+      return false;
+
+    _context.User_Addressess.Remove(Address);
+    _context.Address.Remove(Address.Address!);
+    await SaveChanges();
+
+    return true;
+  }
 
   public uint? CheckRegionExist(string regionName)
   {

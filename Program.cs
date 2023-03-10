@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -51,12 +50,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-
-HMACSHA512 HashAlgorithm = new HMACSHA512(Convert.FromBase64String(builder.Configuration.GetValue<string>("JWT:Key")));
-byte[] Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes("asdjaklsdjalksdjklasdjkasdlajsdaklsdkaskldjksdlkjasldlakskl"));
-
-
 
 {
   app.UseSwagger();
