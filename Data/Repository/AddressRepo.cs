@@ -41,7 +41,8 @@ public class AddressRepo : IAddressRepo
   {
     List<Address> AddressList = new List<Address>();
 
-    List<byte[]> AddressIDs = _context.User_Addressess!.Where(j => j.UserID == userId).Select(x => x.AddressID).ToList();
+    List<byte[]> AddressIDs = _context.User_Addressess!.Where(j => j.UserID == userId)
+    .Select(x => x.AddressID).AsNoTracking().ToList();
 
     foreach (byte[] ID in AddressIDs)
     {
@@ -58,7 +59,9 @@ public class AddressRepo : IAddressRepo
 
   public byte[]? GetUserID(string email)
   {
-    byte[] uid = _context.Users!.Where(x => x.Email == email).Select(i => i.ID).ToArray()[0];
+    byte[] uid = _context.Users!.Where(x => x.Email == email)
+    .Select(i => i.ID).AsNoTracking().ToArray()[0];
+
     if (uid.Length < 1)
       return null;
     return uid;
