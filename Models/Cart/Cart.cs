@@ -11,7 +11,7 @@ namespace Shop.Models
     [Column("name"), MaxLength(30)]
     public string? Name { get; set; }
 
-    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[] UserID { get; set; } = new byte[16];
 
     public User? User { get; set; }

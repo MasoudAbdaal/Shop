@@ -11,9 +11,9 @@ namespace Shop.Models
     [Column("product_item_id")]
     public byte? ProductItemID { get; set; }
 
-    [ForeignKey("VariationOptionID")]
+    [ForeignKey(nameof(VariationOptionID))]
     public VariationOption? VariationOptions { get; set; }
-    [ForeignKey("ProductItemID")]
+    [ForeignKey(nameof(ProductItemID))]
     public ProductItem? ProductItems { get; set; }
   }
 }

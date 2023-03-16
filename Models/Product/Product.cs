@@ -13,7 +13,7 @@ namespace Shop.Models
     [Column("name"), Required, MaxLength(64)]
     public string Name { get; set; } = string.Empty;
 
-    [ForeignKey("Category"), Column("category_id"), Required]
+    [ForeignKey(nameof(Category)), Column("category_id"), Required]
     public ushort CategoryID { get; set; }
 
     [Column("image"), Required]
@@ -26,7 +26,7 @@ namespace Shop.Models
     public uint FullDescriptionID { get; set; }
 
     public Category? Category { get; set; }
-    [ForeignKey("FullDescriptionID")]
+    [ForeignKey(nameof(FullDescriptionID))]
     public Description? Descriptions { get; set; }
     public ICollection<ProductItem>? ProductItem { get; set; }
   }

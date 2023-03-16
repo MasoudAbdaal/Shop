@@ -18,7 +18,7 @@ namespace Shop.Models
     [Column("parent_id")]
     public uint? ParentID { get; set; }
 
-    [ForeignKey("ParentID")]
+    [ForeignKey(nameof(ParentID))]
     // public Region? Regions { get; set; }
     public ICollection<Region>? SubRegion { get; set; }
   }

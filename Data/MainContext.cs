@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Microsoft.EntityFrameworkCore;
 using Shop.Constants;
 using Shop.Models;
+using Shop.RepoConfigurations;
 using static Shop.Models.AuthProvider;
 using static Shop.Models.Role;
 using static Shop.Models.VerificationMethod;
@@ -13,50 +14,15 @@ namespace Shop.Data
     private readonly IConfiguration _configuration;
     private readonly DbContextOptions<MainContext> _options;
 
+    // public MainContext(DbContextOptions options) : base(options)
+    // {
+    // }
+
     public MainContext(DbContextOptions<MainContext> options, IConfiguration configuration) : base(options)
     {
       _configuration = configuration;
       _options = options;
     }
-
-    public DbSet<User> Users => Set<User>();
-    public DbSet<UserReview> User_Reviews => Set<UserReview>();
-    public DbSet<Role> Roles => Set<Role>();
-    public DbSet<UserInfo> User_Info => Set<UserInfo>();
-    public DbSet<UserAddress> User_Addressess => Set<UserAddress>();
-    public DbSet<UserAuthMethod> User_AuthMethods => Set<UserAuthMethod>();
-    public DbSet<UserVerificationMethod> User_VerificationMethods => Set<UserVerificationMethod>();
-
-    public DbSet<Address> Address => Set<Address>();
-    public DbSet<Region> Regions => Set<Region>();
-    public DbSet<AuthProvider> AuthProviders => Set<AuthProvider>();
-    public DbSet<VerificationMethod> VerificationMethods => Set<VerificationMethod>();
-
-
-    public DbSet<Payment> Payments => Set<Payment>();
-    public DbSet<PaymentType> Payment_Types => Set<PaymentType>();
-
-
-    public DbSet<Order> Orders => Set<Order>();
-    public DbSet<OrderLine> Order_Lines => Set<OrderLine>();
-    public DbSet<OrderStatus> Order_Status => Set<OrderStatus>();
-    public DbSet<OrderShippingMethod> Order_Shipping_Methods => Set<OrderShippingMethod>();
-
-
-    public DbSet<Cart> Carts => Set<Cart>();
-    public DbSet<CartItem> Cart_Items => Set<CartItem>();
-
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<Category> Product_Categories => Set<Category>();
-    public DbSet<Promotion> Promotions => Set<Promotion>();
-    public DbSet<ProductConf> Product_Conf => Set<ProductConf>();
-    public DbSet<ProductItem> Product_Items => Set<ProductItem>();
-    public DbSet<Variation> Product_Variations => Set<Variation>();
-    public DbSet<VariationOption> Product_VariationOptions => Set<VariationOption>();
-    public DbSet<Description> Product_Descriptions => Set<Description>();
-    public DbSet<PromotionCategories> Product_Categories_Promotions => Set<PromotionCategories>();
-    public DbSet<PromotionProducts> Product_Items_Promotions => Set<PromotionProducts>();
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -67,38 +33,53 @@ namespace Shop.Data
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<UserAuthMethod>().HasKey(x => new { x.UserID, x.AuthProviderID });
-      modelBuilder.Entity<UserVerificationMethod>().HasKey(x => new { x.UserID, x.VerificationMethodID });
-      modelBuilder.Entity<UserAddress>().HasKey(x => new { x.UserID, x.AddressID });
-      modelBuilder.Entity<PromotionCategories>().HasKey(x => new { x.CategoryID, x.PromotionID });
-      modelBuilder.Entity<ProductConf>().HasKey(x => new { x.ProductItemID, x.VariationOptionID });
-      modelBuilder.Entity<PromotionProducts>().HasKey(x => new { x.ProductItemID, x.PromotionID });
-
-
-      modelBuilder.Entity<Role>().HasData(
-        Enum.GetValues(typeof(UserRoles))
-          .Cast<UserRoles>().Select(u => new Role()
-          {
-            ID = u,
-            Name = u.ToString(),
-          }));
-
-
-      modelBuilder.Entity<AuthProvider>().HasData(
-        Enum.GetValues(typeof(Providers))
-        .Cast<Providers>().Select(u => new AuthProvider()
-        {
-          ID = u,
-          Name = u.ToString()
-        }));
-
-      modelBuilder.Entity<VerificationMethod>().HasData(
-        Enum.GetValues(typeof(VerifyMethods))
-        .Cast<VerifyMethods>().Select(u => new VerificationMethod()
-        {
-          ID = u,
-          Name = u.ToString()
-        }));
+      modelBuilder.ApplyConfiguration(new AuthProviderConfigurations());
+      modelBuilder.ApplyConfiguration(new ProductConfConfigurations());
+      modelBuilder.ApplyConfiguration(new PromotionCategoriesConfigurations());
+      modelBuilder.ApplyConfiguration(new PromotionProductsConfigurations());
+      modelBuilder.ApplyConfiguration(new RoleConfigurations());
+      modelBuilder.ApplyConfiguration(new UserAddressConfigurations());
+      modelBuilder.ApplyConfiguration(new UserAuthMethodConfigurations());
+      modelBuilder.ApplyConfiguration(new UserVerificationMethodConfigurations());
+      modelBuilder.ApplyConfiguration(new VerificationMethodConfigurations());
     }
+
+    public DbSet<User>? Users { get; set; }
+    public DbSet<UserReview>? User_Reviews { get; set; }
+    public DbSet<Role>? Roles { get; set; }
+    public DbSet<UserInfo>? User_Info { get; set; }
+    public DbSet<UserAddress>? User_Addressess { get; set; }
+    public DbSet<UserAuthMethod>? User_AuthMethods { get; set; }
+    public DbSet<UserVerificationMethod>? User_VerificationMethods { get; set; }
+
+    public DbSet<Address>? Address { get; set; }
+    public DbSet<Region>? Regions { get; set; }
+    public DbSet<AuthProvider>? AuthProviders { get; set; }
+    public DbSet<VerificationMethod>? VerificationMethods { get; set; }
+
+
+    public DbSet<Payment>? Payments { get; set; }
+    public DbSet<PaymentType>? Payment_Types { get; set; }
+
+
+    public DbSet<Order>? Orders { get; set; }
+    public DbSet<OrderLine>? Order_Lines { get; set; }
+    public DbSet<OrderStatus>? Order_Status { get; set; }
+    public DbSet<OrderShippingMethod>? Order_Shipping_Methods { get; set; }
+
+
+    public DbSet<Cart>? Carts { get; set; }
+    public DbSet<CartItem>? Cart_Items { get; set; }
+
+    public DbSet<Product>? Products { get; set; }
+    public DbSet<Category>? Product_Categories { get; set; }
+    public DbSet<Promotion>? Promotions { get; set; }
+    public DbSet<ProductConf>? Product_Conf { get; set; }
+    public DbSet<ProductItem>? Product_Items { get; set; }
+    public DbSet<Variation>? Product_Variations { get; set; }
+    public DbSet<VariationOption>? Product_VariationOptions { get; set; }
+    public DbSet<Description>? Product_Descriptions { get; set; }
+    public DbSet<PromotionCategories>? Product_Categories_Promotions { get; set; }
+    public DbSet<PromotionProducts>? Product_Items_Promotions { get; set; }
   }
 }

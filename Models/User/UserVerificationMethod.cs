@@ -6,12 +6,12 @@ namespace Shop.Models
 {
   public class UserVerificationMethod
   {
-    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[]? UserID { get; set; }
 
     public User? Users { get; set; }
 
-    [ForeignKey("VerificationMethod"), Column("verify_method_id"),]
+    [ForeignKey(nameof(VerificationMethod)), Column("verify_method_id"),]
     public VerifyMethods? VerificationMethodID { get; set; }
 
     public VerificationMethod? VerificationMethod { get; set; }

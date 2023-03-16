@@ -8,10 +8,10 @@ namespace Shop.Models
     [Key, Column("id")]
     public uint ID { get; set; }
 
-    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[]? UserID { get; set; } = new byte[16];
 
-    [ForeignKey("OrderLine"), Column("order_line_id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
+    [ForeignKey(nameof(OrderLine)), Column("order_line_id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
     public byte[] OrderLineID { get; set; } = new byte[32];
 
     [Column("rate"), MaxLength(5)]

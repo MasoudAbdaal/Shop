@@ -31,10 +31,10 @@ namespace Shop.Models
 
   public class PromotionCategories
   {
-    [ForeignKey("Promotion"), Column("promotion_id")]
+    [ForeignKey(nameof(Promotion)), Column("promotion_id")]
     public ushort PromotionID { get; set; }
 
-    [ForeignKey("Category"), Column("category_id")]
+    [ForeignKey(nameof(Category)), Column("category_id")]
     public ushort CategoryID { get; set; }
 
     public Category? Category { get; set; }
@@ -44,10 +44,10 @@ namespace Shop.Models
 
   public class PromotionProducts
   {
-    [ForeignKey("ProductItem"), Column("product_item_id")]
+    [ForeignKey(nameof(ProductItem)), Column("product_item_id")]
     public byte ProductItemID { get; set; }
 
-    [ForeignKey("Promotion"), Column("promotion_id")]
+    [ForeignKey(nameof(Promotion)), Column("promotion_id")]
     public ushort PromotionID { get; set; }
 
     public Promotion? Promotion { get; set; }

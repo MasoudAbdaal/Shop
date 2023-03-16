@@ -8,19 +8,19 @@ namespace Shop.Models
     [Key, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
     public byte[] ID { get; set; } = new byte[32];
 
-    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[]? User_ID { get; set; } = new byte[16];
 
-    [ForeignKey("Payment"), Column("payment_method_id")]
+    [ForeignKey(nameof(Payment)), Column("payment_method_id")]
     public uint PaymentMethodID { get; set; }
 
-    [ForeignKey("Address"), Column("shipping_address")]
+    [ForeignKey(nameof(Address)), Column("shipping_address")]
     public byte[] AddressID { get; set; } = new byte[4];
 
-    [ForeignKey("OrderShippingMethod"), Column("shipping_method")]
+    [ForeignKey(nameof(OrderShippingMethod)), Column("shipping_method")]
     public byte ShippingMethod { get; set; }
 
-    [ForeignKey("OrderStatus"), Column("status")]
+    [ForeignKey(nameof(OrderStatus)), Column("status")]
     public byte Status { get; set; }
 
     [Column("ordered_date")]

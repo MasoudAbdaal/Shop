@@ -10,7 +10,7 @@ namespace Shop.Models
     [Key, Required, Column("id"), MaxLength(4), DatabaseGenerated(DatabaseGeneratedOption.None)]
     public byte[] ID { get; set; } = new byte[4];
 
-    [ForeignKey("Region"), Column("region_id")]
+    [ForeignKey(nameof(Region)), Column("region_id")]
     public uint RegionID { get; set; }
 
     [Column("postal_code"), MaxLength(20)]

@@ -8,7 +8,7 @@ namespace Shop.Models
     [Column("id"), Key, Required, ConcurrencyCheck]
     public byte ID { get; set; }
 
-    [ForeignKey("Product"), Column("product_id")]
+    [ForeignKey(nameof(Product)), Column("product_id")]
     public uint ProductID { get; set; }
 
     [MaxLength(110000), Column("sku")]

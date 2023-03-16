@@ -26,7 +26,7 @@ namespace Shop.Data
 
       user!.Name = newInfo.Name.Length > 5 ? newInfo.Name : user.Name;
 
-      UserInfo Info = _context.User_Info.Find(user.ID)!;
+      UserInfo Info = _context.User_Info!.Find(user.ID)!;
 
       if (user != null)
       {
@@ -34,7 +34,7 @@ namespace Shop.Data
         if (Info is not null)
         {
           _context.User_Info.Update(Info!);
-          _context.Users.Update(user!);
+          _context.Users!.Update(user!);
 
           await SaveChanges();
           return user;
@@ -63,9 +63,9 @@ namespace Shop.Data
     {
       User? result;
       if (userId != null)
-        result = await _context.Users.FindAsync(userId);
+        result = await _context.Users!.FindAsync(userId);
       else
-        result = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+        result = await _context.Users!.FirstOrDefaultAsync(x => x.Email == email);
 
       return result == null ? default : result;
     }

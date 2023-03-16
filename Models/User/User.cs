@@ -46,7 +46,7 @@ namespace Shop.Models
     public uint? Email_Code { get; set; }
 
 
-    [ForeignKey("Role")]
+    [ForeignKey(nameof(Role))]
     public Role? Roles { get; set; }
 
     public UserInfo? UserInfo { get; set; } = new UserInfo { CreateDate = DateTime.UtcNow, PhoneNumber_Verified = false, };

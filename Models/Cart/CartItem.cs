@@ -8,10 +8,10 @@ namespace Shop.Models
     [Key, Column("id")]
     public uint ID { get; set; }
 
-    [ForeignKey("Cart"), Column("cart_id")]
+    [ForeignKey(nameof(Cart)), Column("cart_id")]
     public uint CartID { get; set; }
 
-    [ForeignKey("ProductItem"), Column("product_item_id")]
+    [ForeignKey(nameof(ProductItem)), Column("product_item_id")]
     public byte ProductItemID { get; set; }
 
     [Column("quantity")]

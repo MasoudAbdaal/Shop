@@ -8,11 +8,11 @@ namespace Shop.Models
     [Key, Column("id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
     public byte[] ID { get; set; } = new byte[32];
 
-    [ForeignKey("ProductItem"), Column("product_item_id"),]
+    [ForeignKey(nameof(ProductItem)), Column("product_item_id"),]
     public byte ProductItemID { get; set; }
 
 
-    [ForeignKey("Order"), Column("order_id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
+    [ForeignKey(nameof(Order)), Column("order_id", TypeName = "Binary"), ConcurrencyCheck, MaxLength(32)]
     public byte[] OrderID { get; set; } = new byte[32];
 
     [Column("ordered_quantity")]

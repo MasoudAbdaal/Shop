@@ -9,10 +9,10 @@ namespace Shop.Models
     [Key, Column("id")]
     public uint ID { get; set; }
 
-    [ForeignKey("User"), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[] UserID { get; set; } = new byte[16];
 
-    [ForeignKey("PaymentType"), Column("payment_type_id")]
+    [ForeignKey(nameof(PaymentType)), Column("payment_type_id")]
     public byte PaymentTypeID { get; set; }
 
     public User? User { get; set; }

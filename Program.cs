@@ -15,7 +15,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
  });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddDbContextFactory<MainContext>();
+builder.Services.AddDbContext<MainContext>();
 
 builder.Services.AddAuthentication(options =>
 {

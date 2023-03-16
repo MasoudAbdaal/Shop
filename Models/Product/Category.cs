@@ -14,7 +14,7 @@ namespace Shop.Models
     [Column("name"), MaxLength(20)]
     public string? Name { get; set; }
 
-    [ForeignKey("ParentID")]
+    [ForeignKey(nameof(ParentID))]
     public Category? Categories { get; set; }
     public ICollection<Category>? SubCategory { get; set; }
     public ICollection<PromotionCategories>? PromotionCategory { get; set; }

@@ -14,7 +14,7 @@ namespace Shop.Models
     [Column("id"), Key, Required]
     public ushort ID { get; set; }
 
-    [ForeignKey("Category"), Column("category_id"),]
+    [ForeignKey(nameof(Category)), Column("category_id"),]
     public ushort? CategoryID { get; set; }
 
     [Column("name"), MaxLength(20)]
@@ -29,7 +29,7 @@ namespace Shop.Models
     [Column("id"), Key, Required]
     public ushort ID { get; set; }
 
-    [ForeignKey("Variation"), Column("variation_id")]
+    [ForeignKey(nameof(Variation)), Column("variation_id")]
     public ushort? VariationID { get; set; }
 
     [Column("value"), MaxLength(20)]
