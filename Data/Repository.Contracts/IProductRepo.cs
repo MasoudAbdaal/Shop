@@ -1,4 +1,4 @@
-namespace Shop.Data.Interface
+namespace Shop.Data.Repository.Contracts
 {
 
   public interface IProductRepo

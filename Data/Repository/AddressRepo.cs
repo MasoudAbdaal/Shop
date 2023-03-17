@@ -4,19 +4,17 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Shop.Constants;
 using Shop.Data;
-using Shop.Data.Interface;
+using Shop.Data.Repository.Contracts;
 using Shop.Models;
 using Shop.Utility;
 
-public class AddressRepo : IAddressRepo
+internal sealed class AddressRepo : IAddressRepo
 {
   private readonly MainContext _context;
-  private readonly IMapper _mapper;
 
-  public AddressRepo(MainContext context, IMapper mapper)
+  public AddressRepo(MainContext context)
   {
     _context = context;
-    _mapper = mapper;
   }
 
 

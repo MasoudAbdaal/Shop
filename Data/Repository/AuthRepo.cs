@@ -1,13 +1,13 @@
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Shop.Data.Interface;
+using Shop.Data.Repository.Contracts;
 using Shop.Models;
 
 namespace Shop.Data
 {
 
-  public class AuthRepo : IAuthRepo
+  internal sealed class AuthRepo : RepositoryBase<User>, IAuthRepo
   {
     private readonly MainContext _context;
 
@@ -58,15 +58,15 @@ namespace Shop.Data
     }
 
 
-  //   public async Task<User?> EditPhone(User user, string newPhone)
-  //   {
-  //     user.UserInfo!.PhoneNumber = newPhone;
+    //   public async Task<User?> EditPhone(User user, string newPhone)
+    //   {
+    //     user.UserInfo!.PhoneNumber = newPhone;
 
-  //     _context.Update(user);
-  //     await SaveChanges();
+    //     _context.Update(user);
+    //     await SaveChanges();
 
-  //     return await GetUser(user.Email, null);
-  //   }
+    //     return await GetUser(user.Email, null);
+    //   }
   }
 }
 

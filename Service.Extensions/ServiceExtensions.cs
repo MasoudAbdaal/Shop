@@ -10,7 +10,6 @@ using Shop.Data;
 public static class ServiceExtensions
 {
 
-
   public static void ConfigureAutomapper(this IServiceCollection services) =>
   services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Shop.Constants;
-using Shop.Data.Interface;
+using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
 using Shop.Helpers;
 using Shop.Models;

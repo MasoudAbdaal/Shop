@@ -1,6 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Data.Interface;
+using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
 using Shop.Models;
 

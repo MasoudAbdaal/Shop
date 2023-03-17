@@ -2,7 +2,7 @@ using System.Reflection;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Shop.Data.Interface;
+using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
 using Shop.Models;
 using Shop.Utility;
@@ -10,7 +10,7 @@ using Shop.Utility;
 namespace Shop.Data
 {
 
-  public class UserRepo : IUserRepo
+  internal sealed class UserRepo : RepositoryBase<User>, IUserRepo
   {
     private readonly MainContext _context;
     private readonly IMapper _mapper;
