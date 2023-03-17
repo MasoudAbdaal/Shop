@@ -11,25 +11,26 @@ namespace Shop.Data
 {
   public class MainContext : DbContext
   {
-    private readonly IConfiguration _configuration;
-    private readonly DbContextOptions<MainContext> _options;
+    // private readonly IConfiguration _configuration;
+    // private readonly DbContextOptions<MainContext> _options;
 
-    // public MainContext(DbContextOptions options) : base(options)
+    // public MainContext(DbContextOptions<MainContext> options, IConfiguration configuration) : base(options)
     // {
+    //   _configuration = configuration;
+    //   _options = options;
     // }
 
-    public MainContext(DbContextOptions<MainContext> options, IConfiguration configuration) : base(options)
-    {
-      _configuration = configuration;
-      _options = options;
-    }
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //   base.OnConfiguring(optionsBuilder);
+    //   optionsBuilder.UseSqlServer(_configuration.GetValue<string>("Database:ConnectionString")
+    //   , x => x.UseNetTopologySuite()
+    //   );
+    // }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public MainContext(DbContextOptions options) : base(options)
     {
-      base.OnConfiguring(optionsBuilder);
-      optionsBuilder.UseSqlServer(_configuration.GetValue<string>("Database:ConnectionString")
-      , x => x.UseNetTopologySuite()
-      );
+
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
