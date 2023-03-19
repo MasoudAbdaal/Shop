@@ -9,16 +9,15 @@ namespace Shop.Data
 
   internal sealed class AuthRepo : RepositoryBase<User>, IAuthRepo
   {
-    private readonly MainContext _context;
 
-    public AuthRepo(MainContext context)
+    public AuthRepo(MainContext context) : base(context)
     {
-      _context = context;
+
     }
 
     public Task SaveChanges()
     {
-      return _context.SaveChangesAsync();
+      return MainContext.SaveChangesAsync();
     }
 
 
@@ -28,7 +27,7 @@ namespace Shop.Data
 
       if (u == null)
       {
-        await _context.Users!.AddAsync(user!);
+        await MainContext.Users!.AddAsync(user!);
         await SaveChanges();
         return await GetUser(user.Email, null);
       }
@@ -41,9 +40,9 @@ namespace Shop.Data
     {
       User? result;
       if (userId != null)
-        result = await _context.Users!.FindAsync(userId);
+        result = await MainContext.Users!.FindAsync(userId);
       else
-        result = await _context.Users!.FirstOrDefaultAsync(x => x.Email == email);
+        result = await MainContext.Users!.FirstOrDefaultAsync(x => x.Email == email);
 
       return result == null ? default : result;
     }
@@ -52,7 +51,7 @@ namespace Shop.Data
     {
       user.Email = newEmail;
 
-      _context.Update(user);
+      MainContext.Update(user);
       await SaveChanges();
       return await GetUser(newEmail, null);
     }

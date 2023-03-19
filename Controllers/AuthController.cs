@@ -20,12 +20,15 @@ namespace Shop.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
+    private readonly RepositoryManager _repoManager;
+    
     private readonly IAuthRepo _repository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper)
+    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper, RepositoryManager repoManager)
     {
+      _repoManager = repoManager;
       _repository = repository;
       _configuration = configuration;
       _mapper = mapper;
