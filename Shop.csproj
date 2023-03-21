@@ -7,9 +7,17 @@
 
     <AssemblyName>Shop</AssemblyName>
     <Version>0.0.1</Version>
+
   </PropertyGroup>
 
   <ItemGroup>
+
+  
+      <Content Remove="Application\**" />
+      <Compile Remove="Application\**" />
+
+      <Content Remove="Domain\**" />
+      <Compile Remove="Domain\**" />
   
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="7.0.2" />
   
