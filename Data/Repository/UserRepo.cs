@@ -12,16 +12,10 @@ namespace Shop.Data
 
   internal sealed class UserRepo : RepositoryBase<User>, IUserRepo
   {
-    // public UserRepo(MainContext context) : base(context)
-    // {
-    // }
-
-    // private readonly MainContext _context;
     private readonly IMapper _mapper;
 
     public UserRepo(MainContext context, IMapper mapper) : base(context)
     {
-      // _context = context;
       _mapper = mapper;
     }
 

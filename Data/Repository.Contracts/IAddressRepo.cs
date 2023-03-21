@@ -4,7 +4,7 @@ using Shop.Models;
 namespace Shop.Data.Repository.Contracts
 {
 
-  public interface IAddressRepo
+  public interface IAddressRepo : IRepositoryBase<Address>
   {
     byte[]? GetUserID(string email);
     uint? CheckRegionExist(string regionName);

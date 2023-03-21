@@ -17,6 +17,7 @@ public sealed class RepositoryManager : IRepositoryManager
     _authRepo = new Lazy<IAuthRepo>(() => new AuthRepo(context));
     _addressRepo = new Lazy<IAddressRepo>(() => new AddressRepo(context));
     _userRepo = new Lazy<IUserRepo>(() => new UserRepo(context, null!));
+
   }
 
   public IAuthRepo Auth => _authRepo.Value;

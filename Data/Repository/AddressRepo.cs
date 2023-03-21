@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq.Expressions;
 using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -8,11 +9,11 @@ using Shop.Data.Repository.Contracts;
 using Shop.Models;
 using Shop.Utility;
 
-internal sealed class AddressRepo : IAddressRepo
+internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
 {
   private readonly MainContext _context;
 
-  public AddressRepo(MainContext context)
+  public AddressRepo(MainContext context) : base(context)
   {
     _context = context;
   }
@@ -20,6 +21,7 @@ internal sealed class AddressRepo : IAddressRepo
 
   public bool DeleteAddress(byte[] addressID)
   {
+    
     throw new NotImplementedException();
   }
 
@@ -118,4 +120,6 @@ internal sealed class AddressRepo : IAddressRepo
   {
     return await _context.Address!.FindAsync(addressId);
   }
+
+
 }

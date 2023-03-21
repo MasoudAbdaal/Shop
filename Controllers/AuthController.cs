@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Shop.Constants;
+using Shop.Data;
 using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
 using Shop.Helpers;
@@ -20,15 +21,18 @@ namespace Shop.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly RepositoryManager _repoManager;
-    
+    private readonly IRepositoryManager _repositoryManager;
+
+    private readonly MainContext _context;
     private readonly IAuthRepo _repository;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper, RepositoryManager repoManager)
+    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper, MainContext context, IRepositoryManager repositoryManager)
     {
-      _repoManager = repoManager;
+      _repositoryManager = repositoryManager;
+
+      _context = context;
       _repository = repository;
       _configuration = configuration;
       _mapper = mapper;
@@ -37,6 +41,12 @@ namespace Shop.Controllers
     [HttpPost("register")]
     public async Task<IActionResult> Register(UserRegisterDTO request)
     {
+      //exmaple code 
+      
+
+
+
+      //exmaple code 
 
       HMACSHA512 HashAlgorithm = new HMACSHA512();
       byte[] AddressID_Random = new byte[4];

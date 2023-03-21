@@ -3,7 +3,7 @@ using Shop.Models;
 namespace Shop.Data.Repository.Contracts
 {
 
-  public interface IAuthRepo
+  public interface IAuthRepo : IRepositoryBase<User>
   {
     Task SaveChanges();
 

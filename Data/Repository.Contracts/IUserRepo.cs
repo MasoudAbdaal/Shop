@@ -4,7 +4,7 @@ using Shop.Models;
 namespace Shop.Data.Repository.Contracts
 {
 
-  public interface IUserRepo
+  public interface IUserRepo : IRepositoryBase<User>
   {
     Task SaveChanges();
 

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -7,18 +8,20 @@ using Shop.Models;
 namespace Shop.Data
 {
 
-  internal sealed class AuthRepo : RepositoryBase<User>, IAuthRepo
+  public class AuthRepo : RepositoryBase<User>, IAuthRepo
   {
 
     public AuthRepo(MainContext context) : base(context)
     {
-
     }
+
 
     public Task SaveChanges()
     {
       return MainContext.SaveChangesAsync();
     }
+
+
 
 
     public async Task<User?> CreateUser(User user)
@@ -55,6 +58,26 @@ namespace Shop.Data
       await SaveChanges();
       return await GetUser(newEmail, null);
     }
+
+    public override bool Equals(object? obj)
+    {
+      return base.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+      return base.GetHashCode();
+    }
+
+    public override string? ToString()
+    {
+      return base.ToString();
+    }
+
+    // public override IQueryable<User?>? GetEntityByExpression<U>(Expression<Func<User, bool>> condition, bool trachChanges, Expression<Func<User, U>>? entity)
+    // {
+    //   return base.GetEntityByExpression(condition, trachChanges, entity);
+    // }
 
 
     //   public async Task<User?> EditPhone(User user, string newPhone)

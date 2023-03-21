@@ -9,7 +9,7 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
   public RepositoryBase(MainContext context) => MainContext = context;
 
 
-  public IQueryable<T?>? GetEntityByExpression<U>(Expression<Func<T, bool>> condition, bool trachChanges, Expression<Func<T, U>>? entity = null) where U : T
+  public IQueryable<T?>? GetEntityByExpression<U>(Expression<Func<T, bool>> condition, bool trachChanges, Expression<Func<T, U>>? entity) where U : T
   {
     if (trachChanges)
       if (entity is null)
