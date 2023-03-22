@@ -11,20 +11,20 @@ using Shop.Models;
 public class AddressController : ControllerBase
 {
   private readonly IMapper _mapper;
-  private readonly IAddressRepo _repo;
+  private readonly IRepositoryManager _repoManager;
 
 
-  public AddressController(IAddressRepo repo, IMapper mapper)
+  public AddressController(IRepositoryManager repoManager, IMapper mapper)
   {
     _mapper = mapper;
-    _repo = repo;
+    _repoManager = repoManager;
   }
 
   [HttpPost, Route("new")]
   public async Task<ActionResult<Address?>> New(AddressCreateDTO request)
   {
-    byte[]? uid = _repo.GetUserID(request.Mail);
-    uint? RegionID = _repo.CheckRegionExist(request.RegionName);
+    byte[]? uid = _repoManager.Address.GetUserID(request.Mail);
+    uint? RegionID = _repoManager.Address.CheckRegionExist(request.RegionName);
 
     if (uid is null)
       return NotFound("User doesn't exist");
@@ -40,7 +40,7 @@ public class AddressController : ControllerBase
     Address.ID = AddressID;
     Address.RegionID = (uint)RegionID;
 
-    Address? Result = await _repo.AddAddress(Address, uid);
+    Address? Result = await _repoManager.Address.AddAddress(Address, uid);
 
     if (Result is not null)
       return Ok(_mapper.Map<Address, AddressPresentationDTO>(Result));
@@ -52,14 +52,14 @@ public class AddressController : ControllerBase
   [HttpPost, Route("modify")]
   public async Task<ActionResult<AddressPresentationDTO>> Modify(AddressPresentationDTO request)
   {
-    Address? Address = await _repo.GetAddressByID(request.AddressID);
+    Address? Address = await _repoManager.Address.GetAddressByID(request.AddressID);
     if (Address is null)
       return NotFound("Wrong addressID");
 
     var z = _mapper.Map<AddressPresentationDTO, Address>(request);
 
 
-    await _repo.ModifyAddress(z, Address);
+    await _repoManager.Address.ModifyAddress(z, Address);
 
     return Ok();
   }
@@ -67,11 +67,11 @@ public class AddressController : ControllerBase
   [HttpGet, Route("all")]
   public async Task<ActionResult<IEnumerable<AddressPresentationDTO>>> GetAll(string email)
   {
-    byte[]? uid = _repo.GetUserID(email);
+    byte[]? uid = _repoManager.Address.GetUserID(email);
     if (uid is null)
       return NotFound();
 
-    IEnumerable<Address>? addressList = await _repo.GetUserAddresses(uid!);
+    IEnumerable<Address>? addressList = await _repoManager.Address.GetUserAddresses(uid!);
 
     return Ok(_mapper.Map<IEnumerable<Address>, IEnumerable<AddressPresentationDTO>>(addressList!));
 
@@ -80,17 +80,17 @@ public class AddressController : ControllerBase
   [HttpGet, Route("regions")]
   public async Task<ActionResult<IEnumerable<Region>>> GetRegions()
   {
-    return Ok(await _repo.GetRegions());
+    return Ok(await _repoManager.Address.GetRegions());
   }
 
   [HttpPost, Route("delete")]
   public async Task<ActionResult> Delete(AddressDeleteDTO request)
   {
-    Address? Address = await _repo.GetAddressByID(request.AddressID);
+    Address? Address = await _repoManager.Address.GetAddressByID(request.AddressID);
     if (Address is null)
       return NotFound("Invalid AddressID!!");
 
-    if (await _repo.DeleteAddress(request.AddressID, request.UserID))
+    if (await _repoManager.Address.DeleteAddress(request.AddressID, request.UserID))
       return Ok();
 
     return StatusCode(StatusCodes.Status502BadGateway);

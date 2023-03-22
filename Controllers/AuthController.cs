@@ -21,19 +21,13 @@ namespace Shop.Controllers
   [ApiController]
   public class AuthController : ControllerBase
   {
-    private readonly IRepositoryManager _repositoryManager;
-
-    private readonly MainContext _context;
-    private readonly IAuthRepo _repository;
+    private readonly IRepositoryManager _repoManager;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public AuthController(IAuthRepo repository, IConfiguration configuration, IMapper mapper, MainContext context, IRepositoryManager repositoryManager)
+    public AuthController(IRepositoryManager repoManager, IConfiguration configuration, IMapper mapper)
     {
-      _repositoryManager = repositoryManager;
-
-      _context = context;
-      _repository = repository;
+      _repoManager = repoManager;
       _configuration = configuration;
       _mapper = mapper;
     }
@@ -42,7 +36,7 @@ namespace Shop.Controllers
     public async Task<IActionResult> Register(UserRegisterDTO request)
     {
       //exmaple code 
-      
+
 
 
 
@@ -90,7 +84,7 @@ namespace Shop.Controllers
           PhoneNumber = request.PhoneNumber
         },
       };
-      User? Result = await _repository.CreateUser(u);
+      User? Result = await _repoManager.Auth.CreateUser(u);
 
       if (Result == null)
         return StatusCode(502);
@@ -105,7 +99,7 @@ namespace Shop.Controllers
     {
       UserToken TokenInfo = SecurityUtil.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
 
-      User? u = await _repository.GetUser(request.Email, null);
+      User? u = await _repoManager.Auth.GetUser(request.Email, null);
 
       if (u != null)
       {
