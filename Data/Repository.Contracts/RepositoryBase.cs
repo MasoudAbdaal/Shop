@@ -9,19 +9,18 @@ public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
   public RepositoryBase(MainContext context) => MainContext = context;
 
 
-  public IQueryable<T?>? GetEntityByExpression<U>(Expression<Func<T, bool>> condition, bool trachChanges, Expression<Func<T, U>>? entity) where U : T
+  public IQueryable<T?>? GetBy<U>(Expression<Func<T, bool>> condition, bool trachChanges, Expression<Func<T, U>>? entity, Func<T, U>? orderBy) where U : T
   {
-    if (trachChanges)
-      if (entity is null)
-        MainContext.Set<T>().Where(condition);
+    var result = trachChanges ? MainContext.Set<T>().AsNoTracking() : MainContext.Set<T>();
+    result.Where(condition);
 
-    if (!trachChanges)
-      if (entity is not null)
-        MainContext.Set<T>()
-        .Where(condition)
-        .AsNoTracking()
-        .Select(entity);
+    if (orderBy is not null)
+      result.OrderBy(orderBy);
 
-    return default;
+    if (entity is not null)
+      result.Select(entity);
+
+
+    return result;
   }
 }
