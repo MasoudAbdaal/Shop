@@ -1,8 +1,8 @@
 using AutoMapper;
+using Domain.Entities.User;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
-using Shop.Models;
 
 
 [Route("api/[controller]")]

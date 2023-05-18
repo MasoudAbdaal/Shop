@@ -1,13 +1,13 @@
 using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata;
+using Domain.Entities.Auth;
 using Microsoft.Extensions.Primitives;
-using Shop.Models;
 
 namespace Shop.Utility
 {
 
-  public static class SecurityUtil
+    public static class SecurityUtil
   {
     public static UserToken GetBearerTokenInfo(StringValues authHeader)
     {

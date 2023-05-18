@@ -1,10 +1,10 @@
 using AutoMapper;
+using Domain.Entities.User;
 using Shop.DTOs;
-using Shop.Models;
 
 namespace Shop.Profiles
 {
-  public class UserProfile : Profile
+    public class UserProfile : Profile
   {
     public UserProfile()
     {

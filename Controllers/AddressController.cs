@@ -1,8 +1,8 @@
 using AutoMapper;
+using Domain.Entities.Address;
 using Microsoft.AspNetCore.Mvc;
+using Shop.Contracts.DTOs.Address;
 using Shop.Data.Repository.Contracts;
-using Shop.DTOs;
-using Shop.Models;
 
 
 

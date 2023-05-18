@@ -4,20 +4,20 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
+using Domain.Entities.Auth;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Shop.Constants;
+using Shop.Contracts.Constants;
 using Shop.Data;
 using Shop.Data.Repository.Contracts;
 using Shop.DTOs;
 using Shop.Helpers;
-using Shop.Models;
 using Shop.Utility;
 
 namespace Shop.Controllers
 {
-  [Route("api/[controller]")]
+    [Route("api/[controller]")]
   [ApiController]
   public class AuthController : ControllerBase
   {

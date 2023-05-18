@@ -2,12 +2,12 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using Domain.Entities.Auth;
 using Microsoft.IdentityModel.Tokens;
-using Shop.Models;
 
 namespace Shop.Helpers
 {
-  public class Authentication
+    public class Authentication
   {
     public static JwtSecurityToken CreateToken(string userEmail, byte[] userID, Role.UserRoles userRole, double expireMinutes, string issuer, string audience, string key)
     {
