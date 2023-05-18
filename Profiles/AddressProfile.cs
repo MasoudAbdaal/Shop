@@ -1,7 +1,7 @@
 using AutoMapper;
+using Contracts.DTOs.Address;
 using Domain.Entities.Address;
 using NetTopologySuite.Geometries;
-using Shop.Contracts.DTOs.Address;
 
 namespace Shop.Profiles
 {

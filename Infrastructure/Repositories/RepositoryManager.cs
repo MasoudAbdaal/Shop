@@ -1,6 +1,7 @@
 using AutoMapper;
-using Shop.Data;
-using Shop.Data.Repository.Contracts;
+using Contracts.Repository;
+using Infrastructure.Context;
+using Infrastructure.Repositories;
 
 public sealed class RepositoryManager : IRepositoryManager
 {

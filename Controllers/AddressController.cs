@@ -1,10 +1,7 @@
 using AutoMapper;
+using Contracts.DTOs.Address;
 using Domain.Entities.Address;
 using Microsoft.AspNetCore.Mvc;
-using Shop.Contracts.DTOs.Address;
-using Shop.Data.Repository.Contracts;
-
-
 
 [Route("api/[controller]")]
 [ApiController]

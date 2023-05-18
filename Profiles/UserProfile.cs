@@ -1,6 +1,6 @@
 using AutoMapper;
+using Contracts.DTOs.User;
 using Domain.Entities.User;
-using Shop.DTOs;
 
 namespace Shop.Profiles
 {

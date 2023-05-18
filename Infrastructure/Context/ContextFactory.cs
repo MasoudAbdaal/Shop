@@ -1,6 +1,8 @@
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Shop.Data;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 public class ContextFactory : IDesignTimeDbContextFactory<MainContext>
 {

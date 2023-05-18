@@ -4,8 +4,8 @@ builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureAutomapper();
 builder.Services.ConfigureAuthentications(builder.Configuration);
 builder.Services.ConfigureJsonOptions();
-builder.Services.ConfigureContextFactory();
-builder.Services.ConfigureRepositoryManager();
+// builder.Services.ConfigureContextFactory();
+// builder.Services.ConfigureRepositoryManager();
 
 
 builder.Services.AddAuthorization();

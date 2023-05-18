@@ -1,15 +1,16 @@
 using System.Linq.Expressions;
 using System.Reflection;
+using Contracts.Repository;
 using Domain.Entities.User;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Shop.Data.Repository.Contracts;
 
-namespace Shop.Data
+namespace Infrastructure.Repositories;
+
+
+public class AuthRepo : RepositoryBase<User>, IAuthRepo
 {
-
-    public class AuthRepo : RepositoryBase<User>, IAuthRepo
-  {
 
     public AuthRepo(MainContext context) : base(context)
     {
@@ -18,7 +19,7 @@ namespace Shop.Data
 
     public Task SaveChanges()
     {
-      return MainContext.SaveChangesAsync();
+        return MainContext.SaveChangesAsync();
     }
 
 
@@ -26,52 +27,52 @@ namespace Shop.Data
 
     public async Task<User?> CreateUser(User user)
     {
-      User? u = await GetUser(user.Email, null);
+        User? u = await GetUser(user.Email, null);
 
-      if (u == null)
-      {
-        await MainContext.Users!.AddAsync(user!);
-        await SaveChanges();
-        return await GetUser(user.Email, null);
-      }
-      else
-        return u;
+        if (u == null)
+        {
+            await MainContext.Users!.AddAsync(user!);
+            await SaveChanges();
+            return await GetUser(user.Email, null);
+        }
+        else
+            return u;
     }
 
 
     public async Task<User?> GetUser(string? email, byte[]? userId)
     {
-      User? result;
-      if (userId != null)
-        result = await MainContext.Users!.FindAsync(userId);
-      else
-        result = await MainContext.Users!.FirstOrDefaultAsync(x => x.Email == email);
+        User? result;
+        if (userId != null)
+            result = await MainContext.Users!.FindAsync(userId);
+        else
+            result = await MainContext.Users!.FirstOrDefaultAsync(x => x.Email == email);
 
-      return result == null ? default : result;
+        return result == null ? default : result;
     }
 
     public async Task<User?> EditEmail(User user, string newEmail)
     {
-      user.Email = newEmail;
+        user.Email = newEmail;
 
-      MainContext.Update(user);
-      await SaveChanges();
-      return await GetUser(newEmail, null);
+        MainContext.Update(user);
+        await SaveChanges();
+        return await GetUser(newEmail, null);
     }
 
     public override bool Equals(object? obj)
     {
-      return base.Equals(obj);
+        return base.Equals(obj);
     }
 
     public override int GetHashCode()
     {
-      return base.GetHashCode();
+        return base.GetHashCode();
     }
 
     public override string? ToString()
     {
-      return base.ToString();
+        return base.ToString();
     }
 
     // public override IQueryable<User?>? GetEntityByExpression<U>(Expression<Func<User, bool>> condition, bool trachChanges, Expression<Func<User, U>>? entity)
@@ -89,7 +90,6 @@ namespace Shop.Data
 
     //     return await GetUser(user.Email, null);
     //   }
-  }
 }
 
 
