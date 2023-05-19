@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 
+    <AssemblyName>Shop.Application</AssemblyName>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
 </Project>
