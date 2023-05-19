@@ -6,9 +6,9 @@ using Contracts.Constants;
 using Contracts.Repository;
 using Domain.Entities.Address;
 using Domain.Entities.User;
+using Infrastructure;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Shop.Utility;
 
 internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
 {

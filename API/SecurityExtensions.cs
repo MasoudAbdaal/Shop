@@ -20,7 +20,7 @@ public static class SecurityExtensions
     {
       ValidIssuer = configuration.GetValue<string>("JWT:Issuer"),
       ValidAudience = configuration.GetValue<string>("JWT:Audience"),
-      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("JWT:Key"))),
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("JWT:Key")!)),
       RequireExpirationTime = true,
       ValidateIssuer = true,
       ValidateAudience = true,

@@ -10,6 +10,7 @@ using Domain.Entities.Address;
 using Domain.Entities.Auth;
 using Domain.Entities.User;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Shop.Helpers;
@@ -106,9 +107,9 @@ public async Task<IActionResult> Login(UserLoginDTO request)
     if (Authentication.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
     {
       JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.Role, 45,
-       _configuration.GetValue<string>("JWT:Issuer"),
-       _configuration.GetValue<string>("JWT:Audience"),
-       _configuration.GetValue<string>("JWT:Key"));
+       _configuration.GetValue<string>("JWT:Issuer")!,
+       _configuration.GetValue<string>("JWT:Audience")!,
+       _configuration.GetValue<string>("JWT:Key")!);
 
       return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
     }

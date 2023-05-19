@@ -6,7 +6,6 @@ using Domain.Entities.User;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Shop.Utility;
 
 namespace Infrastructure.Repositories;
 
@@ -26,7 +25,6 @@ internal sealed class UserRepo : RepositoryBase<User>, IUserRepo
         user!.Name = newInfo.Name.Length > 5 ? newInfo.Name : user.Name;
 
         UserInfo Info = MainContext.User_Info!.Find(user.ID)!;
-
         if (user != null)
         {
             Info = GeneralUtil.ApplyChanges(Info, _mapper.Map<UserInfoDTO, UserInfo>(newInfo.info!))!;

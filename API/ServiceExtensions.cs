@@ -1,10 +1,5 @@
-using System.Text;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 
 public static class ServiceExtensions
 {
