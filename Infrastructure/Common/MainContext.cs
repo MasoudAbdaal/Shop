@@ -6,34 +6,39 @@ using Domain.Entities.Order;
 using Domain.Entities.Payment;
 using Domain.Entities.Product;
 using Domain.Entities.User;
+using Infrastructure.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Shop.RepoConfigurations;
 
 namespace Infrastructure.Context
 {
     public class MainContext : DbContext
     {
-        // private readonly IConfiguration _configuration;
-        // private readonly DbContextOptions<MainContext> _options;
-
-        // public MainContext(DbContextOptions<MainContext> options, IConfiguration configuration) : base(options)
-        // {
-        //   _configuration = configuration;
-        //   _options = options;
-        // }
-
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //   base.OnConfiguring(optionsBuilder);
-        //   optionsBuilder.UseSqlServer(_configuration.GetValue<string>("Database:ConnectionString")
-        //   , x => x.UseNetTopologySuite()
-        //   );
-        // }
 
         public MainContext(DbContextOptions options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            IConfigurationRoot Configuration = new ConfigurationBuilder()
+       .SetBasePath(Directory.GetParent("./")!.FullName)
+       .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+       .Build();
+
+
+            optionsBuilder
+            .UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }))
+            .UseSqlServer(Configuration.GetValue<string>("Database:ConnectionString"),
+             x => x.UseNetTopologySuite()
+            );
 
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AuthProviderConfigurations());
