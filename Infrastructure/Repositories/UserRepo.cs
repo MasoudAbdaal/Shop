@@ -1,7 +1,7 @@
 using System.Reflection;
 using AutoMapper;
+using Contracts.DbContext;
 using Contracts.DTOs.User;
-using Contracts.Repository;
 using Domain.Entities.User;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +18,8 @@ internal sealed class UserRepo : RepositoryBase<User>, IUserRepo
     {
         _mapper = mapper;
     }
+
+    DbSet<User> IUserRepo.Users { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
     public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
     {
@@ -71,6 +73,11 @@ internal sealed class UserRepo : RepositoryBase<User>, IUserRepo
     public Task SaveChanges()
     {
         return MainContext.SaveChangesAsync();
+    }
+
+    Task<int> IUserRepo.SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 }
 

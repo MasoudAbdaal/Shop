@@ -1,5 +1,5 @@
 using AutoMapper;
-using Contracts.Repository;
+using Contracts.DbContext;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
 

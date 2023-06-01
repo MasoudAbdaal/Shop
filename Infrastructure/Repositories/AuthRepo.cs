@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using System.Reflection;
-using Contracts.Repository;
+using Contracts.DbContext;
 using Domain.Entities.User;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;

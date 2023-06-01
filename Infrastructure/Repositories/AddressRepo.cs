@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Text;
 using AutoMapper;
 using Contracts.Constants;
-using Contracts.Repository;
+using Contracts.DbContext;
 using Domain.Entities.Address;
 using Domain.Entities.User;
 using Infrastructure;

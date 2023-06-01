@@ -1,7 +1,6 @@
-
 using Domain.Entities.Address;
 
-namespace Contracts.Repository;
+namespace Contracts.DbContext;
 
 public interface IAddressRepo : IRepositoryBase<Address>
 {

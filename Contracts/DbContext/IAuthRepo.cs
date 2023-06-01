@@ -1,6 +1,6 @@
 using Domain.Entities.User;
 
-namespace Contracts.Repository;
+namespace Contracts.DbContext;
 
 
 public interface IAuthRepo : IRepositoryBase<User>

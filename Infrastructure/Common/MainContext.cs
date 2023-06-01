@@ -39,18 +39,18 @@ namespace Infrastructure.Context
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfiguration(new AuthProviderConfigurations());
-            modelBuilder.ApplyConfiguration(new ProductConfConfigurations());
-            modelBuilder.ApplyConfiguration(new PromotionCategoriesConfigurations());
-            modelBuilder.ApplyConfiguration(new PromotionProductsConfigurations());
-            modelBuilder.ApplyConfiguration(new RoleConfigurations());
-            modelBuilder.ApplyConfiguration(new UserAddressConfigurations());
-            modelBuilder.ApplyConfiguration(new UserAuthMethodConfigurations());
-            modelBuilder.ApplyConfiguration(new UserVerificationMethodConfigurations());
-            modelBuilder.ApplyConfiguration(new VerificationMethodConfigurations());
-        }
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.ApplyConfiguration(new AuthProviderConfigurations());
+        //     modelBuilder.ApplyConfiguration(new ProductConfConfigurations());
+        //     modelBuilder.ApplyConfiguration(new PromotionCategoriesConfigurations());
+        //     modelBuilder.ApplyConfiguration(new PromotionProductsConfigurations());
+        //     modelBuilder.ApplyConfiguration(new RoleConfigurations());
+        //     modelBuilder.ApplyConfiguration(new UserAddressConfigurations());
+        //     modelBuilder.ApplyConfiguration(new UserAuthMethodConfigurations());
+        //     modelBuilder.ApplyConfiguration(new UserVerificationMethodConfigurations());
+        //     modelBuilder.ApplyConfiguration(new VerificationMethodConfigurations());
+        // }
 
         public DbSet<User>? Users { get; set; }
         public DbSet<UserReview>? User_Reviews { get; set; }
