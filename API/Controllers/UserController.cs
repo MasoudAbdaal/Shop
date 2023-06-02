@@ -1,4 +1,5 @@
 using AutoMapper;
+using Contracts.DbContext;
 using Contracts.DTOs.User;
 using Domain.Entities.User;
 using Microsoft.AspNetCore.Mvc;
@@ -7,28 +8,28 @@ using Microsoft.AspNetCore.Mvc;
 [ApiController]
 public class UserController : ControllerBase
 {
-  private readonly IMapper _mapper;
-  private readonly IRepositoryManager _repoManager;
+    private readonly IMapper _mapper;
+    private readonly IUserDbContext _userContext;
 
-  public UserController(IRepositoryManager repoManager, IMapper mapper)
-  {
-    _mapper = mapper;
-    _repoManager = repoManager;
-  }
-
-
-
-  [HttpPost("modify")]
-  public async Task<IActionResult> Modify(UserModifyDTO request)
-  {
-    User? Result = await _repoManager.Auth.GetUser(request.Mail, null);
-
-    if (Result != null)
+    public UserController(IRepositoryManager repoManager, IMapper mapper, IUserDbContext userContext)
     {
-      await _repoManager.User.EditUserInfo(Result, request);
-
-      return Ok();
+        _mapper = mapper;
+        _userContext = userContext;
     }
-    else return NotFound();
-  }
+
+
+
+    [HttpPost("modify")]
+    public async Task<IActionResult> Modify(UserModifyDTO request)
+    {
+        User? Result = await _userContext.GetUser(request.Mail, null);
+
+        if (Result != null)
+        {
+            await _userContext.EditUserInfo(Result, request);
+
+            return Ok();
+        }
+        else return NotFound();
+    }
 }

@@ -7,5 +7,5 @@ namespace Contracts.DbContext;
 public interface IUserInfoDbContext : IRepositoryBase<UserInfo>
 {
     DbSet<UserInfo> UserInfos { get; set; }
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

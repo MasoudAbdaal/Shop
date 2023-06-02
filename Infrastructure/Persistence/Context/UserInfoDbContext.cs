@@ -4,9 +4,9 @@ using Domain.Entities.User;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
-public class UserInfoDbContext : ModuleDbContext, IUserInfoDbContext
+internal sealed class UserInfoDbContext : ModuleDbContext, IUserInfoDbContext
 {
-    protected override string Schema => "User_Info";
+    protected override string Schema => "Shop";
 
     public DbSet<UserInfo> UserInfos { get; set; }
 

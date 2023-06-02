@@ -3,7 +3,7 @@ using Contracts.DbContext;
 public interface IRepositoryManager
 {
     IAuthRepo Auth { get; }
-    IUserRepo User { get; }
+    // IUserDbContext User { get; }
     IAddressRepo Address { get; }
     void Save();
     // ICartRepo Cart { get; }
