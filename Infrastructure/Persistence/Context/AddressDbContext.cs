@@ -14,20 +14,22 @@ using Microsoft.EntityFrameworkCore;
 internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 {
     protected override string Schema => "Shop";
-    private Region _region { get; set; }
-
     //this Should REMOVE!
-    private MainContext _context { get; set; }
+    private MainContext? _context { get; set; }
 
-    public DbSet<Address>? Addresses { get; set; }
+    private IAddressDbContext? _addressContext { get; set; }
 
     //Create Interface And SeprateDbContext For this Entity!
-    public DbSet<Region> Regions { get; set; }
+    private IRegionDbContext? _regionContext { get; set; }
+    private IUserDbContext? _userContext { get; set; }
+    public DbSet<Address>? Addresses { get; set; }
 
-
-    public AddressDbContext(DbContextOptions options) : base(options)
+    public AddressDbContext(DbContextOptions options, IRegionDbContext regionContext, IAddressDbContext addressContext, DbSet<Address>? addresses, IUserDbContext? userContext) : base(options)
     {
-        Addresses = Set<Address>();
+        _regionContext = regionContext;
+        _addressContext = addressContext;
+        Addresses = addresses;
+        _userContext = userContext;
     }
 
 
@@ -39,15 +41,15 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public async Task<IEnumerable<Region>> GetRegions()
     {
-        if (_context.Regions!.Count() < 1)
+        if (_regionContext!.Regions!.Count() < 1)
         {
-            await Regions!.AddAsync(Countries.USA);
-            await _context.Regions!.AddAsync(Countries.IRAN);
+            await _regionContext!.Regions!.AddAsync(Countries.USA);
+            await _regionContext!.Regions!.AddAsync(Countries.IRAN);
             await SaveChangesAsync();
 
         }
 
-        return await _context.Regions!.ToListAsync();
+        return await _regionContext!.Regions!.ToListAsync();
     }
 
     public async Task<IEnumerable<Address>?> GetUserAddresses(byte[] userId)
@@ -62,7 +64,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
             //IDK Why Regions IS NULL!!
             Address? Address = await _context.Address!.FindAsync(ID);
-            Address!.Region = await _context.Regions!.FindAsync(Address.RegionID);
+            Address!.Region = await _regionContext!.Regions!.FindAsync(Address.RegionID);
 
             AddressList.Add(Address!);
         }
@@ -117,7 +119,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public uint? CheckRegionExist(string regionName)
     {
-        List<uint> RegionID = _context.Regions!.Where(x => x.Name == regionName).Select(x => x.RegionID).ToList()!;
+        List<uint> RegionID = _regionContext!.Regions!.Where(x => x.Name == regionName).Select(x => x.RegionID).ToList()!;
         if (RegionID.Capacity < 1)
             return null;
 
