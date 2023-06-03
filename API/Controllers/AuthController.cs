@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
 using Contracts.Constants;
-using Contracts.DbContext;
+using Contracts.DbContexts;
 using Contracts.DTOs.User;
 using Domain.Entities.Address;
 using Domain.Entities.Auth;

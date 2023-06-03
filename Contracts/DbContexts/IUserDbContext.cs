@@ -2,7 +2,7 @@ using Contracts.DTOs.User;
 using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 
-namespace Contracts.DbContext;
+namespace Contracts.DbContexts;
 
 public interface IUserDbContext
 {

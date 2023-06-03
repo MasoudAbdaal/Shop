@@ -1,4 +1,4 @@
-namespace Contracts.DbContext;
+namespace Contracts.DbContexts;
 
 
 public interface ICartRepo

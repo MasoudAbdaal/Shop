@@ -3,20 +3,31 @@ using System.Linq.Expressions;
 using System.Text;
 using AutoMapper;
 using Contracts.Constants;
-using Contracts.DbContext;
+using Contracts.DbContexts;
 using Domain.Entities.Address;
 using Domain.Entities.User;
 using Infrastructure;
+using Infrastructure.Common;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
-internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
+internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 {
-    private readonly MainContext _context;
+    protected override string Schema => "Shop";
+    private Region _region { get; set; }
 
-    public AddressRepo(MainContext context) : base(context)
+    //this Should REMOVE!
+    private MainContext _context { get; set; }
+
+    public DbSet<Address>? Addresses { get; set; }
+
+    //Create Interface And SeprateDbContext For this Entity!
+    public DbSet<Region> Regions { get; set; }
+
+
+    public AddressDbContext(DbContextOptions options) : base(options)
     {
-        _context = context;
+        Addresses = Set<Address>();
     }
 
 
@@ -30,9 +41,10 @@ internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
     {
         if (_context.Regions!.Count() < 1)
         {
-            await _context.Regions!.AddAsync(Countries.USA);
+            await Regions!.AddAsync(Countries.USA);
             await _context.Regions!.AddAsync(Countries.IRAN);
-            await SaveChanges();
+            await SaveChangesAsync();
+
         }
 
         return await _context.Regions!.ToListAsync();
@@ -68,15 +80,10 @@ internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
         return uid;
     }
 
-    public Task SaveChanges()
-    {
-        return _context.SaveChangesAsync();
-    }
-
     public async Task<Address?> AddAddress(Address newAddress, byte[] userId)
     {
         await _context.User_Addressess!.AddAsync(new UserAddress { AddressID = newAddress.ID, UserID = userId, Address = newAddress });
-        await SaveChanges();
+        await SaveChangesAsync();
 
         return await GetAddressByID(newAddress.ID);
     }
@@ -87,7 +94,7 @@ internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
         if (Modified is not null)
         {
             _context.Address!.Update(Modified);
-            await SaveChanges();
+            await SaveChangesAsync();
 
             return OldAddress;
         }
@@ -103,7 +110,7 @@ internal sealed class AddressRepo : RepositoryBase<Address>, IAddressRepo
 
         _context.User_Addressess.Remove(Address);
         _context.Address!.Remove(Address.Address!);
-        await SaveChanges();
+        await SaveChangesAsync();
 
         return true;
     }

@@ -1,9 +1,9 @@
 using Domain.Entities.User;
 
-namespace Contracts.DbContext;
+namespace Contracts.DbContexts;
 
 
-public interface IAuthRepo : IRepositoryBase<User>
+public interface IAuthRepo 
 {
     Task SaveChanges();
 

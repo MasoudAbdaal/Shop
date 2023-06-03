@@ -1,5 +1,5 @@
 using AutoMapper;
-using Contracts.DbContext;
+using Contracts.DbContexts;
 using Contracts.DTOs.User;
 using Domain.Entities.User;
 using Microsoft.AspNetCore.Mvc;

@@ -1,10 +1,10 @@
-using Contracts.DbContext;
+using Contracts.DbContexts;
 
 public interface IRepositoryManager
 {
     IAuthRepo Auth { get; }
     // IUserDbContext User { get; }
-    IAddressRepo Address { get; }
+    IAddressDbContext Address { get; }
     void Save();
     // ICartRepo Cart { get; }
     // IOrderRepo Order { get; }

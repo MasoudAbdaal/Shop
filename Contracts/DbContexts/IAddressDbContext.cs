@@ -1,14 +1,16 @@
 using Domain.Entities.Address;
+using Microsoft.EntityFrameworkCore;
 
-namespace Contracts.DbContext;
+namespace Contracts.DbContexts;
 
-public interface IAddressRepo : IRepositoryBase<Address>
+public interface IAddressDbContext
 {
+    DbSet<Address>? Addresses { get; set; }
+
     byte[]? GetUserID(string email);
     uint? CheckRegionExist(string regionName);
-    Task<bool> DeleteAddress(byte[] addressID, byte[] userId);
 
-    Task SaveChanges();
+    Task<bool> DeleteAddress(byte[] addressID, byte[] userId);
     Task<IEnumerable<Address>?> GetUserAddresses(byte[] userId);
     Task<IEnumerable<Region>> GetRegions();
     Task<Address?> AddAddress(Address newAddress, byte[] userId);
