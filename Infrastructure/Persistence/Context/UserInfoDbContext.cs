@@ -4,6 +4,8 @@ using Domain.Entities.User;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
+namespace Infrastructure.Persistence.Context;
+
 internal sealed class UserInfoDbContext : ModuleDbContext, IUserInfoDbContext
 {
     protected override string Schema => "Shop";

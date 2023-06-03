@@ -11,25 +11,31 @@ using Infrastructure.Common;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
+namespace Infrastructure.Persistence.Context;
+
 internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 {
     protected override string Schema => "Shop";
-    //this Should REMOVE!
-    private MainContext? _context { get; set; }
-
-    private IAddressDbContext? _addressContext { get; set; }
-
-    //Create Interface And SeprateDbContext For this Entity!
-    private IRegionDbContext? _regionContext { get; set; }
-    private IUserDbContext? _userContext { get; set; }
     public DbSet<Address>? Addresses { get; set; }
 
-    public AddressDbContext(DbContextOptions options, IRegionDbContext regionContext, IAddressDbContext addressContext, DbSet<Address>? addresses, IUserDbContext? userContext) : base(options)
+    private IRegionDbContext? _regionContext { get; set; }
+    private IUserAddressDbContext? _userAddressContext { get; set; }
+    private IUserDbContext? _userContext { get; set; }
+
+    public AddressDbContext(DbContextOptions<UserDbContext> options) : base(options)
     {
+        Addresses = Set<Address>();
+    }
+
+    public AddressDbContext(DbContextOptions options,
+                            IRegionDbContext regionContext,
+                            IUserDbContext? userContext,
+                            IUserAddressDbContext? userAddressContext) : base(options)
+    {
+        Addresses = Set<Address>();
         _regionContext = regionContext;
-        _addressContext = addressContext;
-        Addresses = addresses;
         _userContext = userContext;
+        _userAddressContext = userAddressContext;
     }
 
 
@@ -43,6 +49,8 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
     {
         if (_regionContext!.Regions!.Count() < 1)
         {
+
+            //TODO: Take it to DBContextconfiguration
             await _regionContext!.Regions!.AddAsync(Countries.USA);
             await _regionContext!.Regions!.AddAsync(Countries.IRAN);
             await SaveChangesAsync();
@@ -56,14 +64,17 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
     {
         List<Address> AddressList = new List<Address>();
 
-        List<byte[]> AddressIDs = _context.User_Addressess!.Where(j => j.UserID == userId)
-        .Select(x => x.AddressID).AsNoTracking().ToList();
+        List<byte[]> AddressIDs = _userAddressContext!.UserAddresses!
+        .Where(j => j.UserID == userId)
+        .Select(x => x.AddressID)
+        .AsNoTracking()
+        .ToList();
 
         foreach (byte[] ID in AddressIDs)
         {
 
             //IDK Why Regions IS NULL!!
-            Address? Address = await _context.Address!.FindAsync(ID);
+            Address? Address = await Addresses!.FindAsync(ID);
             Address!.Region = await _regionContext!.Regions!.FindAsync(Address.RegionID);
 
             AddressList.Add(Address!);
@@ -74,7 +85,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public byte[]? GetUserID(string email)
     {
-        byte[] uid = _context.Users!.Where(x => x.Email == email)
+        byte[] uid = _userContext!.Users!.Where(x => x.Email == email)
         .Select(i => i.ID).AsNoTracking().ToArray()[0];
 
         if (uid.Length < 1)
@@ -84,7 +95,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public async Task<Address?> AddAddress(Address newAddress, byte[] userId)
     {
-        await _context.User_Addressess!.AddAsync(new UserAddress { AddressID = newAddress.ID, UserID = userId, Address = newAddress });
+        await _userAddressContext!.UserAddresses!.AddAsync(new UserAddress { AddressID = newAddress.ID, UserID = userId, Address = newAddress });
         await SaveChangesAsync();
 
         return await GetAddressByID(newAddress.ID);
@@ -95,7 +106,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
         Address? Modified = GeneralUtil.ApplyChanges(OldAddress, newAddress)!;
         if (Modified is not null)
         {
-            _context.Address!.Update(Modified);
+            Addresses!.Update(Modified);
             await SaveChangesAsync();
 
             return OldAddress;
@@ -105,13 +116,13 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public async Task<bool> DeleteAddress(byte[] addressID, byte[] userId)
     {
-        UserAddress? Address = await _context.User_Addressess!.FindAsync(userId, addressID);
+        UserAddress? Address = await _userAddressContext!.UserAddresses!.FindAsync(userId, addressID);
 
         if (Address is null)
             return false;
 
-        _context.User_Addressess.Remove(Address);
-        _context.Address!.Remove(Address.Address!);
+        _userAddressContext.UserAddresses.Remove(Address);
+        Addresses!.Remove(Address.Address!);
         await SaveChangesAsync();
 
         return true;
@@ -128,7 +139,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     public async Task<Address?> GetAddressByID(byte[] addressId)
     {
-        return await _context.Address!.FindAsync(addressId);
+        return await Addresses!.FindAsync(addressId);
     }
 
 

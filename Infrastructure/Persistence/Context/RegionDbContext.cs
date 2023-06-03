@@ -3,6 +3,8 @@ using Domain.Entities.Address;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
+namespace Infrastructure.Persistence.Context;
+
 internal sealed class RegionDbContext : ModuleDbContext, IRegionDbContext
 
 {

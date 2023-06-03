@@ -6,12 +6,14 @@ using Infrastructure;
 using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
+namespace Infrastructure.Persistence.Context;
+
 internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
 {
     protected override string Schema => "Shop";
 
     public DbSet<User>? Users { get; set; }
-    private  IUserInfoDbContext? _userInfoDbContext { get; set; }
+    private IUserInfoDbContext? _userInfoDbContext { get; set; }
 
     private readonly IMapper? _mapper;
 
@@ -35,7 +37,7 @@ internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        return await this.SaveChangesAsync(cancellationToken) + await _userInfoDbContext!.SaveChangesAsync(cancellationToken);
+        return await base.SaveChangesAsync(cancellationToken) + await _userInfoDbContext!.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
