@@ -30,8 +30,8 @@ public static class InfrastructureExtensions
              {
                  x.UseNetTopologySuite();
                  x.MigrationsAssembly(typeof(T).Assembly.FullName);
-             }));
-        //  ).AddScoped<U, T>();
+             })
+         ).AddScoped<U, T>();
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
