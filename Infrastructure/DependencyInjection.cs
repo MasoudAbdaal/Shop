@@ -1,14 +1,20 @@
-using Contracts.DbContexts;
-using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+
+using Contracts.DbContexts;
+using Infrastructure.Common;
+using Infrastructure.Persistence.Context;
 public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
         services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
+        services.RegisterDbContext<IAddressDbContext, AddressDbContext>(config);
+        services.RegisterDbContext<IRegionDbContext, RegionDbContext>(config);
+        services.RegisterDbContext<IUserInfoDbContext, UserInfoDbContext>(config);
+        services.RegisterDbContext<IUserAddressDbContext, UserAddressDbContext>(config);
         return services;
     }
 
@@ -24,8 +30,8 @@ public static class InfrastructureExtensions
              {
                  x.UseNetTopologySuite();
                  x.MigrationsAssembly(typeof(T).Assembly.FullName);
-             })
-             ).AddScoped<U, T>();
+             }));
+        //  ).AddScoped<U, T>();
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {

@@ -4,15 +4,13 @@ using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Context;
-
 internal sealed class RegionDbContext : ModuleDbContext, IRegionDbContext
-
 {
     public DbSet<Region>? Regions { get; set; }
-
     protected override string Schema => "Shop";
 
-    public RegionDbContext(DbContextOptions options) : base(options)
+
+    public RegionDbContext(DbContextOptions<RegionDbContext> options) : base(options)
     {
         Regions = Set<Region>();
     }

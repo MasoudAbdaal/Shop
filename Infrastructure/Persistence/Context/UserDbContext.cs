@@ -11,11 +11,11 @@ namespace Infrastructure.Persistence.Context;
 internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
 {
     protected override string Schema => "Shop";
-
     public DbSet<User>? Users { get; set; }
-    private IUserInfoDbContext? _userInfoDbContext { get; set; }
 
+    private IUserInfoDbContext? _userInfoDbContext { get; set; }
     private readonly IMapper? _mapper;
+
 
     public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
     {
@@ -29,15 +29,12 @@ internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
     }
 
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public new async Task<(int userDbContextResult, int userInfoDbContextResult)> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        base.OnModelCreating(modelBuilder);
-    }
+        Task<int>[] tasks = new Task<int>[] { base.SaveChangesAsync(cancellationToken), _userInfoDbContext!.SaveChangesAsync(cancellationToken) };
+        await Task.WhenAll(tasks);
 
-
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        return await base.SaveChangesAsync(cancellationToken) + await _userInfoDbContext!.SaveChangesAsync(cancellationToken);
+        return (tasks[0].Result, tasks[1].Result);
     }
 
     public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
@@ -81,7 +78,7 @@ internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
         if (u == null)
         {
             await AddAsync(user!);
-            await base.SaveChangesAsync();
+            await SaveChangesAsync();
             return await GetUser(user.Email, null);
         }
         else
@@ -93,18 +90,12 @@ internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
         user.Email = newEmail;
 
         Users!.Update(user);
-        await base.SaveChangesAsync();
+        await SaveChangesAsync();
         return await GetUser(newEmail, null);
     }
 
-    Task<User?> IUserDbContext.DeleteUser(string email)
+    public Task<User?> DeleteUser(string email)
     {
         throw new NotImplementedException();
     }
-
-    Task<User?> IUserDbContext.EditUserInfo(User user, UserModifyDTO newInfo)
-    {
-        throw new NotImplementedException();
-    }
-
 }

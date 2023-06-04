@@ -1,16 +1,10 @@
-using System.Collections;
-using System.Linq.Expressions;
-using System.Text;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+
 using Contracts.Constants;
 using Contracts.DbContexts;
 using Domain.Entities.Address;
 using Domain.Entities.User;
-using Infrastructure;
 using Infrastructure.Common;
-using Infrastructure.Context;
-using Microsoft.EntityFrameworkCore;
-
 namespace Infrastructure.Persistence.Context;
 
 internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
@@ -22,20 +16,34 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
     private IUserAddressDbContext? _userAddressContext { get; set; }
     private IUserDbContext? _userContext { get; set; }
 
-    public AddressDbContext(DbContextOptions<UserDbContext> options) : base(options)
+    public AddressDbContext(DbContextOptions<AddressDbContext> options) : base(options)
     {
         Addresses = Set<Address>();
     }
 
-    public AddressDbContext(DbContextOptions options,
-                            IRegionDbContext regionContext,
-                            IUserDbContext? userContext,
-                            IUserAddressDbContext? userAddressContext) : base(options)
+    public AddressDbContext(
+        DbContextOptions<AddressDbContext>  options, IRegionDbContext regionContext, IUserDbContext? userContext,
+        IUserAddressDbContext? userAddressContext) : base(options)
     {
-        Addresses = Set<Address>();
         _regionContext = regionContext;
         _userContext = userContext;
         _userAddressContext = userAddressContext;
+    }
+
+    public new async Task<(int addressDbContextResult, int regionDbContextResut, int userDbContextResult, int userAddressDbContextResult)> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        var userDbContextResults = await _userContext!.SaveChangesAsync(cancellationToken);
+
+        var tasks = new[]
+        {
+            base.SaveChangesAsync(cancellationToken),
+            _regionContext!.SaveChangesAsync(cancellationToken),
+            _userAddressContext!.SaveChangesAsync(cancellationToken),
+
+                    };
+        await Task.WhenAll(tasks);
+
+        return (tasks[0].Result, tasks[1].Result, (userDbContextResults.userDbContextResult + userDbContextResults.userInfoDbContextResult), tasks[2].Result);
     }
 
 
