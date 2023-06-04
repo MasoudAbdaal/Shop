@@ -71,3 +71,12 @@ dotnet run
 ```
 
 8. Change `appsettings.Development.json` **Issuer** And **Audience** for your host url
+
+```ps
+dotnet ef migrations add InitialCreate --project .\Infrastructure\ --startup-project .\API --context UserDbContext  
+
+dotnet ef database update --project .\Infrastructure\ --startup-project .\API\  --context UserDbContext  
+
+dotnet ef database drop --project .\Infrastructure\ -s .\API\ --context UserDbContext  
+
+```

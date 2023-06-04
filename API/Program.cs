@@ -1,14 +1,13 @@
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    var conf = builder.Configuration;
     // builder.Services.ConfigureIISIntegration();
     builder.Services.ConfigureAutomapper();
-    builder.Services.ConfigureAuthentications(builder.Configuration);
+    builder.Services.ConfigureAuthentications(conf);
     builder.Services.ConfigureJsonOptions();
-    builder.Services.ConfigureContextFactory();
-    builder.Services.ConfigureRepositoryManager();
+    builder.Services.AddInfrastructure(conf);
     builder.Services.AddAuthorization();
-
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 }
