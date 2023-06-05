@@ -11,13 +11,11 @@ public class UserController : ControllerBase
     private readonly IMapper _mapper;
     private readonly IUserDbContext _userContext;
 
-    public UserController(IRepositoryManager repoManager, IMapper mapper, IUserDbContext userContext)
+    public UserController(IMapper mapper, IUserDbContext userContext)
     {
         _mapper = mapper;
         _userContext = userContext;
     }
-
-
 
     [HttpPost("modify")]
     public async Task<IActionResult> Modify(UserModifyDTO request)

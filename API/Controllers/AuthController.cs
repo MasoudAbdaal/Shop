@@ -10,11 +10,11 @@ using Contracts.DTOs.User;
 using Domain.Entities.Address;
 using Domain.Entities.Auth;
 using Domain.Entities.User;
+using Infrastructure.Common;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Shop.Helpers;
 using Shop.Utility;
 
 namespace Shop.Controllers;

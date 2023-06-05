@@ -15,6 +15,8 @@ public static class InfrastructureExtensions
         services.RegisterDbContext<IRegionDbContext, RegionDbContext>(config);
         services.RegisterDbContext<IUserInfoDbContext, UserInfoDbContext>(config);
         services.RegisterDbContext<IUserAddressDbContext, UserAddressDbContext>(config);
+
+        services.ConfigureAuthentications(config);
         return services;
     }
 
