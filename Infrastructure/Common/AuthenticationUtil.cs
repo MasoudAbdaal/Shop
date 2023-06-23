@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Domain.Entities.Auth;
+using Domain.Entities.User;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Common;

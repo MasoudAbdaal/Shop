@@ -17,7 +17,7 @@ public class UserPresentationDTO
     public string? Phone { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public Domain.Entities.Auth.Role.UserRoles UserRole { get; set; }
+    public Role.UserRoles UserRole { get; set; }
 
     [SourceMember(nameof(UserInfo))]
     public UserInfoDTO? Info { get; set; }
