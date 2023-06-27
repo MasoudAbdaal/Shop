@@ -9,7 +9,7 @@ namespace Domain.Entities.User;
 
 public class UserAuthMethod
 {
-    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    // [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
     public byte[]? UserID { get; set; }
 
     public User? Users { get; set; }

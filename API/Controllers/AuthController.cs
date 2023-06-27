@@ -110,7 +110,7 @@ public class AuthController : ControllerBase
         {
             if (Authentication.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
             {
-                JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.Role, 45,
+                JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.UserRoleID, 45,
                  _configuration.GetValue<string>("JWT:Issuer")!,
                  _configuration.GetValue<string>("JWT:Audience")!,
                  _configuration.GetValue<string>("JWT:Key")!);

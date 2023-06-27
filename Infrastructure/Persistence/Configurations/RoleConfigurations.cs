@@ -9,6 +9,8 @@ public class RoleConfigurations : IEntityTypeConfiguration<Role>
 {
     public void Configure(EntityTypeBuilder<Role> builder)
     {
+        builder.HasKey(r => r.ID);
+
         builder.HasData(
          Enum.GetValues(typeof(UserRoles))
            .Cast<UserRoles>().Select(u => new Role()
@@ -16,8 +18,7 @@ public class RoleConfigurations : IEntityTypeConfiguration<Role>
                ID = u,
                Name = u.ToString(),
            }));
-           
-        builder.HasKey(r => r.ID);
-        builder.HasMany(x => x.Users).WithOne().HasForeignKey(u => u.Role).OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(u => u.Users).WithOne(r => r.Role).HasForeignKey(u => u.UserRoleID).OnDelete(DeleteBehavior.Cascade);
     }
 }

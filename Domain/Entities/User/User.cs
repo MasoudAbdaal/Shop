@@ -32,7 +32,7 @@ public class User
     public string? ResetPasswordToken { get; set; }
 
     //[Column("role")]
-    public UserRoles Role { get; set; } = UserRoles.PURCHASER;
+    public UserRoles UserRoleID { get; set; } = UserRoles.PURCHASER;
 
     //[Column("reset_pass_token_expire_date")]
     public DateTime? ResetPasswordTokenExpires { get; set; }
@@ -48,7 +48,7 @@ public class User
 
 
     //[ForeignKey(nameof(Role))]
-    public Role? Roles { get; set; }
+    public Role? Role { get; set; }
 
     public UserInfo? UserInfo { get; set; } = new UserInfo { CreateDate = DateTime.UtcNow, PhoneNumber_Verified = false };
 
