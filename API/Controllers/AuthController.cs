@@ -94,7 +94,6 @@ public class AuthController : ControllerBase
         if (Result == null)
             return StatusCode(502);
 
-
         return Ok(_mapper.Map<User, UserPresentationDTO>(Result!));
 
     }
