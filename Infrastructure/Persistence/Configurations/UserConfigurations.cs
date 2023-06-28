@@ -26,10 +26,9 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.Token_Code).HasColumnName("token_2step_code");
         builder.Property(u => u.Email_Code).HasColumnName("email_2step_code");
 
-        builder.HasOne(u => u.UserInfo).WithOne().HasForeignKey<UserInfo>(ui => ui.ID);
-        
-        builder.HasMany(u => u.UserAuthMethods).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
-        builder.HasMany(u => u.UserAddress).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
+        builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
+        builder.HasMany(u => u.UserAddress).WithOne(u => u.User);
+
         builder.HasMany(u => u.Cart).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
         builder.HasMany(u => u.Payment).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
         builder.HasMany(u => u.UserReview).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);

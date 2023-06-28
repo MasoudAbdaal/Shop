@@ -16,5 +16,9 @@ public class AuthProviderConfigurations : IEntityTypeConfiguration<AuthProvider>
               ID = u,
               Name = u.ToString()
           }));
+
+
+        builder.HasKey(a => a.ID);
+        
     }
 }

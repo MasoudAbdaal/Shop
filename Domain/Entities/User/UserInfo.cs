@@ -7,8 +7,8 @@ namespace Domain.Entities.User;
 
 public class UserInfo
 {
-    [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
-    public byte[] ID { get; set; } = new byte[16];
+    // [ForeignKey(nameof(User)), Column("user_id", TypeName = "Binary"), MaxLength(16)]
+    public byte[]? ID { get; set; }
 
     [Column("lastname"), MaxLength(40)]
     public string? LastName { get; set; }

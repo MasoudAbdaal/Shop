@@ -9,5 +9,8 @@ public class UserAuthMethodConfigurations : IEntityTypeConfiguration<UserAuthMet
     public void Configure(EntityTypeBuilder<UserAuthMethod> builder)
     {
         builder.HasKey(x => new { x.UserID, x.AuthProviderID });
+
+        builder.Property(u => u.UserID).IsRequired().HasColumnName("user_id").HasColumnType("Binary").HasMaxLength(16);
+        builder.Property(u => u.AuthProviderID).IsRequired().HasColumnName("auth_provider_id");
     }
 }
