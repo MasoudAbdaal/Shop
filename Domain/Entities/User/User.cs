@@ -42,11 +42,11 @@ public class User
 
     public ICollection<UserAddress>? UserAddress { get; set; }
 
-    public ICollection<Domain.Entities.Cart.Cart>? Cart { get; set; }
+    public ICollection<Domain.Entities.Cart.Cart>? Carts { get; set; }
 
-    public ICollection<Domain.Entities.Payment.Payment>? Payment { get; set; }
+    public ICollection<Domain.Entities.Payment.Payment>? Payments { get; set; }
 
-    public ICollection<UserReview>? UserReview { get; set; }
+    public ICollection<UserReview>? UserReviews { get; set; }
 
-    public ICollection<Domain.Entities.Order.Order>? Order { get; set; }
+    public ICollection<Domain.Entities.Order.Order>? Orders { get; set; }
 }

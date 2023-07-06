@@ -26,13 +26,15 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.Token_Code).HasColumnName("token_2step_code");
         builder.Property(u => u.Email_Code).HasColumnName("email_2step_code");
 
-        builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
-        builder.HasMany(u => u.UserAddress).WithOne(u => u.User);
+        builder.HasOne(ui => ui.UserInfo).WithOne(u => u.User).HasForeignKey<UserInfo>(ui => ui.UserID);
 
-        builder.HasMany(u => u.Cart).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
-        builder.HasMany(u => u.Payment).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
-        builder.HasMany(u => u.UserReview).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
-        builder.HasMany(u => u.Order).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.User_ID);
-        builder.HasMany(u => u.UserVerificationMethods).WithOne().HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
+        builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
+        builder.HasMany(u => u.UserVerificationMethods).WithOne(u => u.User).HasForeignKey(x => x.UserID);
+        builder.HasMany(u => u.UserAddress).WithOne(u => u.User).HasForeignKey(ua => ua.UserID);
+        builder.HasMany(u => u.Carts).WithOne(u => u.User).HasForeignKey(ua => ua.UserID);
+        builder.HasMany(u => u.Payments).WithOne(u => u.User).HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
+
+        builder.HasMany(u => u.UserReviews).WithOne(u => u.User).HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
+        builder.HasMany(u => u.Orders).WithOne(u => u.User).HasPrincipalKey(u => u.ID).HasForeignKey(x => x.UserID);
     }
 }

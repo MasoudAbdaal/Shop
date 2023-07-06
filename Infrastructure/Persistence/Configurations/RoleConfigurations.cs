@@ -19,6 +19,10 @@ public class RoleConfigurations : IEntityTypeConfiguration<Role>
                Name = u.ToString(),
            }));
 
-        builder.HasMany(u => u.Users).WithOne(r => r.Role).HasForeignKey(u => u.UserRoleID).OnDelete(DeleteBehavior.Cascade);
+        builder.Property(r => r.ID).HasColumnName("id");
+        builder.Property(r => r.Name).HasColumnName("name").HasMaxLength(50);
+
+        
+        builder.HasMany(u => u.Users).WithOne(r => r.Role).HasForeignKey(u => u.UserRoleID);
     }
 }
