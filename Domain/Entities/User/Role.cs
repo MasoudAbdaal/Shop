@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Auth;
+namespace Domain.Entities.User;
 
 public class Role
 {
@@ -10,11 +10,11 @@ public class Role
         ADMIN, SELLER, PURCHASER
     }
 
-    [Key, Column("id")]
+    // [Key, Column("id")]
     public UserRoles ID { get; set; }
 
-    [Column("name"), MaxLength(50)]
+    // [Column("name"), MaxLength(50)]
     public string? Name { get; set; }
 
-    public List<Domain.Entities.User.User>? Users { get; set; }
+    public List<User>? Users { get; set; }
 }

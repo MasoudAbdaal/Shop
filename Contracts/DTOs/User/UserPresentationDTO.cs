@@ -1,25 +1,16 @@
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using AutoMapper;
-using AutoMapper.Configuration.Annotations;
-using Domain.Entities.User;
-
+using static Domain.Entities.Auth.AuthProvider;
 namespace Contracts.DTOs.User;
 
-[AutoMap(typeof(Domain.Entities.User.User))]
 public class UserPresentationDTO
 {
     public string? Name { get; set; }
 
-    [SourceMember(nameof(Domain.Entities.User.User.Email))]
     public string? Mail { get; set; }
 
     public string? Phone { get; set; }
 
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public Domain.Entities.Auth.Role.UserRoles UserRole { get; set; }
+    public string? UserRole { get; set; }
 
-    [SourceMember(nameof(UserInfo))]
     public UserInfoDTO? Info { get; set; }
 
     public ICollection<UserAuthMethodDTO>? AuthenticationMethods { get; set; }
@@ -27,6 +18,5 @@ public class UserPresentationDTO
 
 public class UserAuthMethodDTO
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
-    public Domain.Entities.Auth.AuthProvider.Providers? AuthProviderID { get; set; }
+    public Providers? AuthProviderID { get; set; }
 }

@@ -1,8 +1,8 @@
 using Domain.Entities.Auth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Domain.Entities.Auth.AuthProvider;
 
+using static Domain.Entities.Auth.AuthProvider;
 namespace Infrastructure.Persistence.Configurations;
 
 public class AuthProviderConfigurations : IEntityTypeConfiguration<AuthProvider>
@@ -16,5 +16,9 @@ public class AuthProviderConfigurations : IEntityTypeConfiguration<AuthProvider>
               ID = u,
               Name = u.ToString()
           }));
+
+
+        builder.HasKey(a => a.ID);
+        
     }
 }

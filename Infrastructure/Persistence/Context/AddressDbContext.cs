@@ -22,7 +22,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
     }
 
     public AddressDbContext(
-        DbContextOptions<AddressDbContext>  options, IRegionDbContext regionContext, IUserDbContext? userContext,
+        DbContextOptions<AddressDbContext> options, IRegionDbContext regionContext, IUserDbContext? userContext,
         IUserAddressDbContext? userAddressContext) : base(options)
     {
         _regionContext = regionContext;
@@ -53,20 +53,8 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<Region>> GetRegions()
-    {
-        if (_regionContext!.Regions!.Count() < 1)
-        {
+    public async Task<IEnumerable<Region>> GetRegions() => await _regionContext!.Regions!.ToListAsync();
 
-            //TODO: Take it to DBContextconfiguration
-            await _regionContext!.Regions!.AddAsync(Countries.USA);
-            await _regionContext!.Regions!.AddAsync(Countries.IRAN);
-            await SaveChangesAsync();
-
-        }
-
-        return await _regionContext!.Regions!.ToListAsync();
-    }
 
     public async Task<IEnumerable<Address>?> GetUserAddresses(byte[] userId)
     {

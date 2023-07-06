@@ -6,15 +6,19 @@ using Microsoft.Extensions.Logging;
 using Contracts.DbContexts;
 using Infrastructure.Common;
 using Infrastructure.Persistence.Context;
+using Domain.Entities.Address;
+using Contracts.Constants;
+
 public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
-        services.RegisterDbContext<IAddressDbContext, AddressDbContext>(config);
         services.RegisterDbContext<IRegionDbContext, RegionDbContext>(config);
+        services.RegisterDbContext<IAddressDbContext, AddressDbContext>(config);
         services.RegisterDbContext<IUserInfoDbContext, UserInfoDbContext>(config);
         services.RegisterDbContext<IUserAddressDbContext, UserAddressDbContext>(config);
+        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
+        services.ConfigureAuthentications(config);
         return services;
     }
 
@@ -37,6 +41,17 @@ public static class InfrastructureExtensions
         {
             var context = scope.ServiceProvider.GetRequiredService<T>();
             context.Database.Migrate();
+
+            //TODO: seed Regions table
+            // var regionDbContext = scope.ServiceProvider.GetRequiredService<RegionDbContext>();
+            // if (regionDbContext.Regions is not null)
+            // {
+            //     regionDbContext.Database.Migrate();
+            //     regionDbContext.Regions.Add(Countries.IRAN);
+            //     regionDbContext.Regions.Add(Countries.USA);
+            //     regionDbContext.SaveChanges();
+
+            // }
         }
         return services;
     }
