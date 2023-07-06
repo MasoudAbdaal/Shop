@@ -10,7 +10,7 @@ public class UserAddressConfigurations : IEntityTypeConfiguration<UserAddress>
     {
         builder.HasKey(x => new { x.UserID, x.AddressID });
 
-        builder.Property(u => u.UserID).IsRequired().HasColumnName("user_id").HasMaxLength(16);
+        builder.Property(u => u.UserID).IsRequired().UserIDProperties();
         builder.Property(u => u.AddressID).IsRequired().HasColumnName("address_id").HasMaxLength(4).ValueGeneratedNever();
     }
 }

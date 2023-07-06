@@ -10,7 +10,7 @@ public class UserInfoConfigurations : IEntityTypeConfiguration<UserInfo>
     {
         builder.HasKey(ui => ui.UserID);
 
-        builder.Property(ui => ui.UserID).HasColumnName("user_id").HasColumnType("Binary").HasMaxLength(16);
+        builder.Property(ui => ui.UserID).UserIDProperties();
         builder.Property(ui => ui.LastName).HasColumnName("lastname").HasMaxLength(40);
         builder.Property(ui => ui.PhoneNumber).HasColumnName("phone").HasMaxLength(15).IsPhone();
         builder.Property(ui => ui.PhoneNumber_Verified).HasColumnName("is_phone_verified");

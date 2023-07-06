@@ -13,7 +13,7 @@ public class OrderConfigurations : IEntityTypeConfiguration<Order>
         builder.HasKey(o => o.ID);
 
         builder.Property(o => o.ID).HasColumnName("id").HasColumnType("Binary").IsConcurrencyToken().HasMaxLength(32);
-        builder.Property(o => o.UserID).HasColumnName("user_id").HasColumnType("Binary").HasMaxLength(16);
+        builder.Property(o => o.UserID).UserIDProperties();
         builder.Property(o => o.PaymentMethodID).HasColumnName("payment_method_id");
         builder.Property(o => o.AddressID).HasColumnName("shipping_address");
         builder.Property(o => o.ShippingMethod).HasColumnName("shipping_method");

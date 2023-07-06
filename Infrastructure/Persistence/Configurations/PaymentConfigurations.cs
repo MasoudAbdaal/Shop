@@ -13,7 +13,7 @@ public class PaymentConfigurations : IEntityTypeConfiguration<Payment>
         builder.HasKey(p => p.ID);
                 
         builder.Property(c => c.ID).HasColumnName("id");
-        builder.Property(c => c.UserID).HasColumnName("user_id").HasColumnType("Binary").HasMaxLength(16);
+        builder.Property(c => c.UserID).UserIDProperties();
         builder.Property(c => c.PaymentTypeID).HasColumnName("payment_type_id");
 
 

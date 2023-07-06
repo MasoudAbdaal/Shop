@@ -13,6 +13,6 @@ public class CartConfigurations : IEntityTypeConfiguration<Cart>
 
         builder.Property(c => c.ID).HasColumnName("id");
         builder.Property(c => c.Name).HasColumnName("name").HasMaxLength(30);
-        builder.Property(c => c.UserID).HasColumnName("user_id").HasColumnType("Binary").HasMaxLength(16);
+        builder.Property(c => c.UserID).UserIDProperties();
     }
 }
