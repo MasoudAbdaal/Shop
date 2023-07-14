@@ -11,12 +11,9 @@ public class AuthProvider
         EMAIL, GOOGLE, FACEBOOK, MICROSOFT
     }
 
-    [Key, Column("id")]
     public Providers ID { get; set; }
 
-    [Column("name"), MaxLength(40)]
     public string? Name { get; set; }
 
-
-    public ICollection<UserAuthMethod>? UserAuthMethod { get; set; }
+    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
 }

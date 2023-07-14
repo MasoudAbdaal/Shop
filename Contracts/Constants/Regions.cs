@@ -6,24 +6,24 @@ namespace Contracts.Constants;
 
 public static class Countries
 {
-
+    //TODO: Overwrite This Class with RegionID and ParentID Fields
     public static Region USA = new Region
     {
         Name = "USA",
-        SubRegion = new Collection<Region>
+        SubRegions = new Collection<Region>
   {
     new Region{ Name = "California",
 
-    SubRegion = new Collection<Region> {
+    SubRegions = new Collection<Region> {
       new Region{Name="SUB_STATE"},}
       ,},
 
     new Region{
       Name="Hawaii",
-      SubRegion = new Collection<Region> {
+      SubRegions = new Collection<Region> {
     new Region{ Name = "SU_STATE",
 
-    SubRegion = new Collection<Region> {
+    SubRegions = new Collection<Region> {
       new Region{Name="SU_STATE_2"},}, },
       }
       }
@@ -35,19 +35,19 @@ public static class Countries
     public static Region IRAN = new Region
     {
         Name = "IRAN",
-        SubRegion = new Collection<Region> {
+        SubRegions = new Collection<Region> {
     new Region{
        Name = "TEHRAN",
 
-    SubRegion = new Collection<Region> {
+    SubRegions = new Collection<Region> {
       new Region{
         Name="Karaj"},
     },
     },
     new Region{
-      SubRegion = new Collection<Region> {
+      SubRegions = new Collection<Region> {
     new Region{ Name = "MAZANDARAN",
-    SubRegion = new Collection<Region> {
+    SubRegions = new Collection<Region> {
       new Region{Name="RaamSar"},
       new Region{Name="Babol"}
     },

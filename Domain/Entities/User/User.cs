@@ -7,7 +7,6 @@ namespace Domain.Entities.User;
 
 public class User
 {
-
     public byte[] ID { get; set; } = new byte[16];
 
     public string Name { get; set; } = string.Empty;
