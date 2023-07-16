@@ -16,6 +16,8 @@ public class RegionsConfigurations : IEntityTypeConfiguration<Region>
         builder.Property(r => r.RegionID).IsRequired().HasColumnName("id");
         builder.Property(r => r.Name).HasColumnName("name").HasMaxLength(20);
         builder.Property(r => r.ParentID).HasColumnName("parent_id");
+        builder.Property(r => r.Parent).IsRequired(false);
+
 
         builder.HasOne(r => r.Parent).WithMany(r => r.SubRegions).HasForeignKey(r => r.ParentID).OnDelete(DeleteBehavior.Restrict);
     }
