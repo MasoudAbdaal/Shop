@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Contracts.Constants;
 using Domain.Entities.Address;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using static Contracts.Constants.Countries;
 
 namespace Infrastructure.Persistence.Configurations;
 public class RegionsConfigurations : IEntityTypeConfiguration<Region>
@@ -11,14 +12,13 @@ public class RegionsConfigurations : IEntityTypeConfiguration<Region>
     {
         builder.HasKey(x => x.RegionID);
 
-        builder.HasData(Countries.USA, Countries.IRAN);
+
+        builder.HasData(USA, California, Jefferson, Hawaii, SubState2, SubState3, Iran, Tehran, Karaj, Mazandaran, RaamSar, Babol);
 
         builder.Property(r => r.RegionID).IsRequired().HasColumnName("id");
         builder.Property(r => r.Name).HasColumnName("name").HasMaxLength(20);
         builder.Property(r => r.ParentID).HasColumnName("parent_id");
-        builder.Property(r => r.Parent).IsRequired(false);
 
-
-        builder.HasOne(r => r.Parent).WithMany(r => r.SubRegions).HasForeignKey(r => r.ParentID).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(r => r.ParentRegion).WithMany(r => r.SubRegions).HasForeignKey(r => r.ParentID).OnDelete(DeleteBehavior.Restrict);
     }
 }

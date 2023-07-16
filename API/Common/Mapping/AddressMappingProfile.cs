@@ -17,7 +17,7 @@ public class AddressProfile : Profile
         .ForMember(dest => dest.GeoInfo, opt => opt.MapFrom(src => new GeoPointDTO { X = src.Location!.X, Y = src.Location.Y }));
 
         CreateMap<AddressPresentationDTO, Address>()
-        .ForMember(dest => dest.Region, opt => opt.MapFrom(src => new Region { Name = src!.Region }))
+        .ForMember(dest => dest.Region, opt => opt.MapFrom(src => new Region(src!.Region!)))
         .ForMember(dest => dest.UnitNumber, opt => opt.MapFrom(src => src.Unit))
         .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.AddressID))
         .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new Point(src.GeoInfo!.X, src.GeoInfo.Y) { SRID = 4326 }));
@@ -25,7 +25,7 @@ public class AddressProfile : Profile
 
         CreateMap<AddressCreateDTO, Address>()
         .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new Point(src.GeoInfo!.X, src.GeoInfo.Y) { SRID = 4326 }))
-        .ForMember(dest => dest.Region, opt => opt.MapFrom(src => new Region { Name = src.RegionName }))
+        .ForMember(dest => dest.Region, opt => opt.MapFrom(src => new Region(src.RegionName)))
         .ForMember(dest => dest.UnitNumber, opt => opt.MapFrom(src => src.Unit));
     }
 
