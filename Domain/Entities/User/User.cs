@@ -39,7 +39,7 @@ public class User
 
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
 
-    public ICollection<UserAddress>? UserAddress { get; set; }
+    public ICollection<UserAddress>? UserAddresses { get; set; }
 
     public ICollection<Domain.Entities.Cart.Cart>? Carts { get; set; }
 

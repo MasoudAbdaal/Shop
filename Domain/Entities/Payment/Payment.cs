@@ -12,7 +12,9 @@ public class Payment
 
     public byte PaymentTypeID { get; set; }
 
+    public DateTime Date { get; set; }
+
     public Domain.Entities.User.User? User { get; set; }
     public PaymentType? PaymentType { get; set; }
-    public ICollection<Domain.Entities.Order.Order>? Order { get; set; }
+    public ICollection<Domain.Entities.Order.Order>? Orders { get; set; }
 }

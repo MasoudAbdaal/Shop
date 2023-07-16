@@ -20,5 +20,7 @@ public class OrderConfigurations : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Status).HasColumnName("status");
         builder.Property(o => o.Date).HasColumnName("ordered_date");
         builder.Property(o => o.Total).HasColumnName("order_total").HasColumnType("Money");
+
+        
     }
 }

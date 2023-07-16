@@ -83,7 +83,7 @@ public class AuthController : ControllerBase
             Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
             PasswordSalt = HashAlgorithm.Key,
 
-            UserAddress = address,
+            UserAddresses = address,
             UserInfo = new UserInfo
             {
                 PhoneNumber = request.PhoneNumber

@@ -16,5 +16,5 @@ public class OrderStatus
     [Column("status")]
     public CurrentStatus Status { get; set; }
 
-    public ICollection<Order>? Order { get; set; }
+    public ICollection<Order>? Orders { get; set; }
 }

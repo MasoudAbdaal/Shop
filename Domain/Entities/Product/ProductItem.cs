@@ -23,8 +23,8 @@ public class ProductItem
     public decimal Price { get; set; }
 
     public Product? Product { get; set; }
-    public ICollection<ProductConf>? ProductConf { get; set; }
-    public ICollection<CartItem>? CartItem { get; set; }
-    public ICollection<OrderLine>? OrderLine { get; set; }
-    public ICollection<PromotionProducts>? PromotionProduct { get; set; }
+    public ICollection<ProductConf>? ProductConfs { get; set; }
+    public ICollection<CartItem>? CartItems { get; set; }
+    public ICollection<OrderLine>? OrderLines { get; set; }
+    public ICollection<PromotionProducts>? PromotionProducts { get; set; }
 }

@@ -22,11 +22,10 @@ public class Order
 
     public decimal Total { get; set; }
 
-
     public Domain.Entities.User.User? User { get; set; }
     public Domain.Entities.Address.Address? Address { get; set; }
     public Domain.Entities.Payment.Payment? Payment { get; set; }
     public OrderStatus? OrderStatus { get; set; }
     public OrderShippingMethod? OrderShippingMethod { get; set; }
-    public ICollection<OrderLine>? OrderLine { get; set; }
+    public ICollection<OrderLine>? OrderLines { get; set; }
 }

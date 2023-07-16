@@ -10,7 +10,6 @@ public class Address
 {
     public byte[] ID { get; set; } = new byte[4];
 
-    [ForeignKey(nameof(Region)), Column("region_id")]
     public uint RegionID { get; set; }
 
     public string? PostalCode { get; set; }

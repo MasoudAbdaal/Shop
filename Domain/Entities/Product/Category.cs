@@ -16,9 +16,9 @@ public class Category
 
     [ForeignKey(nameof(ParentID))]
     public Category? Categories { get; set; }
-    public ICollection<Category>? SubCategory { get; set; }
-    public ICollection<PromotionCategories>? PromotionCategory { get; set; }
+    public ICollection<Category>? SubCategories { get; set; }
+    public ICollection<PromotionCategories>? PromotionCategories { get; set; }
 
-    public ICollection<Product>? Product { get; set; }
-    public ICollection<Variation>? Variation { get; set; }
+    public ICollection<Product>? Products { get; set; }
+    public ICollection<Variation>? Variations { get; set; }
 }

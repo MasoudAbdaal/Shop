@@ -28,5 +28,5 @@ public class Product
     public Category? Category { get; set; }
     [ForeignKey(nameof(FullDescriptionID))]
     public Description? Descriptions { get; set; }
-    public ICollection<ProductItem>? ProductItem { get; set; }
+    public ICollection<ProductItem>? ProductItems { get; set; }
 }

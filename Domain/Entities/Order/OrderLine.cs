@@ -23,7 +23,7 @@ public class OrderLine
     [Column("price", TypeName = "Money")]
     public decimal Price { get; set; }
 
-    public ICollection<UserReview>? UserReview { get; set; }
+    public ICollection<UserReview>? UserReviews { get; set; }
     public ProductItem? ProductItem { get; set; }
     public Order? Order { get; set; }
 }

@@ -26,7 +26,7 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
 
         builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
         builder.HasMany(u => u.UserVerificationMethods).WithOne(u => u.User);
-        builder.HasMany(u => u.UserAddress).WithOne(u => u.User);
+        builder.HasMany(u => u.UserAddresses).WithOne(u => u.User);
         builder.HasMany(u => u.Carts).WithOne(u => u.User);
         builder.HasMany(u => u.Payments).WithOne(u => u.User).HasPrincipalKey(u => u.ID);
         builder.HasMany(u => u.UserReviews).WithOne(u => u.User).HasPrincipalKey(u => u.ID);

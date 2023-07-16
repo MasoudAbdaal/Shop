@@ -21,7 +21,7 @@ namespace Domain.Entities.Product
         public string? Name { get; set; }
 
         public Category? Category { get; set; }
-        public ICollection<VariationOption>? VariationOption { get; set; }
+        public ICollection<VariationOption>? VariationOptions { get; set; }
     }
 
     public class VariationOption
@@ -36,6 +36,6 @@ namespace Domain.Entities.Product
         public string? Value { get; set; }
 
         public Variation? Variation { get; set; }
-        public ICollection<ProductConf>? ProductConf { get; set; }
+        public ICollection<ProductConf>? ProductConfs { get; set; }
     }
 }

@@ -11,5 +11,5 @@ public class PaymentType
     [Column("value"), MaxLength(20)]
     public string? Value { get; set; }
 
-    public ICollection<Payment>? Payment { get; set; }
+    public ICollection<Payment>? Payments { get; set; }
 }

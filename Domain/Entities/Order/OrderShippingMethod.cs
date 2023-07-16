@@ -19,5 +19,5 @@ public class OrderShippingMethod
     [Column("price", TypeName = "Money")]
     public decimal Price { get; set; }
 
-    public ICollection<Order>? Order { get; set; }
+    public ICollection<Order>? Orders { get; set; }
 }
