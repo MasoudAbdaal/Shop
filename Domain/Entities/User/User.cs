@@ -35,7 +35,7 @@ public class User
     public UserInfo? UserInfo { get; set; } = new UserInfo { CreateDate = DateTime.UtcNow, PhoneNumber_Verified = false };
 
     public ICollection<UserAuthMethod>? UserAuthMethods { get; set; } = new Collection<UserAuthMethod> {
-         new UserAuthMethod {AuthProviderID = AuthProvider.Providers.EMAIL}};
+         new UserAuthMethod {AuthProviderID =0}};
 
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
 
@@ -43,7 +43,7 @@ public class User
 
     public ICollection<Domain.Entities.Cart.Cart>? Carts { get; set; }
 
-    public ICollection<Domain.Entities.Payment.Payment>? Payments { get; set; }
+    public ICollection<Transaction.Transaction>? Transactions { get; set; }
 
     public ICollection<UserReview>? UserReviews { get; set; }
 

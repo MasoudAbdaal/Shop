@@ -10,7 +10,7 @@ public class Order
 
     public byte[]? UserID { get; set; } = new byte[16];
 
-    public uint PaymentMethodID { get; set; }
+    public uint TransactionID { get; set; }
 
     public byte[] AddressID { get; set; } = new byte[4];
 
@@ -24,8 +24,8 @@ public class Order
 
     public Domain.Entities.User.User? User { get; set; }
     public Domain.Entities.Address.Address? Address { get; set; }
-    public Domain.Entities.Payment.Payment? Payment { get; set; }
     public OrderStatus? OrderStatus { get; set; }
     public OrderShippingMethod? OrderShippingMethod { get; set; }
     public ICollection<OrderLine>? OrderLines { get; set; }
+    public ICollection<Transaction.Transaction>? Transactions { get; set; }
 }
