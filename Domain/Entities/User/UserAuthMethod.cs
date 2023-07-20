@@ -6,7 +6,7 @@ namespace Domain.Entities.User;
 public class UserAuthMethod
 {
     public byte[] UserID { get; set; } = new byte[16];
-    public byte AuthProviderID { get; set; } = 0;
+    public Providers AuthProviderID { get; set; } = 0;
     public AuthProvider? AuthProvider { get; set; }
     public User? User { get; set; }
 }

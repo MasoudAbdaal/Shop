@@ -13,12 +13,12 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
+        services.ConfigureAuthentications(config);
+        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
         services.RegisterDbContext<IRegionDbContext, RegionDbContext>(config);
         services.RegisterDbContext<IAddressDbContext, AddressDbContext>(config);
         services.RegisterDbContext<IUserInfoDbContext, UserInfoDbContext>(config);
         services.RegisterDbContext<IUserAddressDbContext, UserAddressDbContext>(config);
-        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
-        services.ConfigureAuthentications(config);
         return services;
     }
 

@@ -6,12 +6,12 @@ namespace Domain.Entities.Auth;
 
 public class AuthProvider
 {
-    // public enum Providers : byte
-    // {
-    //     EMAIL, GOOGLE, FACEBOOK, MICROSOFT
-    // }
+    public enum Providers : byte
+    {
+        EMAIL, GOOGLE, FACEBOOK, MICROSOFT
+    }
 
-    public byte ID { get; set; }
+    public Providers ID { get; set; }
 
     public string? Name { get; set; }
 

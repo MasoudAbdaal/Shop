@@ -76,6 +76,10 @@ dotnet run
 ```ps
 dotnet ef migrations add InitialCreate --project .\Infrastructure\ --startup-project .\API --context UserDbContext  
 ```
+- Remove Migrations:
+```ps
+dotnet ef migrations remove --force --project .\Infrastructure\ --startup-project .\API\  --context UserDbContext  
+```
 - Apply Migrations:
 ```ps
 dotnet ef database update --project .\Infrastructure\ --startup-project .\API\  --context UserDbContext  

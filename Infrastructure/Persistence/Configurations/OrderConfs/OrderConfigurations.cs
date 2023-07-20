@@ -1,10 +1,8 @@
-using Domain.Entities.Auth;
 using Domain.Entities.Order;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using static Domain.Entities.Auth.VerificationMethod;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.OrderConfs;
 
 public class OrderConfigurations : IEntityTypeConfiguration<Order>
 {
