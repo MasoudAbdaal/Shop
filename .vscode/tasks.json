@@ -36,6 +36,40 @@
         "${workspaceFolder}/API/API.csproj"
       ],
       "problemMatcher": "$msCompile"
+    },
+    
+      {
+        "hide": true,
+        "icon": {"color": "terminal.ansiRed"},
+        "label": "Drop Database",
+        "type": "shell",
+        "command": "dotnet ef database drop --project .\\Infrastructure\\ -s .\\API\\ --context UserDbContext",
+        "problemMatcher": "$msCompile",        
+    },
+    {
+        "hide": true,
+        "icon": {"color": "terminal.ansiRed"},
+        "label": "Remove Migrations",
+        "type": "shell",
+        "command": "dotnet ef migrations remove --force --project .\\Infrastructure\\ --startup-project .\\API\\  --context UserDbContext",
+        "problemMatcher": "$msCompile",
+    },
+    {
+        "label": "Add Migrations",
+        "icon": {"color": "terminal.ansiGreen"},
+        "type": "shell",
+        "command": "dotnet ef migrations add InitialCreate --project .\\Infrastructure\\ --startup-project .\\API --context UserDbContext",
+        "problemMatcher": "$msCompile",
+        "dependsOrder": "sequence",
+        "dependsOn":["Remove Migrations"]
+    },
+    {
+        "label": "Update Database",
+        "icon": {"color": "terminal.ansiGreen"},
+        "type": "shell",
+        "command": "dotnet ef database update --project .\\Infrastructure\\ --startup-project .\\API\\  --context UserDbContext",
+        "dependsOrder": "sequence",
+        "dependsOn":["Drop Database"]
     }
   ]
 }
