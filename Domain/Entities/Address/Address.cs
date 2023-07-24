@@ -1,10 +1,7 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities.User;
 using NetTopologySuite.Geometries;
+using Domain.Entities.User;
 
 namespace Domain.Entities.Address;
-
 
 public class Address
 {

@@ -1,7 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Domain.Entities.Address;
-
 namespace Domain.Entities.User;
 
 public class UserAddress
