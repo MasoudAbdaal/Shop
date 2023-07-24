@@ -1,4 +1,7 @@
 
+using static Domain.Entities.Order.OrderShippingMethod;
+using static Domain.Entities.Order.OrderStatus;
+
 namespace Domain.Entities.Order;
 
 public class Order
@@ -11,13 +14,13 @@ public class Order
 
     public byte[] AddressID { get; set; } = new byte[4];
 
-    public byte ShippingMethod { get; set; }
-
-    public byte Status { get; set; }
-
     public DateTime? Date { get; set; }
 
     public decimal Total { get; set; }
+
+    public StatusTypes OrderStatusID { get; set; }
+
+    public ShippingMethods OrderShippingMethodID { get; set; }
 
     public Domain.Entities.User.User? User { get; set; }
     public Domain.Entities.Address.Address? Address { get; set; }

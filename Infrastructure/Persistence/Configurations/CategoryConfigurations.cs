@@ -15,8 +15,8 @@ public class CategoryConfigurations : IEntityTypeConfiguration<Category>
         builder.Property(x => x.Name).HasColumnName("name").HasMaxLength(20);
 
         builder.HasOne(x => x.ParentCategory).WithMany(x => x.SubCategories).HasForeignKey(x => x.ParentID).OnDelete(DeleteBehavior.Restrict);
-        builder.HasMany(x => x.PromotionCategories).WithOne();
-        builder.HasMany(x => x.Products).WithOne();
-        builder.HasMany(x => x.Variations).WithOne();
+        builder.HasMany(x => x.PromotionCategories).WithOne(x=>x.Category);
+        builder.HasMany(x => x.Products).WithOne(x=>x.Category);
+        builder.HasMany(x => x.Variations).WithOne(x=>x.Category);
     }
 }

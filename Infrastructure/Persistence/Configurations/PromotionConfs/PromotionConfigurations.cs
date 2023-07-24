@@ -17,7 +17,7 @@ public class PromotionConfigurations : IEntityTypeConfiguration<Promotion>
         builder.Property(x => x.DiscountStartDate).HasColumnName("start_date").IsRequired();
         builder.Property(x => x.DiscountEndDate).HasColumnName("end_date").IsRequired();
 
-        builder.HasMany(x => x.PromotionCategories).WithOne();
-        builder.HasMany(x => x.PromotionProducts).WithOne();
+        builder.HasMany(x => x.PromotionCategories).WithOne(x=>x.Promotion);
+        builder.HasMany(x => x.PromotionProducts).WithOne(x=>x.Promotion);
     }
 }

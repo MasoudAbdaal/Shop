@@ -14,6 +14,6 @@ public class VariationOptionsConfigurations : IEntityTypeConfiguration<Variation
         builder.Property(x => x.VariationID).HasColumnName("variation_id");
         builder.Property(x => x.Value).HasColumnName("value").HasMaxLength(20);
 
-        builder.HasMany(x => x.ProductConfs).WithOne();
+        builder.HasMany(x => x.ProductConfs).WithOne(x=>x.VariationOption);
     }
 }
