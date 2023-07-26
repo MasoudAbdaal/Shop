@@ -18,5 +18,5 @@ public class UserPresentationDTO
 
 public class UserAuthMethodDTO
 {
-    public Providers? AuthProviderID { get; set; }
+    public byte? AuthProviderID { get; set; }
 }

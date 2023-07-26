@@ -13,12 +13,12 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
+        services.ConfigureAuthentications(config);
+        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
         services.RegisterDbContext<IRegionDbContext, RegionDbContext>(config);
         services.RegisterDbContext<IAddressDbContext, AddressDbContext>(config);
         services.RegisterDbContext<IUserInfoDbContext, UserInfoDbContext>(config);
         services.RegisterDbContext<IUserAddressDbContext, UserAddressDbContext>(config);
-        services.RegisterDbContext<IUserDbContext, UserDbContext>(config);
-        services.ConfigureAuthentications(config);
         return services;
     }
 
@@ -26,32 +26,26 @@ public static class InfrastructureExtensions
      where U : class
      where T : ModuleDbContext, U
     {
-
         services.AddDbContext<U, T>(options =>
-            options.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }))
+
+            options.UseLoggerFactory(LoggerFactory.Create(builder =>
+            {
+                builder.AddConsole();
+            })).EnableDetailedErrors().EnableSensitiveDataLogging()
+
             .UseSqlServer(config.GetValue<string>("Database:ConnectionString"),
              x =>
              {
                  x.UseNetTopologySuite();
                  x.MigrationsAssembly(typeof(T).Assembly.FullName);
              })
-         ).AddScoped<U, T>();
+         ).AddScoped<U, T>()
+         ;
 
         using (var scope = services.BuildServiceProvider().CreateScope())
         {
             var context = scope.ServiceProvider.GetRequiredService<T>();
             context.Database.Migrate();
-
-            //TODO: seed Regions table
-            // var regionDbContext = scope.ServiceProvider.GetRequiredService<RegionDbContext>();
-            // if (regionDbContext.Regions is not null)
-            // {
-            //     regionDbContext.Database.Migrate();
-            //     regionDbContext.Regions.Add(Countries.IRAN);
-            //     regionDbContext.Regions.Add(Countries.USA);
-            //     regionDbContext.SaveChanges();
-
-            // }
         }
         return services;
     }

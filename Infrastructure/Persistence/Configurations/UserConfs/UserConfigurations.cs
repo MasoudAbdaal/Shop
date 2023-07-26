@@ -2,11 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Domain.Entities.User;
-using static Domain.Entities.User.Role;
-using Domain.Entities.Auth;
-using Microsoft.VisualBasic;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.UserConfs;
 
 public class UserConfigurations : IEntityTypeConfiguration<User>
 {
@@ -29,12 +26,11 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.HasOne(ui => ui.UserInfo).WithOne(u => u.User).HasForeignKey<UserInfo>(ui => ui.UserID);
 
         builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
-        builder.HasMany(u => u.UserVerificationMethods).WithOne(u => u.User) ;
-        builder.HasMany(u => u.UserAddress).WithOne(u => u.User) ;
-        builder.HasMany(u => u.Carts).WithOne(u => u.User) ;
-        builder.HasMany(u => u.Payments).WithOne(u => u.User).HasPrincipalKey(u => u.ID) ;
-
-        builder.HasMany(u => u.UserReviews).WithOne(u => u.User).HasPrincipalKey(u => u.ID) ;
-        builder.HasMany(u => u.Orders).WithOne(u => u.User).HasPrincipalKey(u => u.ID) ;
+        builder.HasMany(u => u.UserVerificationMethods).WithOne(u => u.User);
+        builder.HasMany(u => u.UserAddresses).WithOne(u => u.User);
+        builder.HasMany(u => u.Carts).WithOne(u => u.User);
+        builder.HasMany(u => u.Transactions).WithOne(u => u.User);
+        builder.HasMany(u => u.UserReviews).WithOne(u => u.User);
+        builder.HasMany(u => u.Orders).WithOne(u => u.User);
     }
 }

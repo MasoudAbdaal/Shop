@@ -2,7 +2,7 @@ using Domain.Entities.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations;
+namespace Infrastructure.Persistence.Configurations.UserConfs;
 
 public class UserReviewConfigurations : IEntityTypeConfiguration<UserReview>
 {
