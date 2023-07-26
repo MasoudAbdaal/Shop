@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata;
 using Domain.Entities.Auth;
+using Domain.Entities.User;
 using Microsoft.Extensions.Primitives;
 
 namespace Shop.Utility

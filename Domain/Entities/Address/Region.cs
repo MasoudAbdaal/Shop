@@ -1,24 +1,22 @@
 
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 
 namespace Domain.Entities.Address;
 
 
 public class Region
 {
+    public Region(string Name)
+    {
+        this.Name = Name;
+    }
 
-    [Key, Required, Column("id")]
-    public uint RegionID { get; set; }
+    public uint RegionID { get; init; }
 
-    [Column("name"), MaxLength(20)]
-    public string? Name { get; set; }
+    public string? Name { get; init; }
 
-    [Column("parent_id")]
-    public uint? ParentID { get; set; }
-
-    [ForeignKey(nameof(ParentID))]
-    // public Region? Regions { get; set; }
-    public ICollection<Region>? SubRegion { get; set; }
+    public uint? ParentID { get; init; }
+    
+    public Region? ParentRegion { get; set; }
+    public ICollection<Region>? SubRegions { get; set; } = new List<Region>();
 }

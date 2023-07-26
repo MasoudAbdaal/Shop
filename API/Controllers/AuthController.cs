@@ -10,11 +10,11 @@ using Contracts.DTOs.User;
 using Domain.Entities.Address;
 using Domain.Entities.Auth;
 using Domain.Entities.User;
+using Infrastructure.Common;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Shop.Helpers;
 using Shop.Utility;
 
 namespace Shop.Controllers;
@@ -83,7 +83,7 @@ public class AuthController : ControllerBase
             Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
             PasswordSalt = HashAlgorithm.Key,
 
-            UserAddress = address,
+            UserAddresses = address,
             UserInfo = new UserInfo
             {
                 PhoneNumber = request.PhoneNumber
@@ -93,7 +93,6 @@ public class AuthController : ControllerBase
 
         if (Result == null)
             return StatusCode(502);
-
 
         return Ok(_mapper.Map<User, UserPresentationDTO>(Result!));
 
@@ -110,7 +109,7 @@ public class AuthController : ControllerBase
         {
             if (Authentication.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
             {
-                JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.Role, 45,
+                JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.UserRoleID, 45,
                  _configuration.GetValue<string>("JWT:Issuer")!,
                  _configuration.GetValue<string>("JWT:Audience")!,
                  _configuration.GetValue<string>("JWT:Key")!);
