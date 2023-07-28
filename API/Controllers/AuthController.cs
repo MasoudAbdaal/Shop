@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using AutoMapper;
@@ -10,12 +9,11 @@ using Contracts.DTOs.User;
 using Domain.Entities.Address;
 using Domain.Entities.Auth;
 using Domain.Entities.User;
-using Infrastructure.Common;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
-using Shop.Utility;
 
 namespace Shop.Controllers;
 
@@ -101,15 +99,17 @@ public class AuthController : ControllerBase
     [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
-        UserToken TokenInfo = SecurityUtil.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
+        UserToken TokenInfo = JWTUtils.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
 
+        //TODO: Checnge User to just needed field (desctruct from here or dbcontext)
         User? u = await _userContext.GetUser(request.Email, null);
 
         if (u != null)
         {
-            if (Authentication.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
+            if (JWTUtils.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
             {
-                JwtSecurityToken TOKEN = Authentication.CreateToken(request.Email, u.ID, u.UserRoleID, 45,
+                var x = new GenerateToken();
+                JwtSecurityToken TOKEN = x.CreateToken(request.Email, u.ID, u.UserRoleID, 45,
                  _configuration.GetValue<string>("JWT:Issuer")!,
                  _configuration.GetValue<string>("JWT:Audience")!,
                  _configuration.GetValue<string>("JWT:Key")!);

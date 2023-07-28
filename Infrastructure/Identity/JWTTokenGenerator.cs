@@ -5,11 +5,23 @@ using System.Text;
 using Domain.Entities.User;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure.Common;
+namespace Infrastructure.Identity;
 
-public class Authentication
+public class GenerateToken
 {
-    public static JwtSecurityToken CreateToken(string userEmail, byte[] userID, Role.UserRoles userRole, double expireMinutes, string issuer, string audience, string key)
+    private static Random r = new Random(new Random().Next());
+    public HMAC Algorighm { get; init; } = new HMACSHA512();
+    private byte[] UserID { get; init; } = CreateRandomID(new byte[16]);
+
+    public static byte[] CreateRandomID(byte[]? Buffer = null)
+    {
+        Buffer = Buffer ?? new byte[16];
+        r.Next();
+        r.NextBytes(Buffer);
+        return Buffer;
+    }
+
+      public JwtSecurityToken CreateToken(string userEmail, byte[] userID, Role.UserRoles userRole, double expireMinutes, string issuer, string audience, string key)
     {
 
         SymmetricSecurityKey signinKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
@@ -31,10 +43,4 @@ public class Authentication
         return new JwtSecurityToken(HEADERS, PAYLOAD);
     }
 
-    public static bool CheckPassword(string password, byte[] salt, byte[] hash)
-    {
-        HMACSHA512 HashAlgorithm = new HMACSHA512(salt);
-
-        return HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(password)).SequenceEqual(hash);
-    }
 }
