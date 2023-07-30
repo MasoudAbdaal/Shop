@@ -40,35 +40,26 @@ public class AuthController : ControllerBase
     {
         //exmaple code 
 
-
-
-
         //exmaple code 
 
-        HMACSHA512 HashAlgorithm = new HMACSHA512();
-        byte[] AddressID_Random = new byte[4];
-        byte[] UserID_Random = new byte[16];
-        Random r = new Random();
+        HashGenerator HashGenerator = new HashGenerator(request.Password,new HMACSHA512());
+        byte[] AddressID_1 = HashGenerator.CreateRandomID(new byte[4]);
+        byte[] AddressID_2 = HashGenerator.CreateRandomID(new byte[4]);
+        byte[] UserID_Random = HashGenerator.CreateRandomID(new byte[16]);
 
-        r.NextBytes(AddressID_Random);
-        r.Next();
-        r.NextBytes(UserID_Random);
 
-        var address = new Collection<UserAddress> { new UserAddress {
-
-    AddressID =AddressID_Random.CloneByteArray(),
+        var userAddress = new Collection<UserAddress> { new UserAddress {
+    AddressID =AddressID_1,
     UserID = UserID_Random,
-     Address = new Address {ID=AddressID_Random.CloneByteArray(), AddressLine = "Address1",Region=Countries.USA,PostalCode= "1",LocationAddress="Location1",UnitNumber=0xcc1 }}
+     Address = new Address {ID=AddressID_1, AddressLine = "Address1",RegionID=Countries.USA.RegionID,PostalCode= "1",LocationAddress="Location1",UnitNumber=0xcc1 }}
      };
 
-        r.Next();
-        r.NextBytes(AddressID_Random);
 
-        address.Add(new UserAddress
+        userAddress.Add(new UserAddress
         {
-            AddressID = AddressID_Random,
+            AddressID = HashGenerator.CreateRandomID(AddressID_2),
             UserID = UserID_Random,
-            Address = new Address { ID = AddressID_Random, AddressLine = "Address2", Region = Countries.USA, PostalCode = "2", LocationAddress = "Location2", UnitNumber = 0xcc1 }
+            Address = new Address { ID = AddressID_2, AddressLine = "Address2", RegionID = Countries.USA.RegionID, PostalCode = "2", LocationAddress = "Location2", UnitNumber = 0xcc1 }
         }
                 );
 
@@ -78,10 +69,10 @@ public class AuthController : ControllerBase
             ID = UserID_Random,
             Name = request.Name,
             Email = request.Email,
-            Password = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(request.Password!)),
-            PasswordSalt = HashAlgorithm.Key,
+            Password = HashGenerator.CreatePassword(),
+            PasswordSalt = HashGenerator.HashingSalt!,
 
-            UserAddresses = address,
+            UserAddresses = userAddress,
             UserInfo = new UserInfo
             {
                 PhoneNumber = request.PhoneNumber
@@ -99,25 +90,33 @@ public class AuthController : ControllerBase
     [HttpPost, Route("login")]
     public async Task<IActionResult> Login(UserLoginDTO request)
     {
-        UserToken TokenInfo = JWTUtils.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
+        // UserToken TokenInfo = JWTToken.GetBearerTokenInfo(Request.Headers[HeaderNames.Authorization]);
 
         //TODO: Checnge User to just needed field (desctruct from here or dbcontext)
         User? u = await _userContext.GetUser(request.Email, null);
 
         if (u != null)
         {
-            if (JWTUtils.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
+            using (var JWTToken = new JWTUtils())
             {
-                var x = new GenerateToken();
-                JwtSecurityToken TOKEN = x.CreateToken(request.Email, u.ID, u.UserRoleID, 45,
-                 _configuration.GetValue<string>("JWT:Issuer")!,
-                 _configuration.GetValue<string>("JWT:Audience")!,
-                 _configuration.GetValue<string>("JWT:Key")!);
 
-                return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
+                if (JWTToken.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
+                {
+                    JWTTokenConfiguration TokenAttributes = new JWTTokenConfiguration(_configuration.GetValue<string>("JWT:Issuer")!,
+                        _configuration.GetValue<string>("JWT:Audience")!,
+                        request.Email,
+                        u.UserRoleID,
+                        u.ID,
+                        _configuration.GetValue<string>("JWT:Key")!,
+                        45);
+                    JwtSecurityToken TOKEN = JWTToken.CreateToken(TokenAttributes);
+
+                    return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
+                }
+
+
+                else return Unauthorized("Invalid username/password");
             }
-
-            else return Unauthorized("Invalid username/password");
         }
 
         return Unauthorized("You do not have any account with this email!");

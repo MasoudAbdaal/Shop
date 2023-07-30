@@ -10,9 +10,9 @@ using Microsoft.IdentityModel.Tokens;
 namespace Infrastructure.Identity;
 
 
-public static class JWTUtils
+public class JWTUtils : IDisposable
 {
-    public static UserToken GetBearerTokenInfo(StringValues authHeader)
+    public UserToken GetBearerTokenInfo(StringValues authHeader)
     {
         if (authHeader.Any(z => z!.Contains("Bearer")))
         {
@@ -32,11 +32,39 @@ public static class JWTUtils
 
     }
 
-    public static bool CheckPassword(string password, byte[] salt, byte[] hash)
+    public bool CheckPassword(string password, byte[] salt, byte[] hash)
     {
         HMACSHA512 HashAlgorithm = new HMACSHA512(salt);
+
+        var z = HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(password)).SequenceEqual(hash);
 
         return HashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(password)).SequenceEqual(hash);
     }
 
+    public JwtSecurityToken CreateToken(JWTTokenConfiguration TokenAttributes)
+    {
+
+        SymmetricSecurityKey signinKey = new SymmetricSecurityKey(TokenAttributes.TokenKey);
+        SigningCredentials signingCredential = new SigningCredentials(signinKey, SecurityAlgorithms.HmacSha512Signature);
+
+        List<Claim> Claims = new List<Claim>
+    {
+    new Claim(JwtRegisteredClaimNames.Iss,TokenAttributes.Issuer),
+    new Claim(JwtRegisteredClaimNames.Aud,TokenAttributes.Audience),
+    new Claim(JwtRegisteredClaimNames.Exp, TokenAttributes.ExpireMinutes),
+    new Claim(JwtRegisteredClaimNames.Email, TokenAttributes.UserEmail),
+    new Claim(JwtRegisteredClaimNames.NameId, TokenAttributes.UserID),
+    new Claim("role",TokenAttributes.UserRole)
+
+    };
+
+        JwtHeader HEADERS = new JwtHeader(signingCredential);
+        JwtPayload PAYLOAD = new JwtPayload(Claims);
+        return new JwtSecurityToken(HEADERS, PAYLOAD);
+    }
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }
