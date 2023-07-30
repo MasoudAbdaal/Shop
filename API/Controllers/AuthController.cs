@@ -42,24 +42,40 @@ public class AuthController : ControllerBase
 
         //exmaple code 
 
-        HashGenerator HashGenerator = new HashGenerator(request.Password,new HMACSHA512());
+        HashGenerator HashGenerator = new HashGenerator(request.Password!, new HMACSHA512(), new byte[0]);
         byte[] AddressID_1 = HashGenerator.CreateRandomID(new byte[4]);
         byte[] AddressID_2 = HashGenerator.CreateRandomID(new byte[4]);
         byte[] UserID_Random = HashGenerator.CreateRandomID(new byte[16]);
 
 
-        var userAddress = new Collection<UserAddress> { new UserAddress {
-    AddressID =AddressID_1,
-    UserID = UserID_Random,
-     Address = new Address {ID=AddressID_1, AddressLine = "Address1",RegionID=Countries.USA.RegionID,PostalCode= "1",LocationAddress="Location1",UnitNumber=0xcc1 }}
+        var userAddress = new Collection<UserAddress> {new UserAddress
+        {
+            AddressID =AddressID_1,
+            UserID = UserID_Random,
+            Address = new Address
+            {
+                ID=AddressID_1,
+                AddressLine = "Address1",
+                RegionID=Countries.USA.RegionID,
+                PostalCode= "1",
+                LocationAddress="Location1",
+                UnitNumber=0xcc1
+            }
+        }
      };
-
-
         userAddress.Add(new UserAddress
         {
-            AddressID = HashGenerator.CreateRandomID(AddressID_2),
+            AddressID = AddressID_2,
             UserID = UserID_Random,
-            Address = new Address { ID = AddressID_2, AddressLine = "Address2", RegionID = Countries.USA.RegionID, PostalCode = "2", LocationAddress = "Location2", UnitNumber = 0xcc1 }
+            Address = new Address
+            {
+                ID = AddressID_2,
+                AddressLine = "Address2",
+                RegionID = Countries.USA.RegionID,
+                PostalCode = "2",
+                LocationAddress = "Location2",
+                UnitNumber = 0xcc1
+            }
         }
                 );
 
@@ -71,13 +87,14 @@ public class AuthController : ControllerBase
             Email = request.Email,
             Password = HashGenerator.CreatePassword(),
             PasswordSalt = HashGenerator.HashingSalt!,
-
             UserAddresses = userAddress,
             UserInfo = new UserInfo
             {
                 PhoneNumber = request.PhoneNumber
             },
         };
+
+
         User? Result = await _userContext.CreateUser(u);
 
         if (Result == null)
@@ -97,23 +114,20 @@ public class AuthController : ControllerBase
 
         if (u != null)
         {
-            using (var JWTToken = new JWTUtils())
+            using (var JWTToken = new HashGenerator(request.Password!, new HMACSHA512(u.PasswordSalt), u.Password))
             {
 
-                if (JWTToken.CheckPassword(request.Password!, u.PasswordSalt, u.Password))
+                if (JWTToken.CheckPassword())
                 {
                     JWTTokenConfiguration TokenAttributes = new JWTTokenConfiguration(_configuration.GetValue<string>("JWT:Issuer")!,
-                        _configuration.GetValue<string>("JWT:Audience")!,
-                        request.Email,
-                        u.UserRoleID,
-                        u.ID,
-                        _configuration.GetValue<string>("JWT:Key")!,
-                        45);
-                    JwtSecurityToken TOKEN = JWTToken.CreateToken(TokenAttributes);
+                        _configuration.GetValue<string>("JWT:Audience")!, request.Email, u.UserRoleID, u.ID,
+                        _configuration.GetValue<string>("JWT:Key")!, 45);
+
+
+                    JwtSecurityToken TOKEN = JWTToken.CreateJWTToken(TokenAttributes);
 
                     return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(TOKEN) });
                 }
-
 
                 else return Unauthorized("Invalid username/password");
             }
