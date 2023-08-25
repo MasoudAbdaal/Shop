@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Persistence.Context;
 internal sealed class RegionDbContext : ModuleDbContext, IRegionDbContext
 {
-    protected override string Schema => "Shop";
     public DbSet<Region>? Regions { get; set; }
 
 

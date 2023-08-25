@@ -11,7 +11,7 @@ public class UserProfile : Profile
         CreateMap<User, UserPresentationDTO>()
         .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.UserInfo!.PhoneNumber))
         .ForMember(dest => dest.Mail, opt => opt.MapFrom(src => src.Email))
-        .ForMember(dest => dest.Info, opt => opt.MapFrom(src => src.UserInfo))
+        // .ForMember(dest => dest.Info, opt => opt.MapFrom(src => src.UserInfo))
         .ForMember(dest => dest.UserRole, opt => opt.MapFrom(src => src.UserRoleID.ToString()))
         .ForMember(dest => dest.AuthenticationMethods, opt => opt.MapFrom(src => src.UserAuthMethods));
 

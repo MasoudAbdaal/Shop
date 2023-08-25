@@ -8,7 +8,6 @@ namespace Infrastructure.Persistence.Context;
 
 internal sealed class UserInfoDbContext : ModuleDbContext, IUserInfoDbContext
 {
-    protected override string Schema => "Shop";
     public DbSet<UserInfo>? UserInfos { get; set; }
 
 
