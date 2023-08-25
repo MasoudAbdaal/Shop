@@ -14,3 +14,7 @@ public class UserModifyDTO
 
     public UserInfoDTO? info { get; set; }
 }
+
+public class UserInfoDTO 
+{
+}

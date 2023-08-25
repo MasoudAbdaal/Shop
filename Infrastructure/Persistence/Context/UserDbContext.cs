@@ -10,92 +10,100 @@ namespace Infrastructure.Persistence.Context;
 
 internal sealed class UserDbContext : ModuleDbContext, IUserDbContext
 {
-    protected override string Schema => "Shop";
+    //TODO:
+    //1. Remove Schema Property and set it as defailt in Base Class
+    //2. remove userInfoDbContext (LESS Dependency!!)
     public DbSet<User>? Users { get; set; }
 
-    private IUserInfoDbContext? _userInfoDbContext { get; set; }
-    private readonly IMapper? _mapper;
 
+    public UserDbContext(DbContextOptions<UserDbContext> options) : base(options) => Users = Set<User>();
 
-    public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
+
+    public async Task<bool> Exist(string email, byte[]? userId)
     {
-        Users = Set<User>();
-    }
+        if (email is not null)
+            return await Users!.AnyAsync(x => x.Email == email);
 
-    public UserDbContext(DbContextOptions<UserDbContext> options, IMapper mapper, IUserInfoDbContext userInfoDbContext) : base(options)
-    {
-        _mapper = mapper;
-        _userInfoDbContext = userInfoDbContext;
-    }
+        if (userId is not null)
+            return await Users!.AnyAsync(x => x.ID == userId);
 
-
-    public new async Task<(int userDbContextResult, int userInfoDbContextResult)> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        Task<int>[] tasks = new Task<int>[] { base.SaveChangesAsync(cancellationToken), _userInfoDbContext!.SaveChangesAsync(cancellationToken) };
-        await Task.WhenAll(tasks);
-
-        return (tasks[0].Result, tasks[1].Result);
-    }
-
-    public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
-    {
-
-        user!.Name = newInfo.Name.Length > 5 ? newInfo.Name : user.Name;
-
-        UserInfo Info = _userInfoDbContext!.UserInfos!.Find(user.ID)!;
-        if (user != null)
-        {
-            Info = GeneralUtil.ApplyChanges(Info, _mapper!.Map<UserInfoDTO, UserInfo>(newInfo.info!))!;
-            if (Info is not null)
-            {
-                _userInfoDbContext.UserInfos.Update(Info!);
-                Users!.Update(user!);
-
-                await SaveChangesAsync();
-                return user;
-            }
-            return default;
-        }
-
-        return default;
+        throw new InvalidDataException();
     }
 
     public async Task<User?> GetUser(string? email, byte[]? userId)
     {
-        User? result;
-        if (userId != null)
-            result = await Users!.FindAsync(userId);
-        else
-            result = await Users!.FirstOrDefaultAsync(x => x.Email == email);
+        IQueryable<User> query = Users!;
 
-        return result == null ? default : result;
+        if (userId is not null)
+            query = query.Include(u => u.UserInfo)
+                         .Where(u => u.ID == userId);
+
+        if (email is not null)
+            query = query.Include(u => u.UserInfo)
+                         .Where(u => u.Email == email);
+
+        return await query.FirstAsync();
     }
 
     public async Task<User?> CreateUser(User user)
     {
-        User? u = await GetUser(user.Email, null);
-
-        if (u == null)
-        {
-            await AddAsync(user!);
-            await SaveChangesAsync();
-            return await GetUser(user.Email, null);
-        }
-        else
-            return u;
-    }
-
-    public async Task<User?> EditEmail(User user, string newEmail)
-    {
-        user.Email = newEmail;
-
-        Users!.Update(user);
+        await AddAsync(user);
         await SaveChangesAsync();
-        return await GetUser(newEmail, null);
+        return await GetUser(user.Email, null);
     }
 
-    public Task<User?> DeleteUser(string email)
+    public async Task<User?> GetUserWithInfo(string email, byte[]? userId)
     {
-        throw new NotImplementedException();
+        IQueryable<User> query = Users!;
+
+        if (userId is not null)
+            query = query.Where(x => x.ID == userId);
+        if (email is not null)
+            query = query.Where(x => x.Email == email);
+
+        return await query.Include(x => x.UserInfo).FirstAsync();
+
     }
+
+
+    // public async Task<User?> EditUserInfo(User user, UserModifyDTO newInfo)
+    // {
+
+    //     user!.Name = newInfo.Name.Length > 5 ? newInfo.Name : user.Name;
+
+    //     UserInfo Info = _userInfoDbContext!.UserInfos!.Find(user.ID)!;
+    //     if (user != null)
+    //     {
+    //         // Info = GeneralUtil.ApplyChanges(Info, _mapper!.Map<UserInfoDTO, UserInfo>(newInfo.info!))!;
+    //         if (Info is not null)
+    //         {
+    //             _userInfoDbContext.UserInfos.Update(Info!);
+    //             Users!.Update(user!);
+
+    //             await SaveChangesAsync();
+    //             return user;
+    //         }
+    //         return default;
+    //     }
+
+    //     return default;
+    // }
+
+
+
+    // public async Task<User?> EditEmail(User user, string newEmail)
+    // {
+    //     user.Email = newEmail;
+
+    //     Users!.Update(user);
+    //     await SaveChangesAsync();
+    //     return await GetUser(newEmail, null);
+    // }
+
+    // public Task<User?> DeleteUser(string email)
+    // {
+    //     throw new NotImplementedException();
+    // }
+
 }
