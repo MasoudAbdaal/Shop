@@ -6,7 +6,7 @@ namespace Infrastructure.Common;
 
 internal abstract class ModuleDbContext : DbContext
 {
-    protected abstract string Schema { get; }
+    protected string Schema { get; } = "Shop";
 
     protected ModuleDbContext(DbContextOptions options) : base(options)
     {
@@ -16,7 +16,7 @@ internal abstract class ModuleDbContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         if (!string.IsNullOrWhiteSpace(Schema))

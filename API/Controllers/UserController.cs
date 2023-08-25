@@ -24,7 +24,7 @@ public class UserController : ControllerBase
 
         if (Result != null)
         {
-            await _userContext.EditUserInfo(Result, request);
+            // await _userContext.EditUserInfo(Result, request);
 
             return Ok();
         }

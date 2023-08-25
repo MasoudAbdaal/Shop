@@ -11,7 +11,7 @@ public class UserPresentationDTO
 
     public string? UserRole { get; set; }
 
-    public UserInfoDTO? Info { get; set; }
+    // public UserInfoDTO? Info { get; set; }
 
     public ICollection<UserAuthMethodDTO>? AuthenticationMethods { get; set; }
 }

@@ -6,7 +6,7 @@ namespace Contracts.DbContexts;
 public interface IAddressDbContext
 {
     DbSet<Address>? Addresses { get; set; }
-    Task<(int addressDbContextResult, int regionDbContextResut, int userDbContextResult, int userAddressDbContextResult)> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
     byte[]? GetUserID(string email);
     uint? CheckRegionExist(string regionName);

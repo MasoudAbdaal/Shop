@@ -9,7 +9,6 @@ namespace Infrastructure.Persistence.Context;
 
 internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 {
-    protected override string Schema => "Shop";
     public DbSet<Address>? Addresses { get; set; }
 
     private IRegionDbContext? _regionContext { get; set; }
@@ -30,21 +29,8 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
         _userAddressContext = userAddressContext;
     }
 
-    public new async Task<(int addressDbContextResult, int regionDbContextResut, int userDbContextResult, int userAddressDbContextResult)> SaveChangesAsync(CancellationToken cancellationToken)
-    {
-        var userDbContextResults = await _userContext!.SaveChangesAsync(cancellationToken);
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
 
-        var tasks = new[]
-        {
-            base.SaveChangesAsync(cancellationToken),
-            _regionContext!.SaveChangesAsync(cancellationToken),
-            _userAddressContext!.SaveChangesAsync(cancellationToken),
-
-                    };
-        await Task.WhenAll(tasks);
-
-        return (tasks[0].Result, tasks[1].Result, (userDbContextResults.userDbContextResult + userDbContextResults.userInfoDbContextResult), tasks[2].Result);
-    }
 
 
     public bool DeleteAddress(byte[] addressID)
