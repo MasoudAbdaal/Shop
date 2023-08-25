@@ -9,7 +9,9 @@ using Contracts.DTOs.User;
 using Domain.Entities.Address;
 using Domain.Entities.Auth;
 using Domain.Entities.User;
+using FluentResults;
 using Infrastructure.Identity;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.IdentityModel.Tokens;
@@ -21,87 +23,31 @@ namespace Shop.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    //TODO: Override Problem method with problem factory to use Result<IERROR>
     private readonly IUserDbContext _userContext;
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
-    private readonly IUserDbContext _context;
 
-    public AuthController(IConfiguration configuration, IMapper mapper, IUserDbContext context, IUserDbContext userContext)
+    private readonly ISender _sender;
+
+    public AuthController(IConfiguration configuration, IMapper mapper, IUserDbContext userContext, ISender sender)
     {
 
         _configuration = configuration;
         _mapper = mapper;
-        _context = context;
         _userContext = userContext;
+        _sender = sender;
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(UserRegisterDTO request)
+    public async Task<IActionResult> Register(CreateUserCommand request)
     {
-        //exmaple code 
+        Result<UserResult> result = await _sender.Send(request);
 
-        //exmaple code 
+        if (result.IsSuccess)
+            return Ok(result.Value);
 
-        HashGenerator HashGenerator = new HashGenerator(request.Password!, new HMACSHA512(), new byte[0]);
-        byte[] AddressID_1 = HashGenerator.CreateRandomID(new byte[4]);
-        byte[] AddressID_2 = HashGenerator.CreateRandomID(new byte[4]);
-        byte[] UserID_Random = HashGenerator.CreateRandomID(new byte[16]);
-
-
-        var userAddress = new Collection<UserAddress> {new UserAddress
-        {
-            AddressID =AddressID_1,
-            UserID = UserID_Random,
-            Address = new Address
-            {
-                ID=AddressID_1,
-                AddressLine = "Address1",
-                RegionID=Countries.USA.RegionID,
-                PostalCode= "1",
-                LocationAddress="Location1",
-                UnitNumber=0xcc1
-            }
-        }
-     };
-        userAddress.Add(new UserAddress
-        {
-            AddressID = AddressID_2,
-            UserID = UserID_Random,
-            Address = new Address
-            {
-                ID = AddressID_2,
-                AddressLine = "Address2",
-                RegionID = Countries.USA.RegionID,
-                PostalCode = "2",
-                LocationAddress = "Location2",
-                UnitNumber = 0xcc1
-            }
-        }
-                );
-
-
-        User u = new User
-        {
-            ID = UserID_Random,
-            Name = request.Name,
-            Email = request.Email,
-            Password = HashGenerator.CreatePassword(),
-            PasswordSalt = HashGenerator.HashingSalt!,
-            UserAddresses = userAddress,
-            UserInfo = new UserInfo
-            {
-                PhoneNumber = request.PhoneNumber
-            },
-        };
-
-
-        User? Result = await _userContext.CreateUser(u);
-
-        if (Result == null)
-            return StatusCode(502);
-
-        return Ok(_mapper.Map<User, UserPresentationDTO>(Result!));
-
+        return Problem(result.Errors[0].Message);
     }
 
     [HttpPost, Route("login")]
