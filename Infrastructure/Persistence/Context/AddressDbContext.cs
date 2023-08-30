@@ -13,7 +13,7 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
 
     private IRegionDbContext? _regionContext { get; set; }
     private IUserAddressDbContext? _userAddressContext { get; set; }
-    private IUserDbContext? _userContext { get; set; }
+    // private IUserDbContext? _userContext { get; set; }
 
     public AddressDbContext(DbContextOptions<AddressDbContext> options) : base(options)
     {
@@ -21,11 +21,12 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
     }
 
     public AddressDbContext(
-        DbContextOptions<AddressDbContext> options, IRegionDbContext regionContext, IUserDbContext? userContext,
+        DbContextOptions<AddressDbContext> options, IRegionDbContext regionContext,
+        //  IUserDbContext? userContext,
         IUserAddressDbContext? userAddressContext) : base(options)
     {
         _regionContext = regionContext;
-        _userContext = userContext;
+        // _userContext = userContext;
         _userAddressContext = userAddressContext;
     }
 
@@ -65,15 +66,15 @@ internal sealed class AddressDbContext : ModuleDbContext, IAddressDbContext
         return AddressList;
     }
 
-    public byte[]? GetUserID(string email)
-    {
-        byte[] uid = _userContext!.Users!.Where(x => x.Email == email)
-        .Select(i => i.ID).AsNoTracking().ToArray()[0];
+    // public byte[]? GetUserID(string email)
+    // {
+    //     byte[] uid = _userContext!.Users!.Where(x => x.Email == email)
+    //     .Select(i => i.ID).AsNoTracking().ToArray()[0];
 
-        if (uid.Length < 1)
-            return null;
-        return uid;
-    }
+    //     if (uid.Length < 1)
+    //         return null;
+    //     return uid;
+    // }
 
     public async Task<Address?> AddAddress(Address newAddress, byte[] userId)
     {

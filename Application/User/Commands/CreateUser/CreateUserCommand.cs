@@ -8,5 +8,6 @@ public record CreateUserCommand
     string Name,
     string Email,
     string PhoneNumber,
-    UserRoles Role,
-    string Password) : IRequest<Result<UserResult>>;
+    string Password,
+    UserRoles Role = UserRoles.PURCHASER)
+ : IRequest<Result<UserResult>>;

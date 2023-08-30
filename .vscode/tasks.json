@@ -38,6 +38,16 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "Run Migrations Tasks",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Remove Migrations",
+        "Add Migrations",
+        "Drop Database",
+        "Update Database"
+      ]
+    },
+    {
       "hide": true,
       "icon": {
         "color": "terminal.ansiRed"

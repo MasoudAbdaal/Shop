@@ -16,7 +16,7 @@ public class UserInfo
 
     public DateTime? VerifiedDate { get; set; }
 
-    public DateTime? CreateDate { get; set; }
+    public DateTime CreatedDate { get; init; } = DateTime.UtcNow;
 
     public DateTime? BirthDate { get; set; }
 

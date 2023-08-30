@@ -17,7 +17,7 @@ public class UserInfoConfigurations : IEntityTypeConfiguration<UserInfo>
         builder.Property(ui => ui.Enabled).HasColumnName("account_enabled");
         builder.Property(ui => ui.Email_Verified).HasColumnName("is_email_verified");
         builder.Property(ui => ui.VerifiedDate).HasColumnName("verified_date");
-        builder.Property(ui => ui.CreateDate).HasColumnName("createdate");
+        builder.Property(ui => ui.CreatedDate).HasColumnName("creatededate");
         builder.Property(ui => ui.BirthDate).HasColumnName("birthdate");
         builder.Property(ui => ui.FailedLoginAttempts).HasColumnName("failed_login_attempts_count");
 

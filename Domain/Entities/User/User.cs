@@ -1,13 +1,10 @@
-using System.Collections.ObjectModel;
-
-using Domain.Entities.Auth;
 using static Domain.Entities.User.Role;
 
 namespace Domain.Entities.User;
 
 public class User
 {
-    public byte[] ID { get; set; } = new byte[16];
+    public byte[]? ID { get; init; }
 
     public string Name { get; set; } = string.Empty;
 
@@ -32,10 +29,9 @@ public class User
 
     public Role? Role { get; set; }
 
-    public UserInfo? UserInfo { get; set; } = new UserInfo { CreateDate = DateTime.UtcNow, PhoneNumber_Verified = false };
+    public UserInfo? UserInfo { get; set; } = new();
 
-    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; } = new Collection<UserAuthMethod> {
-         new UserAuthMethod {AuthProviderID =0}};
+    public ICollection<UserAuthMethod>? UserAuthMethods { get; set; }
 
     public ICollection<UserVerificationMethod>? UserVerificationMethods { get; set; }
 

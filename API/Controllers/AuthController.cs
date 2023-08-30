@@ -66,7 +66,7 @@ public class AuthController : ControllerBase
                 if (JWTToken.CheckPassword())
                 {
                     JWTTokenConfiguration TokenAttributes = new JWTTokenConfiguration(_configuration.GetValue<string>("JWT:Issuer")!,
-                        _configuration.GetValue<string>("JWT:Audience")!, request.Email, u.UserRoleID, u.ID,
+                        _configuration.GetValue<string>("JWT:Audience")!, request.Email, u.UserRoleID, u!.ID!,
                         _configuration.GetValue<string>("JWT:Key")!, 45);
 
 

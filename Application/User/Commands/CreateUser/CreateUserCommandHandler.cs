@@ -14,7 +14,9 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
     public async Task<Result<UserResult>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        HashGenerator hash = new HashGenerator(request.Password!, new HMACSHA512(), new byte[0]);
+        //TODO: Review hashgenerator methods and make it better
+        //CHANGE Hashing method to consume lower MEMORY !!!!
+        HashGenerator hash = new(request.Password!, new HMACSHA512(), new byte[0]);
         byte[] UserID_Random = hash.CreateRandomID(new byte[16]);
 
         User u = new()
@@ -24,7 +26,6 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
             Email = request.Email,
             Password = hash.CreatePassword(),
             PasswordSalt = hash.HashingSalt!,
-            //TODO: fluent validation for beign in enum .IsInEnum()
             UserRoleID = request.Role,
             UserInfo = new UserInfo
             {
@@ -37,14 +38,12 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         if (result is null)
             return Result.Fail("Failed To Create User");
 
-        return Result.Ok(new UserResult()
-        {
-            Info = result.UserInfo,
-            Mail = result.Email,
-            Name = result.Name,
-            Phone = result.UserInfo!.PhoneNumber,
-            UserRole = result.Role!.Name
-        });
+        return Result.Ok(new UserResult(
+            Info: result.UserInfo,
+            Mail: result.Email,
+            Name: result.Name,
+            Phone: result.UserInfo!.PhoneNumber,
+            UserRole: result.UserRoleID.ToString()));
 
     }
 }

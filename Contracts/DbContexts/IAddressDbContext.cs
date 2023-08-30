@@ -8,7 +8,7 @@ public interface IAddressDbContext
     DbSet<Address>? Addresses { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-    byte[]? GetUserID(string email);
+    // byte[]? GetUserID(string email);
     uint? CheckRegionExist(string regionName);
 
     Task<bool> DeleteAddress(byte[] addressID, byte[] userId);

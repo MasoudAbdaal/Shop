@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.ConfigureAutomapper();
     builder.Services.ConfigureJsonOptions();
     builder.Services.AddInfrastructure(conf);
+    builder.Services.AddApplication();
     builder.Services.AddAuthorization();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();

@@ -24,7 +24,6 @@ public class UserConfigurations : IEntityTypeConfiguration<User>
         builder.Property(u => u.Email_Code).HasColumnName("email_2step_code");
 
         builder.HasOne(ui => ui.UserInfo).WithOne(u => u.User).HasForeignKey<UserInfo>(ui => ui.UserID);
-
         builder.HasMany(u => u.UserAuthMethods).WithOne(u => u.User);
         builder.HasMany(u => u.UserVerificationMethods).WithOne(u => u.User);
         builder.HasMany(u => u.UserAddresses).WithOne(u => u.User);

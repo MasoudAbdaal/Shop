@@ -60,14 +60,14 @@ public class AddressController : ControllerBase
 
         */
 
-        byte[]? uid = _addressDbContext.GetUserID(request.Mail);
-        uint? RegionID = _addressDbContext.CheckRegionExist(request.RegionName);
+        // byte[]? uid = _addressDbContext.GetUserID(request.Mail);
+        // uint? RegionID = _addressDbContext.CheckRegionExist(request.RegionName);
 
-        if (uid is null)
-            return NotFound("User doesn't exist");
+        // if (uid is null)
+        // return NotFound("User doesn't exist");
 
-        if (RegionID is null)
-            return NotFound("Region doesn't exist!");
+        // if (RegionID is null)
+        // return NotFound("Region doesn't exist!");
 
         Random r = new Random();
         byte[] AddressID = new byte[4];
@@ -75,14 +75,15 @@ public class AddressController : ControllerBase
 
         Address Address = _mapper.Map<AddressCreateDTO, Address>(request);
         Address.ID = AddressID;
-        Address.RegionID = (uint)RegionID;
+        // Address.RegionID = (uint)RegionID;
 
-        Address? Result = await _addressDbContext.AddAddress(Address, uid);
+        // Address? Result = await _addressDbContext.AddAddress(Address, uid);
 
-        if (Result is not null)
-            return Ok(_mapper.Map<Address, AddressPresentationDTO>(Result));
+        // if (Result is not null)
+        return Ok();
+        // return Ok(_mapper.Map<Address, AddressPresentationDTO>(Result));
 
-        return StatusCode(504);
+        // return StatusCode(504);
 
     }
 
@@ -104,14 +105,14 @@ public class AddressController : ControllerBase
     [HttpGet, Route("all")]
     public async Task<ActionResult<IEnumerable<AddressPresentationDTO>>> GetAll(string email)
     {
-        byte[]? uid = _addressDbContext.GetUserID(email);
-        if (uid is null)
-            return NotFound();
+        // byte[]? uid = _addressDbContext.GetUserID(email);
+        // if (uid is null)
+        //     return NotFound();
 
-        IEnumerable<Address>? addressList = await _addressDbContext.GetUserAddresses(uid!);
+        // IEnumerable<Address>? addressList = await _addressDbContext.GetUserAddresses(uid!);
 
-        return Ok(_mapper.Map<IEnumerable<Address>, IEnumerable<AddressPresentationDTO>>(addressList!));
-
+        // return Ok(_mapper.Map<IEnumerable<Address>, IEnumerable<AddressPresentationDTO>>(addressList!));
+        return Ok(new { });
     }
 
     [HttpGet, Route("regions")]
